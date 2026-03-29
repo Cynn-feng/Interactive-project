@@ -1,0 +1,29 @@
+{
+  "nav": {
+    "home": "首页",
+    "game": "游戏",
+    "quiz": "测验",
+    "breadcrumb_home": "首页",
+    "breadcrumb_game": "游戏",
+    "breadcrumb_quiz": "测验"
+  },
+  "theme": {
+    "dark": "深色模式",
+    "light": "浅色模式"
+  },
+  "lang": {
+    "toggle": "EN | 中"
+  },
+  "accessibility": {
+    "fontSmall": "A-",
+    "fontNormal": "A",
+    "fontLarge": "A+"
+  },
+  "privacy": {
+    "consentText": "本网站使用本地存储保存您的偏好设置。不收集任何个人数据。",
+    "accept": "接受",
+    "decline": "拒绝",
+    "policyTitle": "隐私政策",
+    "policyContent": "Circle Lab 致力于保护您的隐私。本网站不收集、存储或分享任何个人数据。所有偏好设置（主题、语言、字体大小）仅通过 localStorage 存储在您的设备上，绝不会传输到任何服务器。"
+  }
+}

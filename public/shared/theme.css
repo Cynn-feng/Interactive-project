@@ -1,0 +1,164 @@
+/* ============================================
+   CIRCLE LAB - Dual Theme System
+   theme.css - CSS Custom Properties & Base Styles
+   ============================================ */
+
+/* --- Dark Theme (Neon Geometry) --- */
+[data-theme="dark"] {
+  --bg-primary: #0F0F23;
+  --bg-secondary: #1A1A3E;
+  --bg-card: rgba(124,58,237,0.08);
+  --text-primary: #E2E8F0;
+  --text-secondary: #A78BFA;
+  --text-muted: #64748B;
+  --color-primary: #7C3AED;
+  --color-secondary: #A78BFA;
+  --color-cta: #F43F5E;
+  --color-success: #22C55E;
+  --border-color: rgba(124,58,237,0.2);
+  --glow-primary: 0 0 20px rgba(124,58,237,0.4);
+  --glow-secondary: 0 0 15px rgba(167,139,250,0.3);
+  --grid-color: rgba(124,58,237,0.04);
+  --nav-bg: rgba(15,15,35,0.85);
+
+  /* Scrollbar */
+  --scrollbar-track: #1A1A3E;
+  --scrollbar-thumb: #7C3AED;
+  --scrollbar-thumb-hover: #A78BFA;
+
+  /* Selection */
+  --selection-bg: rgba(124,58,237,0.4);
+  --selection-text: #E2E8F0;
+}
+
+/* --- Light Theme (Blueprint) --- */
+[data-theme="light"] {
+  --bg-primary: #F0F4FF;
+  --bg-secondary: #E2E8FF;
+  --bg-card: rgba(37,99,235,0.05);
+  --text-primary: #1E293B;
+  --text-secondary: #2563EB;
+  --text-muted: #64748B;
+  --color-primary: #2563EB;
+  --color-secondary: #3B82F6;
+  --color-cta: #DC2626;
+  --color-success: #16A34A;
+  --border-color: rgba(37,99,235,0.15);
+  --glow-primary: none;
+  --glow-secondary: none;
+  --grid-color: rgba(37,99,235,0.06);
+  --nav-bg: rgba(240,244,255,0.85);
+
+  /* Scrollbar */
+  --scrollbar-track: #E2E8FF;
+  --scrollbar-thumb: #2563EB;
+  --scrollbar-thumb-hover: #3B82F6;
+
+  /* Selection */
+  --selection-bg: rgba(37,99,235,0.3);
+  --selection-text: #1E293B;
+}
+
+/* --- Responsive Breakpoints (as custom properties) --- */
+:root {
+  --bp-mobile: 480px;
+  --bp-tablet: 768px;
+  --bp-desktop: 1024px;
+  --bp-wide: 1280px;
+}
+
+/* --- Base Reset --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Exo', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
+
+  /* Grid background pattern */
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-attachment: fixed;
+}
+
+/* --- Monospace Font Class --- */
+.font-mono {
+  font-family: 'Roboto Mono', 'Courier New', monospace;
+}
+
+/* --- Links --- */
+a {
+  color: var(--color-secondary);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+a:hover {
+  color: var(--color-primary);
+}
+
+/* --- Selection --- */
+::selection {
+  background-color: var(--selection-bg);
+  color: var(--selection-text);
+}
+
+::-moz-selection {
+  background-color: var(--selection-bg);
+  color: var(--selection-text);
+}
+
+/* --- Scrollbar Styling --- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Firefox scrollbar */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* --- Theme Transition --- */
+body,
+body * {
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+/* --- Utility Classes --- */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.bg-primary { background-color: var(--bg-primary); }
+.bg-secondary { background-color: var(--bg-secondary); }
+.bg-card { background-color: var(--bg-card); }

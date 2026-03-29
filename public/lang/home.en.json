@@ -1,0 +1,45 @@
+{
+  "hero": {
+    "subtitle": "EXPLORE THE GEOMETRY OF",
+    "title": "The Circle",
+    "description": "Discover circle theorems through interactive animations, challenging games, and engaging quizzes.",
+    "cta": "Start Exploring"
+  },
+  "theorems": {
+    "title": "Circle Theorems",
+    "subtitle": "Swipe or click to explore each theorem",
+    "theorem1": { "name": "Angle at Centre", "desc": "The angle at the centre is twice the angle at the circumference when subtended by the same arc." },
+    "theorem2": { "name": "Angles in Same Segment", "desc": "Angles subtended by the same arc in the same segment are equal." },
+    "theorem3": { "name": "Angle in Semicircle", "desc": "The angle inscribed in a semicircle is always a right angle (90\u00b0)." },
+    "theorem4": { "name": "Cyclic Quadrilateral", "desc": "Opposite angles in a cyclic quadrilateral sum to 180\u00b0." },
+    "theorem5": { "name": "Tangent-Radius", "desc": "A tangent to a circle is perpendicular to the radius at the point of contact." },
+    "theorem6": { "name": "Equal Tangent Lengths", "desc": "Two tangent lines drawn from the same external point are equal in length." }
+  },
+  "features": {
+    "title": "Explore & Learn",
+    "game": { "title": "Interactive Games", "desc": "Learn circle concepts through engaging, hands-on games with visual feedback and challenges.", "link": "Play Now" },
+    "quiz": { "title": "Test Your Knowledge", "desc": "Take level-based quizzes with instant feedback. Progress from basics to advanced theorems.", "link": "Start Quiz" },
+    "learn": { "title": "Visual Learning", "desc": "Watch animated demonstrations of every circle theorem. Drag and interact to deepen understanding.", "link": "Explore" }
+  },
+  "ads": {
+    "label": "Advertisement",
+    "title": "Master Mathematics with MathPro Premium",
+    "desc": "Advanced geometry tools, step-by-step solutions, and personalized learning paths.",
+    "cta": "Learn More"
+  },
+  "chatbot": {
+    "title": "circle-lab-ai ~ terminal",
+    "placeholder": "Type a command...",
+    "send": "Send"
+  },
+  "footer": {
+    "desc": "An interactive platform for learning circle geometry, built for GCSE students.",
+    "nav": "Navigation",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use",
+    "copyright": "\u00a9 2026 Circle Lab. All rights reserved.",
+    "course": "EBU5315 Interactive Media Design & Production",
+    "dataNotice": "We respect your privacy. This website does not collect personal data."
+  }
+}

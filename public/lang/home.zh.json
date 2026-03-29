@@ -1,0 +1,45 @@
+{
+  "hero": {
+    "subtitle": "探索几何世界",
+    "title": "圆",
+    "description": "通过互动动画、趣味游戏和知识测验，深入了解圆的定理。",
+    "cta": "开始探索"
+  },
+  "theorems": {
+    "title": "圆的定理",
+    "subtitle": "滑动或点击探索每个定理",
+    "theorem1": { "name": "圆心角定理", "desc": "同弧上的圆心角是圆周角的两倍。" },
+    "theorem2": { "name": "同弓形角定理", "desc": "同弧同侧的圆周角相等。" },
+    "theorem3": { "name": "半圆角定理", "desc": "半圆上的圆周角恒为直角（90°）。" },
+    "theorem4": { "name": "圆内接四边形", "desc": "圆内接四边形的对角之和为180°。" },
+    "theorem5": { "name": "切线-半径定理", "desc": "圆的切线与切点处的半径垂直。" },
+    "theorem6": { "name": "等切线长", "desc": "从同一外部点引出的两条切线长度相等。" }
+  },
+  "features": {
+    "title": "探索与学习",
+    "game": { "title": "互动游戏", "desc": "通过有趣的互动游戏学习圆的概念，包含视觉反馈和挑战。", "link": "开始游戏" },
+    "quiz": { "title": "知识测验", "desc": "参加分级测验，获得即时反馈。从基础到进阶逐步提升。", "link": "开始测验" },
+    "learn": { "title": "可视化学习", "desc": "观看每个圆定理的动画演示。拖拽交互，加深理解。", "link": "探索" }
+  },
+  "ads": {
+    "label": "广告",
+    "title": "使用 MathPro Premium 掌握数学",
+    "desc": "高级几何工具、分步解答和个性化学习路径。",
+    "cta": "了解更多"
+  },
+  "chatbot": {
+    "title": "circle-lab-ai ~ 终端",
+    "placeholder": "输入命令...",
+    "send": "发送"
+  },
+  "footer": {
+    "desc": "一个面向 GCSE 学生的圆形几何互动学习平台。",
+    "nav": "导航",
+    "legal": "法律信息",
+    "privacy": "隐私政策",
+    "terms": "使用条款",
+    "copyright": "© 2026 Circle Lab. 保留所有权利。",
+    "course": "EBU5315 交互媒体设计与制作",
+    "dataNotice": "我们尊重您的隐私。本网站不收集个人数据。"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "nav": {
+    "home": "Home",
+    "game": "Game",
+    "quiz": "Quiz",
+    "breadcrumb_home": "Home",
+    "breadcrumb_game": "Game",
+    "breadcrumb_quiz": "Quiz"
+  },
+  "theme": {
+    "dark": "Dark Mode",
+    "light": "Light Mode"
+  },
+  "lang": {
+    "toggle": "EN | 中"
+  },
+  "accessibility": {
+    "fontSmall": "A-",
+    "fontNormal": "A",
+    "fontLarge": "A+"
+  },
+  "privacy": {
+    "consentText": "This website uses local storage to save your preferences. No personal data is collected.",
+    "accept": "Accept",
+    "decline": "Decline",
+    "policyTitle": "Privacy Policy",
+    "policyContent": "Circle Lab is committed to protecting your privacy. This website does not collect, store, or share any personal data. All preferences (theme, language, font size) are stored locally on your device using localStorage and are never transmitted to any server."
+  }
+}
