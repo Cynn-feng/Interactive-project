@@ -49,13 +49,13 @@
     for (var i = 0; i < scripts.length; i++) {
       var src = scripts[i].getAttribute('src');
       if (src && src.indexOf('i18n.js') !== -1) {
-        // Get the directory of i18n.js
+        // Get the directory of i18n.js and resolve to ../lang/
         var dir = src.substring(0, src.lastIndexOf('/') + 1);
-        return dir + 'lang/';
+        return dir + '../lang/';
       }
     }
-    // Fallback: assume shared/ is a sibling directory
-    return './shared/lang/';
+    // Fallback path from page root.
+    return './lang/';
   }
 
   /**
