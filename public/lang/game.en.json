@@ -1,5 +1,125 @@
 {
   "title": "Circle Geometry Games",
-  "subtitle": "Learn through play",
-  "coming": "Game content coming soon..."
+  "subtitle": "Master circle theorems through interactive challenges",
+  "hub": {
+    "totalScore": "Total Score",
+    "gamesPlayed": "Games Played",
+    "accuracy": "Accuracy",
+    "bestStreak": "Best Streak"
+  },
+  "tabs": {
+    "angle": "Angle Challenge",
+    "matcher": "Theorem Matcher",
+    "constructor": "Circle Constructor"
+  },
+  "game1": {
+    "title": "Angle Calculator Challenge",
+    "desc": "Find the missing angle using circle theorems",
+    "difficulty": "Difficulty",
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard",
+    "start": "Start Game",
+    "next": "Next Question",
+    "submit": "Submit",
+    "skip": "Skip",
+    "question": "Question",
+    "of": "of",
+    "score": "Score",
+    "timer": "Time",
+    "streak": "Streak",
+    "inputPlaceholder": "Enter angle in degrees",
+    "theorem": "Theorem",
+    "correct": "Correct!",
+    "wrong": "Not quite!",
+    "timeout": "Time's up!",
+    "hint": "Hint",
+    "showAnswer": "Show Answer",
+    "answer": "The answer is",
+    "round_complete": "Round Complete!",
+    "final_score": "Final Score",
+    "questions_correct": "Questions Correct",
+    "avg_time": "Average Time",
+    "play_again": "Play Again",
+    "theorems": {
+      "centre_angle": "Angle at Centre Theorem",
+      "centre_angle_desc": "The angle at the centre is twice the angle at the circumference",
+      "same_segment": "Angles in Same Segment",
+      "same_segment_desc": "Angles subtended by the same arc in the same segment are equal",
+      "semicircle": "Angle in a Semicircle",
+      "semicircle_desc": "The angle in a semicircle is always 90°",
+      "cyclic_quad": "Cyclic Quadrilateral",
+      "cyclic_quad_desc": "Opposite angles in a cyclic quadrilateral sum to 180°",
+      "tangent_radius": "Tangent-Radius Theorem",
+      "tangent_radius_desc": "A tangent to a circle is perpendicular to the radius at the point of contact",
+      "tangent_lengths": "Tangent Lengths Theorem",
+      "tangent_lengths_desc": "Tangent segments from an external point are equal in length"
+    }
+  },
+  "game2": {
+    "title": "Theorem Matcher",
+    "desc": "Match each diagram to the correct theorem name",
+    "start": "Start Matching",
+    "timer": "Time",
+    "matches": "Matches",
+    "score": "Score",
+    "instructions": "Drag theorem names on the right to match with the diagrams on the left",
+    "instructionsMobile": "Tap a diagram, then tap its matching theorem name",
+    "correct": "Correct match!",
+    "wrong": "Try again!",
+    "complete": "All Matched!",
+    "final_score": "Final Score",
+    "time_taken": "Time Taken",
+    "accuracy": "Accuracy",
+    "play_again": "Play Again",
+    "reset": "Reset",
+    "names": {
+      "centre_angle": "Angle at Centre = 2× Circumference Angle",
+      "same_segment": "Angles in Same Segment Are Equal",
+      "semicircle": "Angle in Semicircle = 90°",
+      "cyclic_quad": "Opposite Angles Sum to 180°",
+      "tangent_radius": "Tangent ⊥ Radius",
+      "tangent_lengths": "Equal Tangent Lengths"
+    }
+  },
+  "game3": {
+    "title": "Circle Constructor",
+    "desc": "Build geometric constructions on the circle",
+    "start": "Start Building",
+    "instructions": "Click on the circle to place points and construct the required figure",
+    "challenge": "Challenge",
+    "score": "Score",
+    "level": "Level",
+    "hint": "Hint",
+    "check": "Check Answer",
+    "clear": "Clear Points",
+    "next": "Next Challenge",
+    "correct": "Well done!",
+    "wrong": "Not quite right. Try again!",
+    "complete": "All Challenges Complete!",
+    "play_again": "Play Again",
+    "undo": "Undo",
+    "challenges": {
+      "inscribed_angle": "Mark an inscribed angle (3 points on the circle)",
+      "diameter": "Draw a diameter (2 points through the centre)",
+      "semicircle_angle": "Construct a right angle in a semicircle (place the angle vertex on the circle)",
+      "tangent_point": "Mark the point where a tangent touches the circle",
+      "chord": "Draw a chord (2 points on the circle, not through centre)",
+      "cyclic_quad": "Construct a cyclic quadrilateral (4 points on the circle)"
+    },
+    "hints": {
+      "inscribed_angle": "Click 3 points on the circumference. The middle point is the vertex of the angle.",
+      "diameter": "Click 2 points on opposite sides of the circle, passing through the centre.",
+      "semicircle_angle": "First place 2 endpoints of a diameter, then a third point on the semicircle.",
+      "tangent_point": "Click a single point on the circumference where the tangent line touches.",
+      "chord": "Click 2 points on the circle. Make sure the line doesn't pass through the centre.",
+      "cyclic_quad": "Place 4 points on the circle in order to form a quadrilateral."
+    }
+  },
+  "sound": {
+    "on": "Sound On",
+    "off": "Sound Off"
+  },
+  "seconds": "s",
+  "points": "pts"
 }
