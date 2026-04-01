@@ -313,21 +313,33 @@ onUnmounted(() => {
                   <circle cx="130" cy="150" r="100" fill="none" stroke="#7C3AED" stroke-width="2" filter="url(#glow5)"/>
                   <!-- Centre O -->
                   <circle cx="130" cy="150" r="5" fill="#7C3AED" filter="url(#glow5)"/>
-                  <text x="115" y="145" fill="#7C3AED" font-family="monospace" font-size="14">O</text>
+                  <text x="114" y="145" fill="#7C3AED" font-family="monospace" font-size="14" font-weight="700">O</text>
                   <!-- Point P (right side of circle) -->
                   <circle cx="230" cy="150" r="5" fill="#F43F5E" filter="url(#glow5)"/>
                   <text x="236" y="145" fill="#F43F5E" font-family="monospace" font-size="14">P</text>
                   <!-- Radius OP -->
-                  <line x1="130" y1="150" x2="230" y2="150" stroke="#A78BFA" stroke-width="2" filter="url(#glow5)"/>
+                  <line x1="130" y1="150" x2="230" y2="150" stroke="#A78BFA" stroke-width="2.5" filter="url(#glow5)"/>
                   <!-- Tangent line (vertical through P) -->
-                  <line x1="230" y1="40" x2="230" y2="260" stroke="#F43F5E" stroke-width="2" filter="url(#glow5)"/>
-                  <!-- 90 degree square at P -->
-                  <rect x="216" y="150" width="14" height="14" fill="none" stroke="#F43F5E" stroke-width="1.5"/>
-                  <text x="240" y="175" fill="#F43F5E" font-family="monospace" font-size="11">90°</text>
-                  <!-- Label tangent -->
-                  <text x="240" y="55" fill="#F43F5E" font-family="monospace" font-size="11" opacity="0.7">tangent</text>
-                  <!-- Label radius -->
-                  <text x="150" y="142" fill="#A78BFA" font-family="monospace" font-size="11" opacity="0.7">radius</text>
+                  <line
+                    x1="230"
+                    y1="24"
+                    x2="230"
+                    y2="276"
+                    stroke="#F43F5E"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    filter="url(#glow5)"
+                  />
+                  <!-- 90 degree marker at P -->
+                  <path d="M 230 150 L 214 150 L 214 134 L 230 134" fill="none" stroke="#F43F5E" stroke-width="1.8"/>
+                  <text x="236" y="126" fill="#F43F5E" font-family="monospace" font-size="11">90°</text>
+                  <!-- Labels -->
+                  <text x="236" y="32" fill="#F43F5E" font-family="monospace" font-size="11" opacity="0.8">
+                    {{ lang === 'zh' ? '切线' : 'tangent' }}
+                  </text>
+                  <text x="166" y="140" fill="#A78BFA" font-family="monospace" font-size="11" opacity="0.8">
+                    {{ lang === 'zh' ? '半径' : 'radius' }}
+                  </text>
                 </svg>
               </div>
               <div class="slide-card__text">
