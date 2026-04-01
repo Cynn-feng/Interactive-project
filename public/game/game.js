@@ -478,6 +478,11 @@
       if (matcherState.selectedDiagram === id) dBtn.classList.add('matcher-selected');
       dBtn.addEventListener('click', function () {
         if (!matcherState.running || matcherState.matched[id]) return;
+        if (matcherState.selectedDiagram === id) {
+          matcherState.selectedDiagram = null;
+          renderMatcherBoard();
+          return;
+        }
         matcherState.selectedDiagram = id;
         if (matcherState.selectedName) evaluateMatcherPair();
         renderMatcherBoard();
@@ -495,6 +500,11 @@
       if (matcherState.selectedName === id) nBtn.classList.add('matcher-selected');
       nBtn.addEventListener('click', function () {
         if (!matcherState.running || matcherState.matched[id]) return;
+        if (matcherState.selectedName === id) {
+          matcherState.selectedName = null;
+          renderMatcherBoard();
+          return;
+        }
         matcherState.selectedName = id;
         if (matcherState.selectedDiagram) evaluateMatcherPair();
         renderMatcherBoard();
@@ -539,7 +549,7 @@
     hub.gamesPlayed += 1;
     saveHub();
     updateHubView();
-    matcherEls.feedback.textContent = (completed ? t('game2.complete') : t('game2.timer')) + ' | ' + t('game2.final_score') + ': ' + matcherState.score;
+    matcherEls.feedback.textContent = (completed ? t('game2.complete') : t('game2.timeout')) + ' | ' + t('game2.final_score') + ': ' + matcherState.score;
     renderMatcherBoard();
   }
 
@@ -735,7 +745,7 @@
   function nextConstructorChallenge() {
     if (!constructorState.running) return;
     if (!constructorState.solvedCurrent) {
-      constructorEls.feedback.textContent = t('game3.check') + ' -> ' + t('game3.wrong');
+      constructorEls.feedback.textContent = t('game3.solve_first');
       return;
     }
     constructorState.index += 1;
