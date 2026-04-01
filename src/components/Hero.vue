@@ -1,6 +1,8 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
+import { useLang } from '../composables/useLang.js'
 
+const { lang } = useLang()
 const isVisible = ref(false)
 
 const formulas = [
@@ -9,6 +11,18 @@ const formulas = [
   { text: '\u03B8 = 360\u00B0', position: 'top-left' },
   { text: 'sin\u00B2\u03B8 + cos\u00B2\u03B8 = 1', position: 'bottom-right' }
 ]
+
+const txt = computed(() => lang.value === 'zh' ? {
+  subtitle: '探索几何世界',
+  title: '圆',
+  description: '通过互动动画、趣味游戏和知识测验，深入了解圆的定理。',
+  cta: '开始探索'
+} : {
+  subtitle: 'EXPLORE THE GEOMETRY OF',
+  title: 'The Circle',
+  description: 'Discover circle theorems through interactive animations, challenging games, and engaging quizzes.',
+  cta: 'Start Exploring'
+})
 
 function scrollToTheorems() {
   const section = document.getElementById('theorems')
@@ -81,14 +95,10 @@ onMounted(() => {
 
     <!-- Content -->
     <div class="hero__content" :class="{ 'hero__content--visible': isVisible }">
-      <p class="hero__subtitle font-mono">EXPLORE THE GEOMETRY OF</p>
-      <h1 class="hero__title">The Circle</h1>
-      <p class="hero__description">
-        Discover circle theorems through interactive animations, challenging games, and engaging quizzes
-      </p>
-      <button class="hero__cta" @click="scrollToTheorems">
-        Start Exploring
-      </button>
+      <p class="hero__subtitle font-mono">{{ txt.subtitle }}</p>
+      <h1 class="hero__title">{{ txt.title }}</h1>
+      <p class="hero__description">{{ txt.description }}</p>
+      <button class="hero__cta" @click="scrollToTheorems">{{ txt.cta }}</button>
     </div>
   </section>
 </template>

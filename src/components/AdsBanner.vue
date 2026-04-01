@@ -1,4 +1,19 @@
 <script setup>
+import { computed } from 'vue'
+import { useLang } from '../composables/useLang.js'
+
+const { lang } = useLang()
+const txt = computed(() => lang.value === 'zh' ? {
+  label: '广告',
+  title: '使用 MathPro Premium 掌握数学',
+  desc: '高级几何工具、分步解答和个性化学习路径。',
+  cta: '了解更多'
+} : {
+  label: 'Advertisement',
+  title: 'Master Mathematics with MathPro Premium',
+  desc: 'Advanced geometry tools, step-by-step solutions, and personalized learning paths.',
+  cta: 'Learn More'
+})
 </script>
 
 <template>
@@ -12,14 +27,12 @@
       <div class="ads-banner__line ads-banner__line--2"></div>
     </div>
 
-    <span class="ads-banner__label font-mono">Advertisement</span>
+    <span class="ads-banner__label font-mono">{{ txt.label }}</span>
 
     <div class="ads-banner__content">
-      <h3 class="ads-banner__title">Master Mathematics with MathPro Premium</h3>
-      <p class="ads-banner__tagline">
-        Advanced geometry tools, step-by-step solutions, and personalized learning paths
-      </p>
-      <button class="ads-banner__cta" type="button">Learn More</button>
+      <h3 class="ads-banner__title">{{ txt.title }}</h3>
+      <p class="ads-banner__tagline">{{ txt.desc }}</p>
+      <button class="ads-banner__cta" type="button">{{ txt.cta }}</button>
     </div>
   </section>
 </template>
