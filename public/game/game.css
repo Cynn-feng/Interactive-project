@@ -138,7 +138,7 @@
 .matcher-toolbar button,
 .constructor-toolbar button {
   border: 1px solid var(--border-color);
-  background: rgba(10, 10, 28, 0.45);
+  background: var(--bg-card);
   color: var(--text-primary);
   border-radius: 10px;
   padding: 0.48rem 0.72rem;
@@ -169,7 +169,7 @@
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 1rem;
-  background: rgba(10, 10, 28, 0.42);
+  background: var(--bg-secondary);
 }
 
 .angle-question-card__theorem {
@@ -195,7 +195,7 @@
   min-width: 180px;
   border: 1px solid var(--border-color);
   border-radius: 10px;
-  background: rgba(10, 10, 28, 0.7);
+  background: var(--bg-primary);
   color: var(--text-primary);
   padding: 0.5rem 0.62rem;
 }
@@ -238,7 +238,7 @@
 .matcher-name {
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  background: rgba(10, 10, 28, 0.42);
+  background: var(--bg-secondary);
   color: var(--text-primary);
   padding: 0.58rem;
   cursor: pointer;
@@ -284,7 +284,7 @@
   border: 1px solid var(--border-color);
   border-radius: 14px;
   padding: 0.7rem;
-  background: rgba(10, 10, 28, 0.42);
+  background: var(--bg-secondary);
 }
 
 #constructor-board {
