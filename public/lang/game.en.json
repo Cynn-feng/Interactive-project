@@ -72,6 +72,7 @@
     "time_taken": "Time Taken",
     "accuracy": "Accuracy",
     "play_again": "Play Again",
+    "timeout": "Time's up!",
     "reset": "Reset",
     "names": {
       "centre_angle": "Angle at Centre = 2× Circumference Angle",
@@ -96,6 +97,7 @@
     "next": "Next Challenge",
     "correct": "Well done!",
     "wrong": "Not quite right. Try again!",
+    "solve_first": "Solve the current challenge before moving on!",
     "complete": "All Challenges Complete!",
     "play_again": "Play Again",
     "undo": "Undo",
