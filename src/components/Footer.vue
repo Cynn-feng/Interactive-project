@@ -1,4 +1,22 @@
 <script setup>
+import { computed } from 'vue'
+import { useLang } from '../composables/useLang.js'
+
+const { lang } = useLang()
+const txt = computed(() => lang.value === 'zh' ? {
+  desc: '一个面向 GCSE 学生的圆形几何互动学习平台。',
+  nav: '导航', home: '首页', game: '游戏', quiz: '测验',
+  legal: '法律信息', privacy: '隐私政策', terms: '使用条款',
+  dataNotice: '我们尊重您的隐私。本网站不收集个人数据。',
+  copyright: '© 2026 Circle Lab. 保留所有权利。 | EBU5315 交互媒体设计与制作'
+} : {
+  desc: 'An interactive platform for exploring circle geometry through animations, games, and quizzes.',
+  nav: 'Navigation', home: 'Home', game: 'Game', quiz: 'Quiz',
+  legal: 'Legal', privacy: 'Privacy Policy', terms: 'Terms of Use',
+  dataNotice: 'We respect your privacy. This website does not collect personal data.',
+  copyright: '© 2026 Circle Lab. All rights reserved. | EBU5315 Interactive Media Design'
+})
+
 function openPrivacyPolicy() {
   if (window.CircleLab?.privacy?.showPrivacyPolicy) {
     window.CircleLab.privacy.showPrivacyPolicy()
@@ -13,39 +31,35 @@ function openPrivacyPolicy() {
         <!-- Column 1: Logo & description -->
         <div class="footer__col">
           <h3 class="footer__logo font-mono">CIRCLE LAB</h3>
-          <p class="footer__description">
-            An interactive platform for exploring circle geometry through animations, games, and quizzes.
-          </p>
+          <p class="footer__description">{{ txt.desc }}</p>
         </div>
 
         <!-- Column 2: Navigation -->
         <div class="footer__col">
-          <h4 class="footer__heading">Navigation</h4>
+          <h4 class="footer__heading">{{ txt.nav }}</h4>
           <nav class="footer__nav" aria-label="Footer navigation">
-            <router-link to="/" class="footer__link">Home</router-link>
-            <router-link to="/game" class="footer__link">Game</router-link>
-            <router-link to="/quiz" class="footer__link">Quiz</router-link>
+            <router-link to="/" class="footer__link">{{ txt.home }}</router-link>
+            <router-link to="/game" class="footer__link">{{ txt.game }}</router-link>
+            <router-link to="/quiz" class="footer__link">{{ txt.quiz }}</router-link>
           </nav>
         </div>
 
         <!-- Column 3: Legal -->
         <div class="footer__col">
-          <h4 class="footer__heading">Legal</h4>
+          <h4 class="footer__heading">{{ txt.legal }}</h4>
           <nav class="footer__nav" aria-label="Legal links">
-            <a href="#" class="footer__link" @click.prevent="openPrivacyPolicy">Privacy Policy</a>
-            <a href="#" class="footer__link" @click.prevent>Terms of Use</a>
+            <a href="#" class="footer__link" @click.prevent="openPrivacyPolicy">{{ txt.privacy }}</a>
+            <a href="#" class="footer__link" @click.prevent>{{ txt.terms }}</a>
           </nav>
         </div>
       </div>
 
       <!-- Data policy notice -->
-      <p class="footer__privacy-notice font-mono">
-        We respect your privacy. This website does not collect personal data.
-      </p>
+      <p class="footer__privacy-notice font-mono">{{ txt.dataNotice }}</p>
 
       <!-- Bottom bar -->
       <div class="footer__bottom">
-        <p>&copy; 2026 Circle Lab. All rights reserved. | EBU5315 Interactive Media Design</p>
+        <p>{{ txt.copyright }}</p>
       </div>
     </div>
   </footer>

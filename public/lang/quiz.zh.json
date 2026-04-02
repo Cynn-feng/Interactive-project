@@ -1,5 +1,13 @@
 {
   "title": "圆形几何测验",
-  "subtitle": "检验你的知识",
-  "coming": "测验内容即将推出..."
+  "subtitle": "通过定理题目检验你对圆几何的理解。",
+  "progressLabel": "进度",
+  "levelLabel": "难度等级",
+  "questionLabel": "题号",
+  "next": "下一题",
+  "restart": "重新开始",
+  "loading": "题目加载中...",
+  "incorrect": "回答不正确，请再试一次。",
+  "finished": "测验完成，做得很好！",
+  "doneHint": "你可以重新开始并练习新的题目顺序。"
 }

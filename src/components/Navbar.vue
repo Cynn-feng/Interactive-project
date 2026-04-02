@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useLang } from '../composables/useLang.js'
 
 const route = useRoute()
 
@@ -15,13 +16,8 @@ const toggleTheme = () => {
   setTheme(theme.value === 'dark' ? 'light' : 'dark')
 }
 
-// Language
-const lang = ref(localStorage.getItem('circlelab-lang') || 'en')
-const toggleLang = () => {
-  lang.value = lang.value === 'en' ? 'zh' : 'en'
-  localStorage.setItem('circlelab-lang', lang.value)
-  window.dispatchEvent(new CustomEvent('languagechange', { detail: { lang: lang.value } }))
-}
+// Language — shared state via composable
+const { lang, toggleLang } = useLang()
 
 // Font size
 const fontSizes = ['14px', '16px', '20px']
