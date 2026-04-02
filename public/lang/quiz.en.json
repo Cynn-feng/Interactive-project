@@ -1,5 +1,13 @@
 {
   "title": "Circle Geometry Quiz",
-  "subtitle": "Test your knowledge",
-  "coming": "Quiz content coming soon..."
+  "subtitle": "Test your understanding with theorem-based questions.",
+  "progressLabel": "Progress",
+  "levelLabel": "Level",
+  "questionLabel": "Question",
+  "next": "Next Question",
+  "restart": "Restart Quiz",
+  "loading": "Loading question...",
+  "incorrect": "Incorrect, try again.",
+  "finished": "Quiz finished! Great work.",
+  "doneHint": "You can restart to practice with a new order."
 }
