@@ -4,7 +4,7 @@
   var rawQuestions = [
     {
       level: 1,
-      img: 'quiz/images/q1.png',
+      img: 'images/q1.png',
       zh: {
         text: '如图 q1 所示，直径所对的圆周角是多少度？',
         opts: ['45°', '60°', '90°', '180°'],
@@ -19,7 +19,7 @@
     },
     {
       level: 1,
-      img: 'quiz/images/q2.png',
+      img: 'images/q2.png',
       zh: {
         text: '观察 q2，已知圆心角为 110°，其对应的圆周角是多少？',
         opts: ['55°', '110°', '220°'],
@@ -34,7 +34,7 @@
     },
     {
       level: 2,
-      img: 'quiz/images/q3.png',
+      img: 'images/q3.png',
       zh: {
         text: '图 q3 展示了两个 52° 的角，这证明了什么定理？',
         opts: ['对角互补', '同弧所对圆周角相等', '切线垂直于半径'],
@@ -49,7 +49,7 @@
     },
     {
       level: 2,
-      img: 'quiz/images/q4.png',
+      img: 'images/q4.png',
       zh: {
         text: '看图 q4，圆内接四边形的对角（如 99° 和 81°）之和是多少？',
         opts: ['90°', '180°', '360°'],

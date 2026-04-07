@@ -11,8 +11,8 @@
 
   var PAGES = {
     home:  { label: 'Home',  labelZh: '首页', href: '/',       i18nKey: 'nav.home' },
-    game:  { label: 'Game',  labelZh: '游戏', href: '/game/',  i18nKey: 'nav.game' },
-    quiz:  { label: 'Quiz',  labelZh: '测验', href: '/quiz/',  i18nKey: 'nav.quiz' }
+    game:  { label: 'Game',  labelZh: '游戏', href: '/game/index.html',  i18nKey: 'nav.game' },
+    quiz:  { label: 'Quiz',  labelZh: '测验', href: '/quiz/index.html',  i18nKey: 'nav.quiz' }
   };
 
   // SVG icons
