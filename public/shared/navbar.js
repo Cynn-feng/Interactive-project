@@ -10,9 +10,9 @@
   'use strict';
 
   var PAGES = {
-    home:  { label: 'Home',  labelZh: '首页', href: 'index.html',  i18nKey: 'nav.home' },
-    game:  { label: 'Game',  labelZh: '游戏', href: 'game.html',   i18nKey: 'nav.game' },
-    quiz:  { label: 'Quiz',  labelZh: '测验', href: 'quiz.html',   i18nKey: 'nav.quiz' }
+    home:  { label: 'Home',  labelZh: '首页', href: '/',       i18nKey: 'nav.home' },
+    game:  { label: 'Game',  labelZh: '游戏', href: '/game/',  i18nKey: 'nav.game' },
+    quiz:  { label: 'Quiz',  labelZh: '测验', href: '/quiz/',  i18nKey: 'nav.quiz' }
   };
 
   // SVG icons
@@ -52,7 +52,7 @@
     // -- Logo --
     var logo = document.createElement('a');
     logo.className = 'cl-navbar-logo';
-    logo.href = 'index.html';
+    logo.href = '/';
     logo.textContent = 'CIRCLE LAB';
 
     // -- Menu --
@@ -177,7 +177,7 @@
     breadcrumb.setAttribute('aria-label', 'Breadcrumb');
 
     var bcHome = document.createElement('a');
-    bcHome.href = 'index.html';
+    bcHome.href = '/';
     bcHome.textContent = 'Home';
     bcHome.setAttribute('data-i18n', 'nav.home');
 
