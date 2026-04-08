@@ -100,8 +100,8 @@ onUnmounted(() => {
         <router-link to="/" class="nav-link" :class="{ active: route.path === '/' }">
           {{ sharedText.home }}
         </router-link>
-        <a href="/game.html" class="nav-link">{{ sharedText.game }}</a>
-        <a href="/quiz.html" class="nav-link">{{ sharedText.quiz }}</a>
+        <a href="/game/index.html" class="nav-link">{{ sharedText.game }}</a>
+        <a href="/quiz/index.html" class="nav-link">{{ sharedText.quiz }}</a>
       </div>
 
       <!-- Desktop Controls -->
@@ -166,8 +166,8 @@ onUnmounted(() => {
         <router-link to="/" class="mobile-link" :class="{ active: route.path === '/' }" @click="closeMenu">
           {{ sharedText.home }}
         </router-link>
-        <a href="/game.html" class="mobile-link" @click="closeMenu">{{ sharedText.game }}</a>
-        <a href="/quiz.html" class="mobile-link" @click="closeMenu">{{ sharedText.quiz }}</a>
+        <a href="/game/index.html" class="mobile-link" @click="closeMenu">{{ sharedText.game }}</a>
+        <a href="/quiz/index.html" class="mobile-link" @click="closeMenu">{{ sharedText.quiz }}</a>
 
         <div class="mobile-controls">
           <div class="font-controls">

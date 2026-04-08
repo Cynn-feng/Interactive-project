@@ -1,9 +1,20 @@
 {
   "name": "circle-lab",
   "version": "1.0.0",
-  "description": "",
   "private": true,
+  "description": "Circle Lab 是一个圆几何学习站点，课程项目来自 QMUL 的 EBU5315。",
+  "homepage": "https://github.com/Cynn-feng/Interactive-project#readme",
+  "bugs": {
+    "url": "https://github.com/Cynn-feng/Interactive-project/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cynn-feng/Interactive-project.git"
+  },
+  "license": "ISC",
+  "author": "",
   "type": "module",
+  "main": "vite.config.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

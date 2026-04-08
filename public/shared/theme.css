@@ -3,68 +3,113 @@
    theme.css - CSS Custom Properties & Base Styles
    ============================================ */
 
-/* --- Dark Theme (Neon Geometry) --- */
+/* --- Dark Theme (Deep Space) --- */
 [data-theme="dark"] {
-  --bg-primary: #0F0F23;
-  --bg-secondary: #1A1A3E;
-  --bg-card: rgba(124,58,237,0.08);
-  --text-primary: #E2E8F0;
+  --bg-primary:    #080818;
+  --bg-secondary:  #0f0f2a;
+  --bg-card:       rgba(124, 58, 237, 0.07);
+  --bg-card-hover: rgba(124, 58, 237, 0.13);
+
+  --text-primary:   #EEF2FF;
   --text-secondary: #A78BFA;
-  --text-muted: #64748B;
-  --color-primary: #7C3AED;
+  --text-muted:     #6B7A99;
+
+  --color-primary:   #7C3AED;
   --color-secondary: #A78BFA;
-  --color-cta: #F43F5E;
-  --color-success: #22C55E;
-  --border-color: rgba(124,58,237,0.2);
-  --glow-primary: 0 0 20px rgba(124,58,237,0.4);
-  --glow-secondary: 0 0 15px rgba(167,139,250,0.3);
-  --grid-color: rgba(124,58,237,0.04);
-  --nav-bg: rgba(15,15,35,0.85);
+  --color-accent:    #C4B5FD;
+  --color-cta:       #F43F5E;
+  --color-success:   #22C55E;
+
+  --border-color:       rgba(124, 58, 237, 0.22);
+  --border-color-hover: rgba(167, 139, 250, 0.5);
+
+  --glow-primary:   0 0 28px rgba(124, 58, 237, 0.5), 0 0 60px rgba(124, 58, 237, 0.18);
+  --glow-secondary: 0 0 18px rgba(167, 139, 250, 0.35);
+  --glow-cta:       0 0 20px rgba(244, 63, 94, 0.45);
+
+  --grid-color: rgba(124, 58, 237, 0.045);
+  --nav-bg:     rgba(8, 8, 24, 0.82);
+
+  /* Shadows */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.45), 0 1px 4px rgba(0, 0, 0, 0.3);
+  --shadow-elevated: 0 8px 40px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.4);
 
   /* Scrollbar */
-  --scrollbar-track: #1A1A3E;
+  --scrollbar-track: #0f0f2a;
   --scrollbar-thumb: #7C3AED;
   --scrollbar-thumb-hover: #A78BFA;
 
   /* Selection */
-  --selection-bg: rgba(124,58,237,0.4);
-  --selection-text: #E2E8F0;
+  --selection-bg:   rgba(124, 58, 237, 0.4);
+  --selection-text: #EEF2FF;
 }
 
 /* --- Light Theme (Blueprint) --- */
 [data-theme="light"] {
-  --bg-primary: #F0F4FF;
-  --bg-secondary: #E2E8FF;
-  --bg-card: rgba(37,99,235,0.05);
-  --text-primary: #1E293B;
+  --bg-primary:    #F0F4FF;
+  --bg-secondary:  #E4EAFF;
+  --bg-card:       rgba(37, 99, 235, 0.05);
+  --bg-card-hover: rgba(37, 99, 235, 0.1);
+
+  --text-primary:   #1E2A4A;
   --text-secondary: #2563EB;
-  --text-muted: #64748B;
-  --color-primary: #2563EB;
+  --text-muted:     #6B7A99;
+
+  --color-primary:   #2563EB;
   --color-secondary: #3B82F6;
-  --color-cta: #DC2626;
-  --color-success: #16A34A;
-  --border-color: rgba(37,99,235,0.15);
-  --glow-primary: none;
+  --color-accent:    #60A5FA;
+  --color-cta:       #DC2626;
+  --color-success:   #16A34A;
+
+  --border-color:       rgba(37, 99, 235, 0.16);
+  --border-color-hover: rgba(37, 99, 235, 0.45);
+
+  --glow-primary:   none;
   --glow-secondary: none;
-  --grid-color: rgba(37,99,235,0.06);
-  --nav-bg: rgba(240,244,255,0.85);
+  --glow-cta:       none;
+
+  --grid-color: rgba(37, 99, 235, 0.055);
+  --nav-bg:     rgba(240, 244, 255, 0.88);
+
+  /* Shadows */
+  --shadow-card:     0 2px 16px rgba(30, 42, 74, 0.1), 0 1px 4px rgba(30, 42, 74, 0.06);
+  --shadow-elevated: 0 6px 32px rgba(30, 42, 74, 0.14), 0 2px 8px rgba(30, 42, 74, 0.08);
 
   /* Scrollbar */
-  --scrollbar-track: #E2E8FF;
+  --scrollbar-track: #E4EAFF;
   --scrollbar-thumb: #2563EB;
   --scrollbar-thumb-hover: #3B82F6;
 
   /* Selection */
-  --selection-bg: rgba(37,99,235,0.3);
-  --selection-text: #1E293B;
+  --selection-bg:   rgba(37, 99, 235, 0.25);
+  --selection-text: #1E2A4A;
 }
 
-/* --- Responsive Breakpoints (as custom properties) --- */
+/* --- Responsive Breakpoints --- */
 :root {
-  --bp-mobile: 480px;
-  --bp-tablet: 768px;
+  --bp-mobile:  480px;
+  --bp-tablet:  768px;
   --bp-desktop: 1024px;
-  --bp-wide: 1280px;
+  --bp-wide:    1280px;
+
+  /* Spacing scale */
+  --space-xs:  0.375rem;
+  --space-sm:  0.75rem;
+  --space-md:  1.25rem;
+  --space-lg:  2rem;
+  --space-xl:  3rem;
+  --space-2xl: 4.5rem;
+
+  /* Radius scale */
+  --radius-sm:  8px;
+  --radius-md:  14px;
+  --radius-lg:  20px;
+  --radius-xl:  28px;
+
+  /* Transitions */
+  --transition-fast:   0.15s ease;
+  --transition-base:   0.25s ease;
+  --transition-slow:   0.4s ease;
 }
 
 /* --- Base Reset --- */
@@ -85,19 +130,19 @@ body {
   font-family: 'Exo', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.65;
   min-height: 100vh;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.35s, color 0.35s;
 
-  /* Grid background pattern */
+  /* Subtle geometric grid */
   background-image:
     linear-gradient(var(--grid-color) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-  background-size: 40px 40px;
+  background-size: 52px 52px;
   background-attachment: fixed;
 }
 
-/* --- Monospace Font Class --- */
+/* --- Monospace Font --- */
 .font-mono {
   font-family: 'Roboto Mono', 'Courier New', monospace;
 }
@@ -106,11 +151,11 @@ body {
 a {
   color: var(--color-secondary);
   text-decoration: none;
-  transition: color 0.3s;
+  transition: color var(--transition-base);
 }
 
 a:hover {
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 
 /* --- Selection --- */
@@ -118,32 +163,20 @@ a:hover {
   background-color: var(--selection-bg);
   color: var(--selection-text);
 }
-
 ::-moz-selection {
   background-color: var(--selection-bg);
   color: var(--selection-text);
 }
 
-/* --- Scrollbar Styling --- */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--scrollbar-track);
-}
-
+/* --- Scrollbar --- */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
 ::-webkit-scrollbar-thumb {
   background: var(--scrollbar-thumb);
-  border-radius: 4px;
+  border-radius: 3px;
 }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollbar-thumb-hover);
-}
-
-/* Firefox scrollbar */
 html {
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
@@ -152,13 +185,17 @@ html {
 /* --- Theme Transition --- */
 body,
 body * {
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  transition:
+    background-color var(--transition-base),
+    color            var(--transition-base),
+    border-color     var(--transition-base),
+    box-shadow       var(--transition-base);
 }
 
 /* --- Utility Classes --- */
-.text-primary { color: var(--text-primary); }
+.text-primary   { color: var(--text-primary); }
 .text-secondary { color: var(--text-secondary); }
-.text-muted { color: var(--text-muted); }
-.bg-primary { background-color: var(--bg-primary); }
-.bg-secondary { background-color: var(--bg-secondary); }
-.bg-card { background-color: var(--bg-card); }
+.text-muted     { color: var(--text-muted); }
+.bg-primary     { background-color: var(--bg-primary); }
+.bg-secondary   { background-color: var(--bg-secondary); }
+.bg-card        { background-color: var(--bg-card); }
