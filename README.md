@@ -1,92 +1,161 @@
 # Circle Lab
 
-Circle Lab 是一个圆几何学习站点，课程项目来自 QMUL 的 EBU5315。
+Circle Lab is an interactive learning platform for GCSE-level circle geometry, built as a course project for **EBU5315** at Queen Mary University of London (QMUL).
 
-这个仓库现在主要负责首页（Vue 3 + Vite）和一套给队友复用的前端公共模块。`game` 和 `quiz` 页面已经有占位页，后续由队友继续填内容。
+> Contact: cxf17711867369@outlook.com
 
-## 现在有什么
+---
 
-- 首页（Vue）：Hero、定理轮播、功能卡片、广告位、聊天机器人、页脚
-- 主题切换：深色「霓虹几何」+ 浅色「蓝图风格」
-- 中英切换：轻量 i18n
-- 公共导航：普通页面也能直接接入
-- 可访问性：字体大小控制、键盘可达、减少动效支持
-- 隐私模块：隐私弹窗与同意逻辑
+## Features
 
-## 本地运行
+### Homepage (Vue 3 + Vite)
+- **Hero section** — animated introduction
+- **Theorem Carousel** — browse all 7 key circle theorems
+- **Feature Cards** — quick entry to Game and Quiz
+- **Circle Lab AI Terminal** — smart chatbot covering 30+ GCSE geometry topics, with real-time calculation (area, circumference, arc length, sector area)
+- **Theme toggle** — Dark "Neon Geometry" / Light "Blueprint" mode
+- **Language toggle** — English / Chinese (lightweight i18n)
+- **Footer** — project info and contact
+
+### Game Page (Vanilla JS)
+- Interactive circle geometry game
+- Multi-tab layout (Learn / Play / Leaderboard)
+- Shared navbar, theme and i18n modules
+
+### Quiz Page (Vanilla JS)
+- Image-based multiple-choice quiz
+- Score tracking with pass/fail feedback
+- Shared navbar, theme and i18n modules
+
+### Shared Modules (`public/shared/`)
+| File | Purpose |
+|------|---------|
+| `theme.css` | CSS variables, global base styles |
+| `navbar.css` | Navigation bar styles |
+| `theme.js` | Dark/light mode logic |
+| `navbar.js` | Dynamic navbar renderer |
+| `i18n.js` | Language switching (loads `lang/*.json`) |
+| `accessibility.js` | Font size control, keyboard nav, reduced motion |
+| `privacy.js` | Privacy policy modal |
+
+---
+
+## Project Structure
+
+```text
+Interactive-project/
+├── index.html               # Vue app entry point
+├── src/
+│   ├── main.js
+│   ├── App.vue
+│   ├── router/              # Vue Router (Hash mode)
+│   ├── views/
+│   │   └── HomePage.vue     # Homepage composition root
+│   └── components/
+│       ├── Navbar.vue       # Homepage navbar (Vue)
+│       ├── Hero.vue
+│       ├── TheoremCarousel.vue
+│       ├── FeatureCards.vue
+│       ├── AdsBanner.vue
+│       ├── Chatbot.vue      # Circle Lab AI Terminal
+│       └── Footer.vue
+├── public/
+│   ├── game/
+│   │   ├── index.html       # Game page entry
+│   │   ├── game.js
+│   │   └── game.css
+│   ├── quiz/
+│   │   ├── index.html       # Quiz page entry
+│   │   ├── quiz.js
+│   │   ├── quiz.css
+│   │   └── images/          # Quiz question images
+│   ├── shared/              # Shared JS/CSS modules
+│   └── lang/                # i18n translation files (EN / ZH)
+└── vite.config.js
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (LTS recommended)
+- npm
+
+### Install & Run
 
 ```bash
 npm install
 npm run dev
 ```
 
-默认会启动 Vite 开发服务器。常用入口：
+Local URLs:
 
-- 首页：`http://localhost:5173/#/`
-- Game 占位页：`http://localhost:5173/game.html`
-- Quiz 占位页：`http://localhost:5173/quiz.html`
+| Page | URL |
+|------|-----|
+| Homepage | `http://localhost:5173/` |
+| Game | `http://localhost:5173/game/index.html` |
+| Quiz | `http://localhost:5173/quiz/index.html` |
 
-## 打包与预览
+### Build & Preview
 
 ```bash
 npm run build
 npm run preview
 ```
 
-`build` 产物在 `dist/`。
+Output is in `dist/`.
 
-## 目录速览
+---
 
-```text
-circle-lab/
-├── src/
-│   ├── components/          # Vue 组件（首页模块）
-│   ├── views/HomePage.vue   # 首页聚合
-│   ├── router/              # Vue Router（Hash 模式）
-│   └── main.js
-├── public/
-│   ├── game.html            # 队友页面入口（占位）
-│   ├── quiz.html            # 队友页面入口（占位）
-│   ├── shared/              # 公共 JS/CSS 模块
-│   └── lang/                # 文案资源（EN / ZH）
-├── docs/                    # 设计与流程文档
-└── index.html
-```
+## Shared Module Integration (for static pages)
 
-## 给队友的接入方式
-
-如果你在写纯 HTML 页面，可以直接复用公共模块：
+If you are writing a plain HTML page and want to reuse the shared modules:
 
 ```html
-<link rel="stylesheet" href="shared/theme.css" />
-<link rel="stylesheet" href="shared/navbar.css" />
+<head>
+  <link rel="stylesheet" href="../shared/theme.css" />
+  <link rel="stylesheet" href="../shared/navbar.css" />
+</head>
+<body>
+  <div id="navbar-container"></div>
 
-<script src="shared/theme.js"></script>
-<script src="shared/navbar.js"></script>
-<script src="shared/i18n.js"></script>
-<script src="shared/accessibility.js"></script>
-<script src="shared/privacy.js"></script>
+  <!-- page content -->
+
+  <script src="../shared/theme.js"></script>
+  <script src="../shared/navbar.js"></script>
+  <script src="../shared/i18n.js"></script>
+  <script src="../shared/accessibility.js"></script>
+  <script src="../shared/privacy.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      window.CircleLab.theme.init()
+      window.CircleLab.navbar.init({ activePage: 'game' }) // 'home' | 'game' | 'quiz'
+      window.CircleLab.i18n.init('game')                   // page name for lang file
+      window.CircleLab.accessibility.init()
+      window.CircleLab.privacy.init()
+    })
+  </script>
+</body>
 ```
 
-页面里预留一个容器给导航：
+---
 
-```html
-<div id="navbar-container"></div>
-```
+## Tech Stack
 
-然后在 `DOMContentLoaded` 里初始化：
+| Layer | Technology |
+|-------|-----------|
+| Homepage | Vue 3, Vite, Vue Router |
+| Game / Quiz | Vanilla HTML / CSS / JS |
+| Styling | CSS Custom Properties (variables) |
+| i18n | Custom lightweight module |
+| Build | Vite |
 
-```js
-window.CircleLab.theme.init()
-window.CircleLab.navbar.init({ activePage: 'game' })
-window.CircleLab.i18n.init('game')
-window.CircleLab.accessibility.init()
-window.CircleLab.privacy.init()
-```
+---
 
-## 开发备注
+## Notes
 
-- Node 版本建议用当前稳定版（LTS）
-- 字体来自 Google Fonts，离线环境下会回退到系统字体
-- 首页路由使用 `createWebHashHistory()`，部署静态站点更省心
-
+- Homepage routing uses `createWebHashHistory()` — works well for static hosting
+- Fonts are loaded from Google Fonts; fallback to system fonts when offline
+- Game and Quiz pages are served as static files under `public/`, accessed via their exact file paths (`/game/index.html`, `/quiz/index.html`) to avoid Vite's SPA fallback
