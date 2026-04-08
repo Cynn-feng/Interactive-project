@@ -6,46 +6,52 @@
 /* --- Navbar Container --- */
 .cl-navbar {
   position: fixed;
-  top: 12px;
-  left: 12px;
-  right: 12px;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1200px, calc(100% - 32px));
   z-index: 1000;
   background: var(--nav-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 0 24px;
+  border-radius: var(--radius-lg);
+  padding: 0 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
-  box-shadow: var(--glow-secondary);
-  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  height: 62px;
+  box-shadow:
+    var(--glow-secondary),
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition:
+    background-color var(--transition-base),
+    border-color     var(--transition-base),
+    box-shadow       var(--transition-base);
 }
 
 /* --- Logo --- */
 .cl-navbar-logo {
   font-family: 'Exo', system-ui, sans-serif;
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1.15rem;
+  font-weight: 800;
   color: var(--color-primary);
   text-decoration: none;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   white-space: nowrap;
-  transition: color 0.3s, text-shadow 0.3s;
+  transition: color var(--transition-base);
 }
 
 .cl-navbar-logo:hover {
   color: var(--color-secondary);
-  text-shadow: var(--glow-primary);
 }
 
 /* --- Menu --- */
 .cl-navbar-menu {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -54,35 +60,36 @@
 .cl-navbar-menu a {
   position: relative;
   display: inline-block;
-  padding: 8px 16px;
-  color: var(--text-primary);
-  font-size: 0.9rem;
-  font-weight: 500;
+  padding: 8px 18px;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   text-decoration: none;
-  border-radius: 8px;
-  transition: color 0.3s, background-color 0.3s;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-base), background-color var(--transition-base);
 }
 
 .cl-navbar-menu a:hover {
-  color: var(--color-secondary);
-  background-color: var(--bg-card);
+  color: var(--text-primary);
+  background-color: var(--bg-card-hover);
 }
 
-/* Active page neon underline */
+/* Active — glowing pill */
 .cl-navbar-menu a.active {
-  color: var(--color-primary);
+  color: var(--color-accent);
+  background: var(--bg-card);
 }
 
 .cl-navbar-menu a.active::after {
   content: '';
   position: absolute;
-  bottom: 2px;
-  left: 16px;
-  right: 16px;
+  bottom: 5px;
+  left: 18px;
+  right: 18px;
   height: 2px;
   background: var(--color-primary);
   border-radius: 1px;
-  box-shadow: var(--glow-primary);
 }
 
 /* --- Controls (right side) --- */
@@ -92,32 +99,37 @@
   gap: 6px;
 }
 
-/* --- Navbar Buttons (theme, lang, font size) --- */
+/* --- Navbar Buttons --- */
 .cl-navbar-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   padding: 0;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: var(--bg-card);
-  color: var(--text-primary);
-  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  transition:
+    background-color var(--transition-fast),
+    color            var(--transition-fast),
+    border-color     var(--transition-fast),
+    box-shadow       var(--transition-fast);
 }
 
 .cl-navbar-btn:hover {
   background: var(--color-primary);
   color: #fff;
+  border-color: var(--color-primary);
   box-shadow: var(--glow-primary);
 }
 
 .cl-navbar-btn svg {
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  height: 17px;
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -125,23 +137,23 @@
   stroke-linejoin: round;
 }
 
-/* Language button - wider to fit text */
+/* Language button */
 .cl-navbar-btn-lang {
   width: auto;
-  padding: 0 10px;
-  font-weight: 600;
-  font-size: 0.8rem;
-  letter-spacing: 0.5px;
+  padding: 0 12px;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 1px;
 }
 
-/* Font size buttons group */
+/* Font size group */
 .cl-font-group {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 1px;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 2px;
+  border-radius: var(--radius-sm);
+  padding: 3px;
   background: var(--bg-card);
 }
 
@@ -153,27 +165,23 @@
   height: 28px;
   padding: 0;
   border: none;
-  border-radius: 6px;
+  border-radius: 5px;
   background: transparent;
   color: var(--text-muted);
   font-family: 'Exo', system-ui, sans-serif;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
-.cl-font-group .cl-font-btn:hover {
-  background: var(--color-primary);
-  color: #fff;
-}
-
+.cl-font-group .cl-font-btn:hover,
 .cl-font-group .cl-font-btn.active {
   background: var(--color-primary);
   color: #fff;
 }
 
-.cl-font-btn-sm { font-size: 0.7rem; }
-.cl-font-btn-md { font-size: 0.85rem; }
-.cl-font-btn-lg { font-size: 1.05rem; }
+.cl-font-btn-sm { font-size: 0.68rem; }
+.cl-font-btn-md { font-size: 0.82rem; }
+.cl-font-btn-lg { font-size: 1rem; }
 
 /* --- Hamburger --- */
 .cl-hamburger {
@@ -181,81 +189,76 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   padding: 0;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: var(--bg-card);
   cursor: pointer;
-  gap: 4px;
-  transition: background-color 0.3s;
+  gap: 5px;
+  transition: background-color var(--transition-fast);
 }
 
 .cl-hamburger span {
   display: block;
   width: 18px;
-  height: 2px;
+  height: 1.5px;
   background: var(--text-primary);
   border-radius: 1px;
-  transition: transform 0.3s, opacity 0.3s;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.cl-hamburger.open span:nth-child(1) {
-  transform: translateY(6px) rotate(45deg);
-}
-
-.cl-hamburger.open span:nth-child(2) {
-  opacity: 0;
-}
-
-.cl-hamburger.open span:nth-child(3) {
-  transform: translateY(-6px) rotate(-45deg);
-}
+.cl-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.cl-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.cl-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
 /* --- Breadcrumb --- */
 .cl-breadcrumb {
   position: fixed;
-  top: 76px;
-  left: 12px;
-  right: 12px;
+  top: calc(16px + 62px + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1200px, calc(100% - 32px));
   z-index: 999;
-  padding: 6px 24px;
-  font-size: 0.8rem;
+  padding: 6px 28px;
+  font-size: 0.78rem;
   color: var(--text-muted);
+  letter-spacing: 0.3px;
 }
 
 .cl-breadcrumb a {
   color: var(--text-muted);
   text-decoration: none;
-  transition: color 0.3s;
+  transition: color var(--transition-fast);
 }
 
 .cl-breadcrumb a:hover {
-  color: var(--color-primary);
+  color: var(--color-secondary);
 }
 
 .cl-breadcrumb .cl-breadcrumb-sep {
   margin: 0 8px;
-  color: var(--text-muted);
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .cl-breadcrumb .cl-breadcrumb-current {
   color: var(--text-secondary);
+  font-weight: 600;
 }
 
-/* --- Body Padding for Fixed Navbar --- */
+/* --- Body Padding --- */
 body.has-navbar {
-  padding-top: 100px;
+  padding-top: 112px;
 }
 
-/* --- Mobile Responsive --- */
+/* --- Mobile --- */
 @media (max-width: 768px) {
   .cl-navbar {
     flex-wrap: wrap;
     height: auto;
-    padding: 12px 16px;
+    padding: 14px 18px;
+    top: 12px;
   }
 
   .cl-navbar-menu {
@@ -263,9 +266,9 @@ body.has-navbar {
     flex-direction: column;
     width: 100%;
     order: 3;
-    padding-top: 12px;
+    padding-top: 14px;
     border-top: 1px solid var(--border-color);
-    margin-top: 12px;
+    margin-top: 14px;
     gap: 4px;
   }
 
@@ -275,15 +278,14 @@ body.has-navbar {
 
   .cl-navbar-menu a {
     width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
+    padding: 11px 14px;
   }
 
   .cl-navbar-menu a.active::after {
-    bottom: 4px;
-    left: 12px;
+    bottom: 6px;
+    left: 14px;
     right: auto;
-    width: 24px;
+    width: 20px;
   }
 
   .cl-navbar-controls {
@@ -301,12 +303,15 @@ body.has-navbar {
   }
 
   .cl-breadcrumb {
-    top: auto;
     position: relative;
-    padding: 6px 16px;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    padding: 6px 18px;
   }
 
   body.has-navbar {
-    padding-top: 80px;
+    padding-top: 90px;
   }
 }
