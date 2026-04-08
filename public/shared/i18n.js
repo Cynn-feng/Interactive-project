@@ -34,10 +34,17 @@
    */
   function getPageName() {
     var path = window.location.pathname;
-    var filename = path.substring(path.lastIndexOf('/') + 1);
-    // Remove extension
+    // Strip trailing slash: "/game/" → "/game"
+    var trimmed = path.replace(/\/$/, '');
+    var filename = trimmed.substring(trimmed.lastIndexOf('/') + 1);
+    // Remove extension (e.g. "index.html" → "index")
     var name = filename.replace(/\.[^.]+$/, '');
-    return name || 'index';
+    // If the filename is "index" or empty, use the parent directory name
+    if (!name || name === 'index') {
+      var parent = trimmed.substring(0, trimmed.lastIndexOf('/'));
+      name = parent.substring(parent.lastIndexOf('/') + 1) || 'home';
+    }
+    return name;
   }
 
   /**

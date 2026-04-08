@@ -1,30 +1,24 @@
 <script setup>
-const features = [
-  {
-    id: 'game',
-    title: 'Interactive Games',
-    description:
-      'Put your circle geometry knowledge to the test with fun, hands-on games. Drag, click, and solve puzzles that bring theorems to life in real time.',
-    link: 'game.html',
-    icon: 'game'
-  },
-  {
-    id: 'quiz',
-    title: 'Challenge Quizzes',
-    description:
-      'Test your understanding with timed quizzes covering every circle theorem. Track your progress and aim for a perfect score across multiple difficulty levels.',
-    link: 'quiz.html',
-    icon: 'quiz'
-  },
-  {
-    id: 'learn',
-    title: 'Learn Theorems',
-    description:
-      'Explore beautifully animated explanations of each circle theorem. Step through proofs, see visual demos, and build deep geometric intuition.',
-    link: '#theorems',
-    icon: 'learn'
-  }
-]
+import { computed } from 'vue'
+import { useLang } from '../composables/useLang.js'
+
+const { lang } = useLang()
+
+const txt = computed(() => lang.value === 'zh' ? {
+  sectionTitle: '探索与学习',
+  features: [
+    { id: 'game', title: '互动游戏', description: '通过有趣的互动游戏学习圆的概念，包含视觉反馈和挑战。', link: '/game/index.html', linkText: '开始游戏', icon: 'game' },
+    { id: 'quiz', title: '知识测验', description: '参加分级测验，获得即时反馈。从基础到进阶逐步提升。', link: '/quiz/index.html', linkText: '开始测验', icon: 'quiz' },
+    { id: 'learn', title: '可视化学习', description: '观看每个圆定理的动画演示。拖拽交互，加深理解。', link: '#theorems', linkText: '探索', icon: 'learn' }
+  ]
+} : {
+  sectionTitle: 'Explore & Learn',
+  features: [
+    { id: 'game', title: 'Interactive Games', description: 'Learn circle concepts through engaging, hands-on games with visual feedback and challenges.', link: '/game/index.html', linkText: 'Play Now', icon: 'game' },
+    { id: 'quiz', title: 'Test Your Knowledge', description: 'Take level-based quizzes with instant feedback. Progress from basics to advanced theorems.', link: '/quiz/index.html', linkText: 'Start Quiz', icon: 'quiz' },
+    { id: 'learn', title: 'Visual Learning', description: 'Watch animated demonstrations of every circle theorem. Drag and interact to deepen understanding.', link: '#theorems', linkText: 'Explore', icon: 'learn' }
+  ]
+})
 
 function handleClick(link) {
   if (link.startsWith('#')) {
@@ -41,13 +35,13 @@ function handleClick(link) {
 <template>
   <section class="features">
     <div class="features__header">
-      <h2 class="features__title">Explore &amp; Learn</h2>
+      <h2 class="features__title">{{ txt.sectionTitle }}</h2>
       <div class="features__accent" aria-hidden="true"></div>
     </div>
 
     <div class="features__grid">
       <article
-        v-for="feature in features"
+        v-for="feature in txt.features"
         :key="feature.id"
         class="card"
         @click="handleClick(feature.link)"
@@ -117,7 +111,7 @@ function handleClick(link) {
 
         <h3 class="card__title">{{ feature.title }}</h3>
         <p class="card__description">{{ feature.description }}</p>
-        <span class="card__link">Explore &rarr;</span>
+        <span class="card__link">{{ feature.linkText }} &rarr;</span>
       </article>
     </div>
   </section>

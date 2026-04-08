@@ -1,38 +1,30 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useLang } from '../composables/useLang.js'
 
-const theorems = [
-  {
-    id: 1,
-    name: 'Angle at Centre Theorem',
-    explanation: 'The angle at the centre is twice the angle at the circumference when both are subtended by the same arc.'
-  },
-  {
-    id: 2,
-    name: 'Angles in Same Segment',
-    explanation: 'Angles subtended by the same arc in the same segment are equal.'
-  },
-  {
-    id: 3,
-    name: 'Angle in Semicircle',
-    explanation: 'The angle in a semicircle is always 90 degrees.'
-  },
-  {
-    id: 4,
-    name: 'Cyclic Quadrilateral',
-    explanation: 'Opposite angles in a cyclic quadrilateral sum to 180 degrees.'
-  },
-  {
-    id: 5,
-    name: 'Tangent-Radius',
-    explanation: 'A tangent to a circle is perpendicular to the radius at the point of contact.'
-  },
-  {
-    id: 6,
-    name: 'Tangent Lengths',
-    explanation: 'Two tangent lines drawn from an external point to a circle are equal in length.'
-  }
-]
+const { lang } = useLang()
+
+const theorems = computed(() => lang.value === 'zh' ? [
+  { id: 1, name: '圆心角定理', explanation: '同弧上的圆心角是圆周角的两倍。' },
+  { id: 2, name: '同弓形角定理', explanation: '同弧同侧的圆周角相等。' },
+  { id: 3, name: '半圆角定理', explanation: '半圆上的圆周角恒为直角（90°）。' },
+  { id: 4, name: '圆内接四边形', explanation: '圆内接四边形的对角之和为180°。' },
+  { id: 5, name: '切线-半径定理', explanation: '圆的切线与切点处的半径垂直。' },
+  { id: 6, name: '等切线长', explanation: '从同一外部点引出的两条切线长度相等。' }
+] : [
+  { id: 1, name: 'Angle at Centre Theorem', explanation: 'The angle at the centre is twice the angle at the circumference when both are subtended by the same arc.' },
+  { id: 2, name: 'Angles in Same Segment', explanation: 'Angles subtended by the same arc in the same segment are equal.' },
+  { id: 3, name: 'Angle in Semicircle', explanation: 'The angle in a semicircle is always 90 degrees.' },
+  { id: 4, name: 'Cyclic Quadrilateral', explanation: 'Opposite angles in a cyclic quadrilateral sum to 180 degrees.' },
+  { id: 5, name: 'Tangent-Radius', explanation: 'A tangent to a circle is perpendicular to the radius at the point of contact.' },
+  { id: 6, name: 'Tangent Lengths', explanation: 'Two tangent lines drawn from an external point to a circle are equal in length.' }
+])
+
+const carouselTxt = computed(() => lang.value === 'zh' ? {
+  title: '圆的定理', subtitle: '滑动或点击探索每个定理'
+} : {
+  title: 'Circle Theorems', subtitle: 'Swipe or click to explore each theorem'
+})
 
 const currentIndex = ref(0)
 const isHovered = ref(false)
@@ -47,11 +39,11 @@ function goTo(index) {
 }
 
 function prev() {
-  currentIndex.value = currentIndex.value === 0 ? theorems.length - 1 : currentIndex.value - 1
+  currentIndex.value = currentIndex.value === 0 ? theorems.value.length - 1 : currentIndex.value - 1
 }
 
 function next() {
-  currentIndex.value = currentIndex.value === theorems.length - 1 ? 0 : currentIndex.value + 1
+  currentIndex.value = currentIndex.value === theorems.value.length - 1 ? 0 : currentIndex.value + 1
 }
 
 function onTouchStart(e) {
@@ -99,8 +91,8 @@ onUnmounted(() => {
 <template>
   <section id="theorems" class="carousel-section">
     <div class="carousel-header">
-      <h2 class="carousel-title">Circle Theorems</h2>
-      <p class="carousel-subtitle font-mono">Swipe or click to explore each theorem</p>
+      <h2 class="carousel-title">{{ carouselTxt.title }}</h2>
+      <p class="carousel-subtitle font-mono">{{ carouselTxt.subtitle }}</p>
     </div>
 
     <div
@@ -321,21 +313,33 @@ onUnmounted(() => {
                   <circle cx="130" cy="150" r="100" fill="none" stroke="#7C3AED" stroke-width="2" filter="url(#glow5)"/>
                   <!-- Centre O -->
                   <circle cx="130" cy="150" r="5" fill="#7C3AED" filter="url(#glow5)"/>
-                  <text x="115" y="145" fill="#7C3AED" font-family="monospace" font-size="14">O</text>
+                  <text x="114" y="145" fill="#7C3AED" font-family="monospace" font-size="14" font-weight="700">O</text>
                   <!-- Point P (right side of circle) -->
                   <circle cx="230" cy="150" r="5" fill="#F43F5E" filter="url(#glow5)"/>
                   <text x="236" y="145" fill="#F43F5E" font-family="monospace" font-size="14">P</text>
                   <!-- Radius OP -->
-                  <line x1="130" y1="150" x2="230" y2="150" stroke="#A78BFA" stroke-width="2" filter="url(#glow5)"/>
+                  <line x1="130" y1="150" x2="230" y2="150" stroke="#A78BFA" stroke-width="2.5" filter="url(#glow5)"/>
                   <!-- Tangent line (vertical through P) -->
-                  <line x1="230" y1="40" x2="230" y2="260" stroke="#F43F5E" stroke-width="2" filter="url(#glow5)"/>
-                  <!-- 90 degree square at P -->
-                  <rect x="216" y="150" width="14" height="14" fill="none" stroke="#F43F5E" stroke-width="1.5"/>
-                  <text x="240" y="175" fill="#F43F5E" font-family="monospace" font-size="11">90°</text>
-                  <!-- Label tangent -->
-                  <text x="240" y="55" fill="#F43F5E" font-family="monospace" font-size="11" opacity="0.7">tangent</text>
-                  <!-- Label radius -->
-                  <text x="150" y="142" fill="#A78BFA" font-family="monospace" font-size="11" opacity="0.7">radius</text>
+                  <line
+                    x1="230"
+                    y1="24"
+                    x2="230"
+                    y2="276"
+                    stroke="#F43F5E"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    filter="url(#glow5)"
+                  />
+                  <!-- 90 degree marker at P -->
+                  <path d="M 230 150 L 214 150 L 214 134 L 230 134" fill="none" stroke="#F43F5E" stroke-width="1.8"/>
+                  <text x="236" y="126" fill="#F43F5E" font-family="monospace" font-size="11">90°</text>
+                  <!-- Labels -->
+                  <text x="236" y="32" fill="#F43F5E" font-family="monospace" font-size="11" opacity="0.8">
+                    {{ lang === 'zh' ? '切线' : 'tangent' }}
+                  </text>
+                  <text x="166" y="140" fill="#A78BFA" font-family="monospace" font-size="11" opacity="0.8">
+                    {{ lang === 'zh' ? '半径' : 'radius' }}
+                  </text>
                 </svg>
               </div>
               <div class="slide-card__text">
