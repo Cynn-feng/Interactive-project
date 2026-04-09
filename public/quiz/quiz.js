@@ -229,9 +229,9 @@
   // ─── 完成状态 ────────────────────────────────────────────────────────────────
   function setFinishedView() {
     state.completed = true;
-    var msg = t('quiz.finished', 'Quiz complete! Great work.')
+    var msg = t('finished', 'Quiz complete! Great work.')
               + ' '
-              + t('quiz.doneHint', 'Press Restart to try again with a new order.');
+              + t('doneHint', 'Press Restart to try again with a new order.');
     setFeedback(msg, 'quiz-feedback--done');
     els.next.classList.add('quiz-btn--hidden');
     els.restart.classList.remove('quiz-btn--hidden');
@@ -291,7 +291,7 @@
         setFinishedView();
       }
     } else {
-      setFeedback('❌ ' + t('quiz.incorrect', 'Incorrect — try again!'), 'quiz-feedback--err');
+      setFeedback('❌ ' + t('incorrect', 'Incorrect — try again!'), 'quiz-feedback--err');
     }
   }
 
@@ -314,9 +314,9 @@
   // ─── 语言切换时同步更新题目文字和选项 ───────────────────────────────────────
   function onLanguageChange() {
     if (state.completed) {
-      var msg = t('quiz.finished', 'Quiz complete! Great work.')
+      var msg = t('finished', 'Quiz complete! Great work.')
                 + ' '
-                + t('quiz.doneHint', 'Press Restart to try again with a new order.');
+                + t('doneHint', 'Press Restart to try again with a new order.');
       setFeedback(msg, 'quiz-feedback--done');
       return;
     }
@@ -337,7 +337,7 @@
     if (state.solvedCurrent) {
       setFeedback('✅ ' + lang.exp, 'quiz-feedback--ok');
     } else if (els.feedback.classList.contains('quiz-feedback--err')) {
-      setFeedback('❌ ' + t('quiz.incorrect', 'Incorrect — try again!'), 'quiz-feedback--err');
+      setFeedback('❌ ' + t('incorrect', 'Incorrect — try again!'), 'quiz-feedback--err');
     }
   }
 
