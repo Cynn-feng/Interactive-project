@@ -54,16 +54,16 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       if (window.CircleLab && window.CircleLab.navbar) {
-        window.CircleLab.navbar.init({ activePage: 'quiz' });
+        window.CircleLab.navbar.initNavbar({ activePage: 'quiz' });
       }
       if (window.CircleLab && window.CircleLab.i18n) {
-        window.CircleLab.i18n.init('quiz');
+        window.CircleLab.i18n.setLanguage(window.CircleLab.i18n.getLanguage());
       }
       if (window.CircleLab && window.CircleLab.accessibility) {
-        window.CircleLab.accessibility.init();
+        window.CircleLab.accessibility.initAccessibility();
       }
       if (window.CircleLab && window.CircleLab.privacy) {
-        window.CircleLab.privacy.init();
+        window.CircleLab.privacy.initPrivacy();
       }
       if (window.CircleLabQuiz) {
         window.CircleLabQuiz.init();
