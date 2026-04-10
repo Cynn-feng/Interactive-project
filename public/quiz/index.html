@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="quiz.css">
 </head>
 <body>
+  <div id="navbar-container"></div>
+
   <main class="quiz-page">
     <section class="quiz-hero">
       <h1 data-i18n="title">Circle Geometry Quiz</h1>
@@ -19,13 +21,13 @@
 
     <section class="quiz-shell" aria-live="polite">
       <header class="quiz-topbar">
-        <p class="quiz-chip"><span data-i18n="progressLabel">Progress</span>: <strong id="quiz-progress">1 / 4</strong></p>
+        <p class="quiz-chip"><span data-i18n="progressLabel">Progress</span>: <strong id="quiz-progress">1 / 10</strong></p>
         <p class="quiz-chip"><span data-i18n="levelLabel">Level</span>: <strong id="quiz-level">1</strong></p>
-        <p class="quiz-chip"><span data-i18n="questionLabel">Question</span>: <strong id="quiz-question-counter">1 / 4</strong></p>
+        <p class="quiz-chip"><span data-i18n="questionLabel">Question</span>: <strong id="quiz-question-counter">1 / 10</strong></p>
       </header>
 
       <article class="quiz-question-card">
-        <h2 id="quiz-question-text" data-i18n="loading">Loading question...</h2>
+        <h2 id="quiz-question-text">Loading question...</h2>
 
         <div class="quiz-image-wrap">
           <img id="quiz-image" src="" alt="Circle theorem diagram">
