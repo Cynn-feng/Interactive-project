@@ -20,8 +20,17 @@
     </section>
 
     <section class="quiz-shell" aria-live="polite">
+      <div class="quiz-mode-switcher" role="group" aria-label="Quiz mode selector">
+        <span class="quiz-mode-switcher__label">Mode</span>
+        <div class="quiz-mode-switcher__buttons">
+          <button id="quiz-mode-easy" class="quiz-btn quiz-btn--mode" type="button">Easy Mode</button>
+          <button id="quiz-mode-hard" class="quiz-btn quiz-btn--mode" type="button">Hard Mode</button>
+        </div>
+      </div>
+
       <header class="quiz-topbar">
         <p class="quiz-chip"><span data-i18n="progressLabel">Progress</span>: <strong id="quiz-progress">1 / 10</strong></p>
+        <p class="quiz-chip"><span id="quiz-mode-chip-label">Mode</span>: <strong id="quiz-mode-label">Easy</strong></p>
         <p class="quiz-chip"><span data-i18n="levelLabel">Level</span>: <strong id="quiz-level">1</strong></p>
         <p class="quiz-chip"><span data-i18n="questionLabel">Question</span>: <strong id="quiz-question-counter">1 / 10</strong></p>
       </header>
