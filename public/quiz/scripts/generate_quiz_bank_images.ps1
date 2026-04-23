@@ -25,14 +25,6 @@ function Save-Canvas {
 function New-Pen { param([string]$Color, [float]$Width = 4) return New-Object System.Drawing.Pen ([System.Drawing.ColorTranslator]::FromHtml($Color)), $Width }
 function New-Brush { param([string]$Color) return New-Object System.Drawing.SolidBrush ([System.Drawing.ColorTranslator]::FromHtml($Color)) }
 
-function Draw-Title {
-  param([System.Drawing.Graphics]$Graphics, [string]$Text)
-  $font = New-Object System.Drawing.Font('Arial', 34, [System.Drawing.FontStyle]::Regular)
-  $brush = New-Brush '#0f172a'
-  $Graphics.DrawString($Text, $font, $brush, 70, 50)
-  $brush.Dispose()
-  $font.Dispose()
-}
 
 function Draw-Label {
   param(
@@ -43,13 +35,17 @@ function Draw-Label {
     [string]$Color = '#111827',
     [float]$Size = 28
   )
+  if ([string]::IsNullOrWhiteSpace($Text)) { return }
   $font = New-Object System.Drawing.Font('Arial', $Size, [System.Drawing.FontStyle]::Regular)
   $brush = New-Brush $Color
+  $background = New-Brush '#ffffff'
+  $textSize = $Graphics.MeasureString($Text, $font)
+  $Graphics.FillRectangle($background, $X - 8, $Y - 4, $textSize.Width + 16, $textSize.Height + 8)
   $Graphics.DrawString($Text, $font, $brush, $X, $Y)
+  $background.Dispose()
   $brush.Dispose()
   $font.Dispose()
 }
-
 function Draw-Circle {
   param([System.Drawing.Graphics]$Graphics, [System.Drawing.Pen]$Pen, [float]$CenterX, [float]$CenterY, [float]$Radius)
   $Graphics.DrawEllipse($Pen, $CenterX - $Radius, $CenterY - $Radius, $Radius * 2, $Radius * 2)
@@ -100,7 +96,6 @@ function Draw-SameSegment {
   param($cfg)
   $c = New-Canvas
   $g = $c.Graphics
-  Draw-Title $g $cfg.Title
   $cx = 720; $cy = 670; $r = 330
   Draw-Circle $g $pens.black $cx $cy $r
   $a = Get-CirclePoint $cx $cy $r 140
@@ -126,7 +121,6 @@ function Draw-CentralInscribed {
   param($cfg)
   $c = New-Canvas
   $g = $c.Graphics
-  Draw-Title $g $cfg.Title
   $cx = 720; $cy = 670; $r = 330
   Draw-Circle $g $pens.black $cx $cy $r
   $a = Get-CirclePoint $cx $cy $r 145
@@ -151,7 +145,6 @@ function Draw-CyclicQuad {
   param($cfg)
   $c = New-Canvas
   $g = $c.Graphics
-  Draw-Title $g $cfg.Title
   $cx = 760; $cy = 660; $r = 345
   Draw-Circle $g $pens.black $cx $cy $r
   $a = Get-CirclePoint $cx $cy $r 145
@@ -179,7 +172,6 @@ function Draw-TangentRadius {
   param($cfg)
   $c = New-Canvas
   $g = $c.Graphics
-  Draw-Title $g $cfg.Title
   $cx = 670; $cy = 650; $r = 300
   Draw-Circle $g $pens.blue $cx $cy $r
   $touch = Get-CirclePoint $cx $cy $r 25
@@ -196,7 +188,6 @@ function Draw-DiameterSemicircle {
   param($cfg)
   $c = New-Canvas
   $g = $c.Graphics
-  Draw-Title $g $cfg.Title
   $cx = 700; $cy = 680; $r = 340
   Draw-Circle $g $pens.black $cx $cy $r
   $left = Get-CirclePoint $cx $cy $r 180
@@ -217,7 +208,6 @@ function Draw-ChordMidpoint {
   param($cfg)
   $c = New-Canvas
   $g = $c.Graphics
-  Draw-Title $g $cfg.Title
   $cx = 720; $cy = 660; $r = 340
   Draw-Circle $g $pens.black $cx $cy $r
   $y = $cy - 80
@@ -237,7 +227,6 @@ function Draw-EqualChords {
   param($cfg)
   $c = New-Canvas
   $g = $c.Graphics
-  Draw-Title $g $cfg.Title
   $cx = 720; $cy = 660; $r = 340
   Draw-Circle $g $pens.black $cx $cy $r
   $g.DrawLine($pens.purple, $cx - 220, $cy - 150, $cx + 220, $cy - 150)
@@ -254,7 +243,6 @@ function Draw-ExternalTangents {
   param($cfg)
   $c = New-Canvas
   $g = $c.Graphics
-  Draw-Title $g $cfg.Title
   $cx = 600; $cy = 650; $r = 230
   Draw-Circle $g $pens.blue $cx $cy $r
   $externalX = 1230; $externalY = 610
@@ -276,7 +264,6 @@ function Draw-ExternallyTangentCircles {
   param($cfg)
   $c = New-Canvas
   $g = $c.Graphics
-  Draw-Title $g $cfg.Title
   $c1x = 560; $c1y = 670; $r1 = 190
   $c2x = 980; $c2y = 670; $r2 = 230
   Draw-Circle $g $pens.pink $c1x $c1y $r1
@@ -295,7 +282,6 @@ function Draw-RegularHexagon {
   param($cfg)
   $c = New-Canvas
   $g = $c.Graphics
-  Draw-Title $g $cfg.Title
   $cx = 730; $cy = 650; $r = 320
   Draw-Circle $g $pens.blue $cx $cy $r
   $points = @()
@@ -315,89 +301,89 @@ function Draw-RegularHexagon {
 }
 
 $configs = @(
-  @{ File = 'q21.png'; Title = 'Angles in the Same Segment'; Type = 'same'; KnownLabel = '44 deg'; UnknownLabel = '?' },
-  @{ File = 'q22.png'; Title = 'Central and Inscribed Angles'; Type = 'central'; CentralLabel = '80 deg'; InscribedLabel = '?' },
-  @{ File = 'q23.png'; Title = 'Central and Inscribed Angles'; Type = 'central'; CentralLabel = '?'; InscribedLabel = '33 deg' },
-  @{ File = 'q24.png'; Title = 'Cyclic Quadrilateral'; Type = 'cyclic'; KnownLabel = '72 deg'; UnknownLabel = '?' },
-  @{ File = 'q25.png'; Title = 'Tangent and Radius'; Type = 'tangent'; AngleLabel = '?' },
-  @{ File = 'q26.png'; Title = 'Angle in a Semicircle'; Type = 'semi'; AngleLabel = '?' },
-  @{ File = 'q27.png'; Title = 'Perpendicular from the Centre'; Type = 'chord'; CenterLabel = 'O'; MeetLabel = 'M' },
-  @{ File = 'q28.png'; Title = 'Equal Distance from the Centre'; Type = 'equalchords' },
-  @{ File = 'q29.png'; Title = 'Tangents from an External Point'; Type = 'external'; UpperLabel = 'PA'; LowerLabel = 'PB' },
-  @{ File = 'q30.png'; Title = 'Regular Hexagon in a Circle'; Type = 'hex'; RadiusLabel = 'radius'; SideLabel = 'side' },
-  @{ File = 'q31.png'; Title = 'Angles in the Same Segment'; Type = 'same'; KnownLabel = '58 deg'; UnknownLabel = '?' },
-  @{ File = 'q32.png'; Title = 'Cyclic Quadrilateral'; Type = 'cyclic'; KnownLabel = '95 deg'; UnknownLabel = '?' },
-  @{ File = 'q33.png'; Title = 'Central and Inscribed Angles'; Type = 'central'; CentralLabel = '146 deg'; InscribedLabel = '?' },
-  @{ File = 'q34.png'; Title = 'Radius Perpendicular to Tangent'; Type = 'tangent'; AngleLabel = '90 deg' },
-  @{ File = 'q35.png'; Title = 'Angle in a Semicircle'; Type = 'semi'; AngleLabel = '?' },
-  @{ File = 'q36.png'; Title = 'Perpendicular from the Centre'; Type = 'chord'; CenterLabel = 'O'; MeetLabel = 'M' },
-  @{ File = 'q37.png'; Title = 'Tangents from an External Point'; Type = 'external'; UpperLabel = 'PA = 7 cm'; LowerLabel = 'PB = ?' },
-  @{ File = 'q38.png'; Title = 'Regular Hexagon in a Circle'; Type = 'hex'; RadiusLabel = 'radius = 6 cm'; SideLabel = 'side = ?' },
-  @{ File = 'q39.png'; Title = 'Externally Tangent Circles'; Type = 'circles'; LeftLabel = '3 cm'; RightLabel = '5 cm'; CenterLabel = '?' },
-  @{ File = 'q40.png'; Title = 'Angles in the Same Segment'; Type = 'same'; KnownLabel = 'x'; UnknownLabel = 'x' },
+  @{ File = 'q21.png'; Type = 'same'; KnownLabel = '44°'; UnknownLabel = '?' },
+  @{ File = 'q22.png'; Type = 'central'; CentralLabel = '80°'; InscribedLabel = '?' },
+  @{ File = 'q23.png'; Type = 'central'; CentralLabel = '?'; InscribedLabel = '33°' },
+  @{ File = 'q24.png'; Type = 'cyclic'; KnownLabel = '72°'; UnknownLabel = '?' },
+  @{ File = 'q25.png'; Type = 'tangent'; AngleLabel = '?' },
+  @{ File = 'q26.png'; Type = 'semi'; AngleLabel = '?' },
+  @{ File = 'q27.png'; Type = 'chord'; CenterLabel = 'O'; MeetLabel = 'M' },
+  @{ File = 'q28.png'; Type = 'equalchords' },
+  @{ File = 'q29.png'; Type = 'external'; UpperLabel = 'PA'; LowerLabel = 'PB' },
+  @{ File = 'q30.png'; Type = 'hex'; RadiusLabel = 'r'; SideLabel = 'a' },
+  @{ File = 'q31.png'; Type = 'same'; KnownLabel = '58°'; UnknownLabel = '?' },
+  @{ File = 'q32.png'; Type = 'cyclic'; KnownLabel = '95°'; UnknownLabel = '?' },
+  @{ File = 'q33.png'; Type = 'central'; CentralLabel = '146°'; InscribedLabel = '?' },
+  @{ File = 'q34.png'; Type = 'tangent'; AngleLabel = '90°' },
+  @{ File = 'q35.png'; Type = 'semi'; AngleLabel = '?' },
+  @{ File = 'q36.png'; Type = 'chord'; CenterLabel = 'O'; MeetLabel = 'M' },
+  @{ File = 'q37.png'; Type = 'external'; UpperLabel = 'PA = 7 cm'; LowerLabel = 'PB = ?' },
+  @{ File = 'q38.png'; Type = 'hex'; RadiusLabel = 'r = 6 cm'; SideLabel = 'a = ?' },
+  @{ File = 'q39.png'; Type = 'circles'; LeftLabel = '3 cm'; RightLabel = '5 cm'; CenterLabel = '?' },
+  @{ File = 'q40.png'; Type = 'same'; KnownLabel = 'x'; UnknownLabel = 'x' },
 
-  @{ File = 'q41.png'; Title = 'Alternate Segment Theorem'; Type = 'same'; KnownLabel = '36 deg'; UnknownLabel = '?' },
-  @{ File = 'q42.png'; Title = 'Alternate Segment Theorem'; Type = 'same'; KnownLabel = '28 deg'; UnknownLabel = '?' },
-  @{ File = 'q43.png'; Title = 'Cyclic Quadrilateral'; Type = 'cyclic'; KnownLabel = '127 deg'; UnknownLabel = '?' },
-  @{ File = 'q44.png'; Title = 'Central and Inscribed Angles'; Type = 'central'; CentralLabel = '?'; InscribedLabel = '47 deg' },
-  @{ File = 'q45.png'; Title = 'Equal Chords'; Type = 'equalchords' },
-  @{ File = 'q46.png'; Title = 'Externally Tangent Circles'; Type = 'circles'; LeftLabel = '9 cm'; RightLabel = '?'; CenterLabel = '17 cm' },
-  @{ File = 'q47.png'; Title = 'Tangents from an External Point'; Type = 'external'; UpperLabel = 'PA = 14 cm'; LowerLabel = 'PB = ?' },
-  @{ File = 'q48.png'; Title = 'Regular Hexagon in a Circle'; Type = 'hex'; RadiusLabel = 'diameter = 20 cm'; SideLabel = 'side = ?' },
-  @{ File = 'q49.png'; Title = 'Central and Inscribed Angles'; Type = 'central'; CentralLabel = '?'; InscribedLabel = '62 deg' },
-  @{ File = 'q50.png'; Title = 'Externally Tangent Circles'; Type = 'circles'; LeftLabel = '12 cm'; RightLabel = '15 cm'; CenterLabel = '?' },
-  @{ File = 'q51.png'; Title = 'Alternate Segment Theorem'; Type = 'same'; KnownLabel = '63 deg'; UnknownLabel = '?' },
-  @{ File = 'q52.png'; Title = 'Cyclic Quadrilateral'; Type = 'cyclic'; KnownLabel = '104 deg'; UnknownLabel = '?' },
-  @{ File = 'q53.png'; Title = 'Tangents from an External Point'; Type = 'external'; UpperLabel = 'PA + PB = 18 cm'; LowerLabel = 'PA = PB' },
-  @{ File = 'q54.png'; Title = 'Regular Hexagon in a Circle'; Type = 'hex'; RadiusLabel = 'radius = 11 cm'; SideLabel = 'side = ?' },
-  @{ File = 'q55.png'; Title = 'Central and Inscribed Angles'; Type = 'central'; CentralLabel = '134 deg'; InscribedLabel = '?' },
-  @{ File = 'q56.png'; Title = 'Angles in the Same Segment'; Type = 'same'; KnownLabel = '71 deg'; UnknownLabel = '?' },
-  @{ File = 'q57.png'; Title = 'Equal Chords'; Type = 'equalchords' },
-  @{ File = 'q58.png'; Title = 'Angle in a Semicircle'; Type = 'semi'; AngleLabel = '?' },
-  @{ File = 'q59.png'; Title = 'Radius and Tangent'; Type = 'tangent'; AngleLabel = '90 deg' },
-  @{ File = 'q60.png'; Title = 'Cyclic Quadrilateral'; Type = 'cyclic'; KnownLabel = '138 deg'; UnknownLabel = '?' },
+  @{ File = 'q41.png'; Type = 'same'; KnownLabel = '36°'; UnknownLabel = '?' },
+  @{ File = 'q42.png'; Type = 'same'; KnownLabel = '28°'; UnknownLabel = '?' },
+  @{ File = 'q43.png'; Type = 'cyclic'; KnownLabel = '127°'; UnknownLabel = '?' },
+  @{ File = 'q44.png'; Type = 'central'; CentralLabel = '?'; InscribedLabel = '47°' },
+  @{ File = 'q45.png'; Type = 'equalchords' },
+  @{ File = 'q46.png'; Type = 'circles'; LeftLabel = '9 cm'; RightLabel = '?'; CenterLabel = '17 cm' },
+  @{ File = 'q47.png'; Type = 'external'; UpperLabel = 'PA = 14 cm'; LowerLabel = 'PB = ?' },
+  @{ File = 'q48.png'; Type = 'hex'; RadiusLabel = 'd = 20 cm'; SideLabel = 'a = ?' },
+  @{ File = 'q49.png'; Type = 'central'; CentralLabel = '?'; InscribedLabel = '62°' },
+  @{ File = 'q50.png'; Type = 'circles'; LeftLabel = '12 cm'; RightLabel = '15 cm'; CenterLabel = '?' },
+  @{ File = 'q51.png'; Type = 'same'; KnownLabel = '63°'; UnknownLabel = '?' },
+  @{ File = 'q52.png'; Type = 'cyclic'; KnownLabel = '104°'; UnknownLabel = '?' },
+  @{ File = 'q53.png'; Type = 'external'; UpperLabel = 'PA + PB = 18 cm'; LowerLabel = 'PA = PB' },
+  @{ File = 'q54.png'; Type = 'hex'; RadiusLabel = 'r = 11 cm'; SideLabel = 'a = ?' },
+  @{ File = 'q55.png'; Type = 'central'; CentralLabel = '134°'; InscribedLabel = '?' },
+  @{ File = 'q56.png'; Type = 'same'; KnownLabel = '71°'; UnknownLabel = '?' },
+  @{ File = 'q57.png'; Type = 'equalchords' },
+  @{ File = 'q58.png'; Type = 'semi'; AngleLabel = '?' },
+  @{ File = 'q59.png'; Type = 'tangent'; AngleLabel = '90°' },
+  @{ File = 'q60.png'; Type = 'cyclic'; KnownLabel = '138°'; UnknownLabel = '?' },
 
-  @{ File = 'q61.png'; Title = 'Central and Inscribed Angles'; Type = 'central'; CentralLabel = '?'; InscribedLabel = '24 deg' },
-  @{ File = 'q62.png'; Title = 'Angles in the Same Segment'; Type = 'same'; KnownLabel = 'x'; UnknownLabel = 'x' },
-  @{ File = 'q63.png'; Title = 'Cyclic Quadrilateral'; Type = 'cyclic'; KnownLabel = '109 deg'; UnknownLabel = '?' },
-  @{ File = 'q64.png'; Title = 'Tangent and Radius'; Type = 'tangent'; AngleLabel = '90 deg' },
-  @{ File = 'q65.png'; Title = 'Angle in a Semicircle'; Type = 'semi'; AngleLabel = '?' },
-  @{ File = 'q66.png'; Title = 'Tangents from an External Point'; Type = 'external'; UpperLabel = 'PA = 9 cm'; LowerLabel = 'PB = ?' },
-  @{ File = 'q67.png'; Title = 'Perpendicular from the Centre'; Type = 'chord'; CenterLabel = 'O'; MeetLabel = 'M' },
-  @{ File = 'q68.png'; Title = 'Regular Hexagon in a Circle'; Type = 'hex'; RadiusLabel = 'radius = 4 cm'; SideLabel = 'perimeter = ?' },
-  @{ File = 'q69.png'; Title = 'Externally Tangent Circles'; Type = 'circles'; LeftLabel = '2 cm'; RightLabel = '11 cm'; CenterLabel = '?' },
-  @{ File = 'q70.png'; Title = 'Equal Chords'; Type = 'equalchords' },
-  @{ File = 'q71.png'; Title = 'Central and Inscribed Angles'; Type = 'central'; CentralLabel = '128 deg'; InscribedLabel = '?' },
-  @{ File = 'q72.png'; Title = 'Angles in the Same Segment'; Type = 'same'; KnownLabel = '29 deg'; UnknownLabel = '?' },
-  @{ File = 'q73.png'; Title = 'Cyclic Quadrilateral'; Type = 'cyclic'; KnownLabel = '88 deg'; UnknownLabel = '?' },
-  @{ File = 'q74.png'; Title = 'Tangent and Radius'; Type = 'tangent'; AngleLabel = '90 deg' },
-  @{ File = 'q75.png'; Title = 'Tangents from an External Point'; Type = 'external'; UpperLabel = 'PA + PB = 16 cm'; LowerLabel = 'PA = PB' },
-  @{ File = 'q76.png'; Title = 'Circle Radius and Diameter'; Type = 'hex'; RadiusLabel = 'diameter = 18 cm'; SideLabel = 'radius = ?' },
-  @{ File = 'q77.png'; Title = 'Central and Inscribed Angles'; Type = 'central'; CentralLabel = '?'; InscribedLabel = '75 deg' },
-  @{ File = 'q78.png'; Title = 'Regular Hexagon in a Circle'; Type = 'hex'; RadiusLabel = 'radius = ?'; SideLabel = 'side = 9 cm' },
-  @{ File = 'q79.png'; Title = 'Externally Tangent Circles'; Type = 'circles'; LeftLabel = '6 cm'; RightLabel = '?'; CenterLabel = '14 cm' },
-  @{ File = 'q80.png'; Title = 'Central and Inscribed Angles'; Type = 'central'; CentralLabel = '150 deg'; InscribedLabel = '?' },
+  @{ File = 'q61.png'; Type = 'central'; CentralLabel = '?'; InscribedLabel = '24°' },
+  @{ File = 'q62.png'; Type = 'same'; KnownLabel = 'x'; UnknownLabel = 'x' },
+  @{ File = 'q63.png'; Type = 'cyclic'; KnownLabel = '109°'; UnknownLabel = '?' },
+  @{ File = 'q64.png'; Type = 'tangent'; AngleLabel = '90°' },
+  @{ File = 'q65.png'; Type = 'semi'; AngleLabel = '?' },
+  @{ File = 'q66.png'; Type = 'external'; UpperLabel = 'PA = 9 cm'; LowerLabel = 'PB = ?' },
+  @{ File = 'q67.png'; Type = 'chord'; CenterLabel = 'O'; MeetLabel = 'M' },
+  @{ File = 'q68.png'; Type = 'hex'; RadiusLabel = 'r = 4 cm'; SideLabel = 'P = ?' },
+  @{ File = 'q69.png'; Type = 'circles'; LeftLabel = '2 cm'; RightLabel = '11 cm'; CenterLabel = '?' },
+  @{ File = 'q70.png'; Type = 'equalchords' },
+  @{ File = 'q71.png'; Type = 'central'; CentralLabel = '128°'; InscribedLabel = '?' },
+  @{ File = 'q72.png'; Type = 'same'; KnownLabel = '29°'; UnknownLabel = '?' },
+  @{ File = 'q73.png'; Type = 'cyclic'; KnownLabel = '88°'; UnknownLabel = '?' },
+  @{ File = 'q74.png'; Type = 'tangent'; AngleLabel = '90°' },
+  @{ File = 'q75.png'; Type = 'external'; UpperLabel = 'PA + PB = 16 cm'; LowerLabel = 'PA = PB' },
+  @{ File = 'q76.png'; Type = 'hex'; RadiusLabel = 'd = 18 cm'; SideLabel = 'r = ?' },
+  @{ File = 'q77.png'; Type = 'central'; CentralLabel = '?'; InscribedLabel = '75°' },
+  @{ File = 'q78.png'; Type = 'hex'; RadiusLabel = 'r = ?'; SideLabel = 'a = 9 cm' },
+  @{ File = 'q79.png'; Type = 'circles'; LeftLabel = '6 cm'; RightLabel = '?'; CenterLabel = '14 cm' },
+  @{ File = 'q80.png'; Type = 'central'; CentralLabel = '150°'; InscribedLabel = '?' },
 
-  @{ File = 'q81.png'; Title = 'Central and Inscribed Angles'; Type = 'central'; CentralLabel = '3x'; InscribedLabel = 'x + 15 deg' },
-  @{ File = 'q82.png'; Title = 'Cyclic Quadrilateral'; Type = 'cyclic'; KnownLabel = 'x + 20 deg'; UnknownLabel = '2x - 10 deg' },
-  @{ File = 'q83.png'; Title = 'Tangents from an External Point'; Type = 'external'; UpperLabel = 'PA + PB = 30 cm'; LowerLabel = 'PA = PB' },
-  @{ File = 'q84.png'; Title = 'Externally Tangent Circles'; Type = 'circles'; LeftLabel = '14 cm'; RightLabel = '?'; CenterLabel = '29 cm' },
-  @{ File = 'q85.png'; Title = 'Regular Hexagon Perimeter'; Type = 'hex'; RadiusLabel = 'side = 12 cm'; SideLabel = 'perimeter = ?' },
-  @{ File = 'q86.png'; Title = 'Regular Hexagon in a Circle'; Type = 'hex'; RadiusLabel = 'perimeter = 48 cm'; SideLabel = 'diameter = ?' },
-  @{ File = 'q87.png'; Title = 'Angles in the Same Segment'; Type = 'same'; KnownLabel = 'x + 12 deg'; UnknownLabel = '2x - 6 deg' },
-  @{ File = 'q88.png'; Title = 'Cyclic Quadrilateral'; Type = 'cyclic'; KnownLabel = 'x + 48 deg'; UnknownLabel = '2x + 6 deg' },
-  @{ File = 'q89.png'; Title = 'Alternate Segment Theorem'; Type = 'same'; KnownLabel = '54 deg'; UnknownLabel = '?' },
-  @{ File = 'q90.png'; Title = 'Equal Chords'; Type = 'equalchords' },
-  @{ File = 'q91.png'; Title = 'Central and Inscribed Angles'; Type = 'central'; CentralLabel = '172 deg'; InscribedLabel = '?' },
-  @{ File = 'q92.png'; Title = 'Angle in a Semicircle'; Type = 'semi'; AngleLabel = '90 deg' },
-  @{ File = 'q93.png'; Title = 'Externally Tangent Circles'; Type = 'circles'; LeftLabel = '2k'; RightLabel = '3k'; CenterLabel = '25 cm' },
-  @{ File = 'q94.png'; Title = 'Tangents from an External Point'; Type = 'external'; UpperLabel = 'PA = 2x + 1'; LowerLabel = 'PB = 17' },
-  @{ File = 'q95.png'; Title = 'Regular Hexagon in a Circle'; Type = 'hex'; RadiusLabel = 'diameter = ?'; SideLabel = 'side = 7 cm' },
-  @{ File = 'q96.png'; Title = 'Cyclic Quadrilateral'; Type = 'cyclic'; KnownLabel = '143 deg'; UnknownLabel = '?' },
-  @{ File = 'q97.png'; Title = 'Regular Hexagon in a Circle'; Type = 'hex'; RadiusLabel = 'perimeter = 54 cm'; SideLabel = 'radius = ?' },
-  @{ File = 'q98.png'; Title = 'Equal Chords'; Type = 'equalchords' },
-  @{ File = 'q99.png'; Title = 'Angles in the Same Segment'; Type = 'same'; KnownLabel = '63 deg'; UnknownLabel = '?' },
-  @{ File = 'q100.png'; Title = 'Externally Tangent Circles'; Type = 'circles'; LeftLabel = '10 cm'; RightLabel = '?'; CenterLabel = '23 cm' }
+  @{ File = 'q81.png'; Type = 'central'; CentralLabel = '3x'; InscribedLabel = 'x + 15°' },
+  @{ File = 'q82.png'; Type = 'cyclic'; KnownLabel = 'x + 20°'; UnknownLabel = '2x - 10°' },
+  @{ File = 'q83.png'; Type = 'external'; UpperLabel = 'PA + PB = 30 cm'; LowerLabel = 'PA = PB' },
+  @{ File = 'q84.png'; Type = 'circles'; LeftLabel = '14 cm'; RightLabel = '?'; CenterLabel = '29 cm' },
+  @{ File = 'q85.png'; Type = 'hex'; RadiusLabel = 'a = 12 cm'; SideLabel = 'P = ?' },
+  @{ File = 'q86.png'; Type = 'hex'; RadiusLabel = 'P = 48 cm'; SideLabel = 'd = ?' },
+  @{ File = 'q87.png'; Type = 'same'; KnownLabel = 'x + 12°'; UnknownLabel = '2x - 6°' },
+  @{ File = 'q88.png'; Type = 'cyclic'; KnownLabel = 'x + 48°'; UnknownLabel = '2x + 6°' },
+  @{ File = 'q89.png'; Type = 'same'; KnownLabel = '54°'; UnknownLabel = '?' },
+  @{ File = 'q90.png'; Type = 'equalchords' },
+  @{ File = 'q91.png'; Type = 'central'; CentralLabel = '172°'; InscribedLabel = '?' },
+  @{ File = 'q92.png'; Type = 'semi'; AngleLabel = '90°' },
+  @{ File = 'q93.png'; Type = 'circles'; LeftLabel = '2k'; RightLabel = '3k'; CenterLabel = '25 cm' },
+  @{ File = 'q94.png'; Type = 'external'; UpperLabel = 'PA = 2x + 1'; LowerLabel = 'PB = 17' },
+  @{ File = 'q95.png'; Type = 'hex'; RadiusLabel = 'd = ?'; SideLabel = 'a = 7 cm' },
+  @{ File = 'q96.png'; Type = 'cyclic'; KnownLabel = '143°'; UnknownLabel = '?' },
+  @{ File = 'q97.png'; Type = 'hex'; RadiusLabel = 'P = 54 cm'; SideLabel = 'r = ?' },
+  @{ File = 'q98.png'; Type = 'equalchords' },
+  @{ File = 'q99.png'; Type = 'same'; KnownLabel = '63°'; UnknownLabel = '?' },
+  @{ File = 'q100.png'; Type = 'circles'; LeftLabel = '10 cm'; RightLabel = '?'; CenterLabel = '23 cm' }
 )
 
 foreach ($cfg in $configs) {
