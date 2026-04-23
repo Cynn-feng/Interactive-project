@@ -41,6 +41,8 @@
     "questions_correct": "Questions Correct",
     "avg_time": "Average Time",
     "play_again": "Play Again",
+    "pause": "Pause",
+    "resume": "Resume",
     "theorems": {
       "centre_angle": "Angle at Centre Theorem",
       "centre_angle_desc": "The angle at the centre is twice the angle at the circumference",

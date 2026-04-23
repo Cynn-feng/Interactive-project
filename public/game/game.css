@@ -40,6 +40,7 @@
   border: 2px dashed var(--color-primary);
   opacity: 0.12;
   animation: hero-spin 20s linear infinite;
+  pointer-events: none;
 }
 .game-hero::after {
   content: '';
@@ -53,6 +54,7 @@
   border: 1px solid var(--color-secondary);
   opacity: 0.1;
   animation: hero-spin 14s linear infinite reverse;
+  pointer-events: none;
 }
 @keyframes hero-spin {
   to { transform: translateY(-50%) rotate(360deg); }
@@ -652,6 +654,11 @@
   align-items: center;
   justify-content: center;
   animation: overlay-in 0.2s ease-out;
+  cursor: pointer;
+}
+.game-pause-overlay:hover .game-pause-overlay__box {
+  transform: scale(1.03);
+  transition: transform 0.15s ease;
 }
 [data-theme="light"] .game-pause-overlay {
   background: rgba(240, 244, 255, 0.75);

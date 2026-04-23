@@ -269,14 +269,24 @@
     if (!panel) return;
     var existing = panel.querySelector('.game-pause-overlay');
     if (existing) return;
+    var lang = window.CircleLab && window.CircleLab.i18n ? window.CircleLab.i18n.getLanguage() : 'en';
     var overlay = document.createElement('div');
     overlay.className = 'game-pause-overlay';
-    var lang = window.CircleLab && window.CircleLab.i18n ? window.CircleLab.i18n.getLanguage() : 'en';
+    overlay.setAttribute('role', 'button');
+    overlay.setAttribute('tabindex', '0');
+    overlay.setAttribute('aria-label', lang === 'zh' ? '点击继续游戏' : 'Click to resume game');
     overlay.innerHTML = '<div class="game-pause-overlay__box">'
       + '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="10" height="24" rx="2" fill="currentColor"/><rect x="18" y="4" width="10" height="24" rx="2" fill="currentColor"/></svg>'
       + '<p>' + (lang === 'zh' ? '游戏已暂停' : 'Game Paused') + '</p>'
-      + '<span>' + (lang === 'zh' ? '休息一下，随时继续' : 'Take a break — resume anytime') + '</span>'
+      + '<span>' + (lang === 'zh' ? '点击此处继续游戏' : 'Click anywhere to resume') + '</span>'
       + '</div>';
+
+    var resumeFn = panelId === 'angle' ? toggleAnglePause : toggleMatcherPause;
+    overlay.addEventListener('click', resumeFn);
+    overlay.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); resumeFn(); }
+    });
+
     panel.appendChild(overlay);
   }
 
@@ -310,7 +320,7 @@
     angleState.timeLeft = 0;
     angleEls.feedback.textContent = '';
     angleEls.feedback.classList.remove('feedback--correct', 'feedback--wrong');
-    angleEls.prompt.textContent = t('game1.start');
+    angleEls.prompt.textContent = '';
     angleEls.theorem.textContent = '';
     angleEls.answer.value = '';
     angleEls.answer.disabled = true;
@@ -986,10 +996,6 @@
 
   function nextConstructorChallenge() {
     if (!constructorState.running) return;
-    if (!constructorState.solvedCurrent) {
-      constructorEls.feedback.textContent = t('game3.solve_first');
-      return;
-    }
     constructorState.index += 1;
     constructorState.points = [];
     constructorState.solvedCurrent = false;

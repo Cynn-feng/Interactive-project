@@ -48,6 +48,17 @@ onMounted(() => {
 </template>
 
 <style>
+/* Offset for fixed floating navbar (62px height + 16px top + 34px breadcrumb) */
+body {
+  padding-top: 112px;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-top: 90px;
+  }
+}
+
 .cookie-banner {
   position: fixed;
   bottom: 1.5rem;

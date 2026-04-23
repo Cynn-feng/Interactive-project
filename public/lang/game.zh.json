@@ -41,6 +41,8 @@
     "questions_correct": "正确题数",
     "avg_time": "平均用时",
     "play_again": "再玩一次",
+    "pause": "暂停",
+    "resume": "继续",
     "theorems": {
       "centre_angle": "圆心角定理",
       "centre_angle_desc": "圆心角是同弧上圆周角的两倍",

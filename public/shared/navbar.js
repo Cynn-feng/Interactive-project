@@ -236,6 +236,19 @@
       }
     } catch (e) { /* localStorage unavailable */ }
 
+    // Hide on scroll down, show on scroll up
+    var navEl = result.nav;
+    var lastScrollY = 0;
+    window.addEventListener('scroll', function () {
+      var current = window.scrollY;
+      if (current > lastScrollY && current > 40) {
+        navEl.classList.add('cl-navbar--hidden');
+      } else {
+        navEl.classList.remove('cl-navbar--hidden');
+      }
+      lastScrollY = current;
+    }, { passive: true });
+
     // Listen for theme changes to update icon
     document.addEventListener('themechange', function () {
       var themeBtn = document.getElementById('cl-theme-toggle');

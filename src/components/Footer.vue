@@ -39,8 +39,8 @@ function openPrivacyPolicy() {
           <h4 class="footer__heading">{{ txt.nav }}</h4>
           <nav class="footer__nav" aria-label="Footer navigation">
             <router-link to="/" class="footer__link">{{ txt.home }}</router-link>
-            <router-link to="/game" class="footer__link">{{ txt.game }}</router-link>
-            <router-link to="/quiz" class="footer__link">{{ txt.quiz }}</router-link>
+            <a href="/game/index.html" class="footer__link">{{ txt.game }}</a>
+            <a href="/quiz/index.html" class="footer__link">{{ txt.quiz }}</a>
           </nav>
         </div>
 
