@@ -48,32 +48,32 @@
 [data-theme="light"] {
   --bg-primary:    #F0F4FF;
   --bg-secondary:  #E4EAFF;
-  --bg-card:       rgba(37, 99, 235, 0.05);
-  --bg-card-hover: rgba(37, 99, 235, 0.1);
+  --bg-card:       rgba(255, 255, 255, 0.85);
+  --bg-card-hover: rgba(255, 255, 255, 0.95);
 
-  --text-primary:   #1E2A4A;
-  --text-secondary: #2563EB;
-  --text-muted:     #6B7A99;
+  --text-primary:   #0F172A;
+  --text-secondary: #1D4ED8;
+  --text-muted:     #475569;
 
   --color-primary:   #2563EB;
   --color-secondary: #3B82F6;
-  --color-accent:    #60A5FA;
+  --color-accent:    #1D4ED8;
   --color-cta:       #DC2626;
   --color-success:   #16A34A;
 
-  --border-color:       rgba(37, 99, 235, 0.16);
-  --border-color-hover: rgba(37, 99, 235, 0.45);
+  --border-color:       rgba(37, 99, 235, 0.22);
+  --border-color-hover: rgba(37, 99, 235, 0.55);
 
-  --glow-primary:   none;
-  --glow-secondary: none;
+  --glow-primary:   0 0 20px rgba(37, 99, 235, 0.2);
+  --glow-secondary: 0 0 12px rgba(59, 130, 246, 0.2);
   --glow-cta:       none;
 
   --grid-color: rgba(37, 99, 235, 0.055);
-  --nav-bg:     rgba(240, 244, 255, 0.88);
+  --nav-bg:     rgba(240, 244, 255, 0.92);
 
   /* Shadows */
-  --shadow-card:     0 2px 16px rgba(30, 42, 74, 0.1), 0 1px 4px rgba(30, 42, 74, 0.06);
-  --shadow-elevated: 0 6px 32px rgba(30, 42, 74, 0.14), 0 2px 8px rgba(30, 42, 74, 0.08);
+  --shadow-card:     0 2px 16px rgba(15, 23, 42, 0.1), 0 1px 4px rgba(15, 23, 42, 0.06);
+  --shadow-elevated: 0 6px 32px rgba(15, 23, 42, 0.14), 0 2px 8px rgba(15, 23, 42, 0.08);
 
   /* Scrollbar */
   --scrollbar-track: #E4EAFF;
@@ -82,7 +82,7 @@
 
   /* Selection */
   --selection-bg:   rgba(37, 99, 235, 0.25);
-  --selection-text: #1E2A4A;
+  --selection-text: #0F172A;
 }
 
 /* --- Responsive Breakpoints --- */
@@ -190,6 +190,40 @@ body * {
     color            var(--transition-base),
     border-color     var(--transition-base),
     box-shadow       var(--transition-base);
+}
+
+/* --- View Transition (theme switch) --- */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+  animation-timing-function: ease-in-out;
+}
+
+::view-transition-old(root) {
+  animation-name: theme-fade-out;
+}
+
+::view-transition-new(root) {
+  animation-name: theme-fade-in;
+}
+
+@keyframes theme-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes theme-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* --- User-toggled reduced motion --- */
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
 }
 
 /* --- Utility Classes --- */

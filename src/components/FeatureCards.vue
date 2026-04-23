@@ -44,7 +44,12 @@ function handleClick(link) {
         v-for="feature in txt.features"
         :key="feature.id"
         class="card"
+        role="button"
+        tabindex="0"
+        :aria-label="feature.title"
         @click="handleClick(feature.link)"
+        @keydown.enter="handleClick(feature.link)"
+        @keydown.space.prevent="handleClick(feature.link)"
       >
         <!-- Game icon -->
         <svg
@@ -161,6 +166,12 @@ function handleClick(link) {
   text-align: center;
   cursor: pointer;
   transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  outline: none;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
 }
 
 .card:hover {

@@ -13,7 +13,12 @@ const setTheme = (t) => {
   localStorage.setItem('circlelab-theme', t)
 }
 const toggleTheme = () => {
-  setTheme(theme.value === 'dark' ? 'light' : 'dark')
+  const next = theme.value === 'dark' ? 'light' : 'dark'
+  if (document.startViewTransition) {
+    document.startViewTransition(() => setTheme(next))
+  } else {
+    setTheme(next)
+  }
 }
 
 // Language — shared state via composable
@@ -39,6 +44,21 @@ const setFontSize = (index) => {
   localStorage.setItem('circlelab-fontsize', fontSizes[index])
 }
 
+// Reduced motion
+const reducedMotion = ref(localStorage.getItem('circlelab-reduced-motion') === '1')
+const applyReducedMotion = (val) => {
+  if (val) {
+    document.documentElement.classList.add('reduced-motion')
+  } else {
+    document.documentElement.classList.remove('reduced-motion')
+  }
+  localStorage.setItem('circlelab-reduced-motion', val ? '1' : '0')
+}
+const toggleReducedMotion = () => {
+  reducedMotion.value = !reducedMotion.value
+  applyReducedMotion(reducedMotion.value)
+}
+
 // Mobile menu
 const menuOpen = ref(false)
 const toggleMenu = () => {
@@ -62,9 +82,22 @@ const sharedText = computed(() => {
   }
 })
 
-// Breadcrumb
-const breadcrumb = computed(() => {
-  return sharedText.value.breadcrumb_home
+// Breadcrumb — show Home > CurrentPage on sub-pages
+const breadcrumbItems = computed(() => {
+  const path = route.path
+  if (path === '/game' || path.startsWith('/game')) {
+    return [
+      { label: sharedText.value.breadcrumb_home, to: '/' },
+      { label: sharedText.value.breadcrumb_game, to: null }
+    ]
+  }
+  if (path === '/quiz' || path.startsWith('/quiz')) {
+    return [
+      { label: sharedText.value.breadcrumb_home, to: '/' },
+      { label: sharedText.value.breadcrumb_quiz, to: null }
+    ]
+  }
+  return [{ label: sharedText.value.breadcrumb_home, to: null }]
 })
 
 // Responsive
@@ -77,6 +110,7 @@ const checkMobile = () => {
 onMounted(() => {
   setTheme(theme.value)
   initFontSize()
+  applyReducedMotion(reducedMotion.value)
   checkMobile()
   window.addEventListener('resize', checkMobile)
 })
@@ -123,6 +157,26 @@ onUnmounted(() => {
         <!-- Language toggle -->
         <button class="control-btn lang-btn" @click="toggleLang" aria-label="Toggle language">
           EN | 中
+        </button>
+
+        <!-- Reduced motion toggle -->
+        <button
+          class="control-btn motion-btn"
+          :class="{ active: reducedMotion }"
+          @click="toggleReducedMotion"
+          :aria-label="reducedMotion ? 'Enable animations' : 'Reduce motion'"
+          :title="reducedMotion ? 'Enable animations' : 'Reduce motion'"
+        >
+          <!-- Animation-on: sine wave -->
+          <svg v-if="!reducedMotion" class="theme-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12 C4 6, 8 6, 10 12 S16 18, 18 12 S22 6, 24 12"/>
+          </svg>
+          <!-- Animation-off: flat line with cross -->
+          <svg v-else class="theme-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <line x1="16" y1="6" x2="22" y2="12"/>
+            <line x1="16" y1="18" x2="22" y2="12"/>
+          </svg>
         </button>
 
         <!-- Theme toggle -->
@@ -182,6 +236,16 @@ onUnmounted(() => {
             </button>
           </div>
           <button class="control-btn lang-btn" @click="toggleLang">EN | 中</button>
+          <button class="control-btn motion-btn" :class="{ active: reducedMotion }" @click="toggleReducedMotion" :aria-label="reducedMotion ? 'Enable animations' : 'Reduce motion'">
+            <svg v-if="!reducedMotion" class="theme-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12 C4 6, 8 6, 10 12 S16 18, 18 12 S22 6, 24 12"/>
+            </svg>
+            <svg v-else class="theme-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <line x1="16" y1="6" x2="22" y2="12"/>
+              <line x1="16" y1="18" x2="22" y2="12"/>
+            </svg>
+          </button>
           <button class="control-btn theme-btn" @click="toggleTheme">
             <svg v-if="theme === 'dark'" class="theme-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="5"/>
@@ -203,10 +267,13 @@ onUnmounted(() => {
     </transition>
 
     <!-- Breadcrumb -->
-    <div class="breadcrumb">
-      <span class="breadcrumb-separator">&gt;</span>
-      <span class="breadcrumb-current">{{ breadcrumb }}</span>
-    </div>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <template v-for="(item, index) in breadcrumbItems" :key="index">
+        <span v-if="index > 0" class="breadcrumb-separator" aria-hidden="true">&gt;</span>
+        <router-link v-if="item.to" :to="item.to" class="breadcrumb-link">{{ item.label }}</router-link>
+        <span v-else class="breadcrumb-current" aria-current="page">{{ item.label }}</span>
+      </template>
+    </nav>
   </header>
 </template>
 
@@ -461,10 +528,34 @@ onUnmounted(() => {
   color: var(--text-muted);
   max-width: 1400px;
   margin: 0 auto;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .breadcrumb {
+    font-size: 0.68rem;
+    padding: 4px 16px;
+  }
+  .breadcrumb-current {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+  }
 }
 
 .breadcrumb-separator {
   opacity: 0.5;
+}
+
+.breadcrumb-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+  color: var(--color-primary);
 }
 
 .breadcrumb-current {

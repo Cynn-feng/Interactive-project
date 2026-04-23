@@ -172,29 +172,35 @@
     nav.appendChild(controls);
 
     // -- Breadcrumb --
-    var breadcrumb = document.createElement('div');
+    var breadcrumb = document.createElement('nav');
     breadcrumb.className = 'cl-breadcrumb';
     breadcrumb.setAttribute('aria-label', 'Breadcrumb');
 
     var bcHome = document.createElement('a');
     bcHome.href = '/';
+    bcHome.className = 'cl-breadcrumb-link';
     bcHome.textContent = 'Home';
     bcHome.setAttribute('data-i18n', 'nav.home');
 
-    var bcSep = document.createElement('span');
-    bcSep.className = 'cl-breadcrumb-sep';
-    bcSep.textContent = '>';
-
-    var bcCurrent = document.createElement('span');
-    bcCurrent.className = 'cl-breadcrumb-current';
-    bcCurrent.textContent = getActiveLabel(activePage);
-    if (PAGES[activePage]) {
-      bcCurrent.setAttribute('data-i18n', PAGES[activePage].i18nKey);
-    }
-
     breadcrumb.appendChild(bcHome);
-    breadcrumb.appendChild(bcSep);
-    breadcrumb.appendChild(bcCurrent);
+
+    if (activePage !== 'home') {
+      var bcSep = document.createElement('span');
+      bcSep.className = 'cl-breadcrumb-sep';
+      bcSep.textContent = '>';
+      bcSep.setAttribute('aria-hidden', 'true');
+
+      var bcCurrent = document.createElement('span');
+      bcCurrent.className = 'cl-breadcrumb-current';
+      bcCurrent.textContent = getActiveLabel(activePage);
+      bcCurrent.setAttribute('aria-current', 'page');
+      if (PAGES[activePage]) {
+        bcCurrent.setAttribute('data-i18n', PAGES[activePage].i18nKey);
+      }
+
+      breadcrumb.appendChild(bcSep);
+      breadcrumb.appendChild(bcCurrent);
+    }
 
     return { nav: nav, breadcrumb: breadcrumb };
   }

@@ -227,13 +227,13 @@
   letter-spacing: 0.3px;
 }
 
-.cl-breadcrumb a {
+.cl-breadcrumb-link {
   color: var(--text-muted);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
-.cl-breadcrumb a:hover {
+.cl-breadcrumb-link:hover {
   color: var(--color-secondary);
 }
 
@@ -308,7 +308,19 @@ body.has-navbar {
     left: auto;
     transform: none;
     width: 100%;
-    padding: 6px 18px;
+    padding: 4px 18px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cl-breadcrumb-current {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+    display: inline-block;
+    vertical-align: bottom;
   }
 
   body.has-navbar {
