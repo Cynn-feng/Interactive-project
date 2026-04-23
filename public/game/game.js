@@ -252,7 +252,7 @@
       angleEls.submit.disabled = true;
       if (angleEls.pauseLabel) angleEls.pauseLabel.textContent = t('game1.resume') || 'Resume';
       angleEls.pauseBtn.classList.add('game-pause-btn--paused');
-      showPauseOverlay('angle-panel');
+      showPauseOverlay('angle');
     } else {
       hidePauseOverlay('angle-panel');
       angleEls.answer.disabled = false;
