@@ -1,5 +1,6 @@
 <script setup>
 import Hero from '../components/Hero.vue'
+import StatsBar from '../components/StatsBar.vue'
 import TheoremCarousel from '../components/TheoremCarousel.vue'
 import FeatureCards from '../components/FeatureCards.vue'
 import AdsBanner from '../components/AdsBanner.vue'
@@ -10,6 +11,7 @@ import Footer from '../components/Footer.vue'
 <template>
   <main>
     <Hero />
+    <StatsBar />
     <TheoremCarousel />
     <FeatureCards />
     <AdsBanner />

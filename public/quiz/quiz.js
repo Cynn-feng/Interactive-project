@@ -480,6 +480,7 @@
 
       button.type = 'button';
       button.className = 'quiz-option';
+      button.setAttribute('tabindex', '0');
 
       key.className = 'quiz-option__key';
       key.textContent = OPTION_KEYS[index];
@@ -611,13 +612,49 @@
 
     els.next.addEventListener('click', nextQuestion);
     els.restart.addEventListener('click', restartQuiz);
-    els.easyMode.addEventListener('click', function () {
-      switchMode('easy');
-    });
-    els.hardMode.addEventListener('click', function () {
-      switchMode('hard');
-    });
+    els.easyMode.addEventListener('click', function () { switchMode('easy'); });
+    els.hardMode.addEventListener('click', function () { switchMode('hard'); });
     document.addEventListener('languagechange', onLanguageChange);
+
+    // Keyboard navigation: A/B/C/D or 1/2/3/4 to select, ArrowUp/Down to move focus, Enter to confirm
+    document.addEventListener('keydown', function (e) {
+      if (state.solvedCurrent || state.completed) {
+        if (e.key === 'Enter' || e.key === 'ArrowRight') {
+          var visibleNext = !els.next.classList.contains('quiz-btn--hidden');
+          if (visibleNext) nextQuestion();
+        }
+        return;
+      }
+
+      var btns = Array.prototype.slice.call(els.options.querySelectorAll('.quiz-option:not([disabled])'));
+      if (!btns.length) return;
+
+      var focused = document.activeElement;
+      var focusedIdx = btns.indexOf(focused);
+
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        var next = focusedIdx < btns.length - 1 ? focusedIdx + 1 : 0;
+        btns[next].focus();
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        var prev = focusedIdx > 0 ? focusedIdx - 1 : btns.length - 1;
+        btns[prev].focus();
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        if (focusedIdx !== -1) {
+          e.preventDefault();
+          onOptionClick(focusedIdx);
+        }
+      } else {
+        // A/B/C/D or 1/2/3/4 shortcut
+        var keyMap = { 'a': 0, 'b': 1, 'c': 2, 'd': 3, '1': 0, '2': 1, '3': 2, '4': 3 };
+        var idx = keyMap[e.key.toLowerCase()];
+        if (idx !== undefined && idx < btns.length) {
+          btns[idx].focus();
+          onOptionClick(idx);
+        }
+      }
+    });
 
     restartQuiz();
   }

@@ -24,27 +24,74 @@
 
     <section class="game-hub" aria-label="Game stats">
       <article class="hub-card">
-        <p class="hub-card__label" data-i18n="hub.totalScore">Total Score</p>
+        <div class="hub-card__header">
+          <svg class="hub-card__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <polygon points="10,2 12.9,7.6 19,8.5 14.5,12.9 15.6,19 10,16 4.4,19 5.5,12.9 1,8.5 7.1,7.6" stroke="var(--color-accent)" stroke-width="1.4" stroke-linejoin="round"/>
+          </svg>
+          <p class="hub-card__label" data-i18n="hub.totalScore">Total Score</p>
+        </div>
         <p id="hub-total-score" class="hub-card__value">0</p>
       </article>
       <article class="hub-card">
-        <p class="hub-card__label" data-i18n="hub.gamesPlayed">Games Played</p>
+        <div class="hub-card__header">
+          <svg class="hub-card__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="10" cy="10" r="8" stroke="var(--color-accent)" stroke-width="1.4"/>
+            <path d="M10 6v4l3 2" stroke="var(--color-accent)" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+          <p class="hub-card__label" data-i18n="hub.gamesPlayed">Games Played</p>
+        </div>
         <p id="hub-games-played" class="hub-card__value">0</p>
       </article>
       <article class="hub-card">
-        <p class="hub-card__label" data-i18n="hub.accuracy">Accuracy</p>
+        <div class="hub-card__header">
+          <svg class="hub-card__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M3 14 L7 9 L11 12 L15 5 L18 8" stroke="var(--color-accent)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p class="hub-card__label" data-i18n="hub.accuracy">Accuracy</p>
+        </div>
         <p id="hub-accuracy" class="hub-card__value">0%</p>
       </article>
       <article class="hub-card">
-        <p class="hub-card__label" data-i18n="hub.bestStreak">Best Streak</p>
+        <div class="hub-card__header">
+          <svg class="hub-card__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M10 2 C10 2 4 6 4 11 a6 6 0 0 0 12 0 C16 6 10 2 10 2Z" stroke="var(--color-accent)" stroke-width="1.4" stroke-linejoin="round"/>
+          </svg>
+          <p class="hub-card__label" data-i18n="hub.bestStreak">Best Streak</p>
+        </div>
         <p id="hub-best-streak" class="hub-card__value">0</p>
       </article>
     </section>
 
     <section class="game-tabs" aria-label="Game tabs">
-      <button class="game-tab game-tab--active" data-tab="angle" data-i18n="tabs.angle" type="button">Angle Challenge</button>
-      <button class="game-tab" data-tab="matcher" data-i18n="tabs.matcher" type="button">Theorem Matcher</button>
-      <button class="game-tab" data-tab="constructor" data-i18n="tabs.constructor" type="button">Circle Constructor</button>
+      <button class="game-tab game-tab--active" data-tab="angle" data-i18n="tabs.angle" type="button">
+        <svg class="game-tab__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="10" y1="10" x2="17" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="10" y1="10" x2="13.5" y2="3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M 14.5 9 A 5 5 0 0 0 12.5 4.5" fill="none" stroke="currentColor" stroke-width="1.2"/>
+        </svg>
+        <span data-i18n="tabs.angle">Angle Challenge</span>
+      </button>
+      <button class="game-tab" data-tab="matcher" data-i18n="tabs.matcher" type="button">
+        <svg class="game-tab__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <rect x="2" y="3" width="7" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="11" y="3" width="7" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="2" y="11" width="7" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="11" y="11" width="7" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="9" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="9" y1="14" x2="11" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span data-i18n="tabs.matcher">Theorem Matcher</span>
+      </button>
+      <button class="game-tab" data-tab="constructor" data-i18n="tabs.constructor" type="button">
+        <svg class="game-tab__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="10" cy="10" r="1.5" fill="currentColor"/>
+          <circle cx="17" cy="10" r="2" stroke="currentColor" stroke-width="1.2"/>
+          <circle cx="6.5" cy="3.5" r="2" stroke="currentColor" stroke-width="1.2"/>
+        </svg>
+        <span data-i18n="tabs.constructor">Circle Constructor</span>
+      </button>
     </section>
 
     <section id="panel-angle" class="game-panel game-panel--active">
@@ -61,6 +108,14 @@
           <option value="hard" data-i18n="game1.hard">Hard</option>
         </select>
         <button id="angle-start" type="button" data-i18n="game1.start">Start Game</button>
+        <button id="angle-pause" type="button" class="game-pause-btn" style="display:none" aria-label="Pause game">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><rect x="2" y="1" width="4" height="12" rx="1"/><rect x="8" y="1" width="4" height="12" rx="1"/></svg>
+          <span id="angle-pause-label">Pause</span>
+        </button>
+      </div>
+
+      <div class="angle-progress-bar" aria-hidden="true">
+        <div id="angle-progress-fill" class="angle-progress-bar__fill" style="width:0%"></div>
       </div>
 
       <div class="angle-metrics">
@@ -91,6 +146,10 @@
       <div class="matcher-toolbar">
         <button id="matcher-start" type="button" data-i18n="game2.start">Start Matching</button>
         <button id="matcher-reset" type="button" data-i18n="game2.reset">Reset</button>
+        <button id="matcher-pause" type="button" class="game-pause-btn" style="display:none" aria-label="Pause game">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><rect x="2" y="1" width="4" height="12" rx="1"/><rect x="8" y="1" width="4" height="12" rx="1"/></svg>
+          <span id="matcher-pause-label">Pause</span>
+        </button>
         <span id="matcher-timer" data-i18n="game2.timer">Time: 0</span>
         <span id="matcher-matches" data-i18n="game2.matches">Matches: 0</span>
       </div>

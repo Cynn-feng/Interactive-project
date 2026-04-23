@@ -442,7 +442,7 @@ async function handleContactStep(input) {
   height: 380px;
   overflow-y: auto;
   padding: 1rem;
-  background: #0A0A1A;
+  background: var(--bg-secondary);
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
@@ -497,7 +497,7 @@ async function handleContactStep(input) {
   align-items: center;
   gap: 0.5rem;
   padding: 0.6rem 1rem;
-  background: #0A0A1A;
+  background: var(--bg-secondary);
   border-top: 1px solid var(--border-color);
 }
 

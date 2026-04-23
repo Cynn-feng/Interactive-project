@@ -77,6 +77,23 @@ function stopAutoPlay() {
   }
 }
 
+// 3D tilt on hover
+function onCardMouseMove(e) {
+  const card = e.currentTarget
+  const rect = card.getBoundingClientRect()
+  const x = e.clientX - rect.left
+  const y = e.clientY - rect.top
+  const cx = rect.width / 2
+  const cy = rect.height / 2
+  const rotX = ((y - cy) / cy) * -6
+  const rotY = ((x - cx) / cx) * 6
+  card.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.02)`
+}
+
+function onCardMouseLeave(e) {
+  e.currentTarget.style.transform = ''
+}
+
 onMounted(() => {
   window.addEventListener('keydown', onKeyDown)
   startAutoPlay()
@@ -103,8 +120,13 @@ onUnmounted(() => {
       @touchend.passive="onTouchEnd"
     >
       <!-- Left Arrow -->
-      <button class="carousel__arrow carousel__arrow--left" @click="prev" aria-label="Previous theorem">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <button
+        class="carousel__arrow carousel__arrow--left"
+        @click="prev"
+        :aria-label="lang === 'zh' ? '上一个定理' : 'Previous theorem'"
+        :aria-disabled="theorems.length <= 1"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
@@ -113,43 +135,32 @@ onUnmounted(() => {
       <div class="carousel__viewport">
         <div class="carousel__track" :style="{ transform: `translateX(${slideOffset})` }">
 
-          <!-- Slide 1: Angle at Centre -->
+          <!-- Slide 1: Angle at Centre — filled sectors show 2× relationship -->
           <div class="carousel__slide">
-            <div class="slide-card">
+            <div class="slide-card" @mousemove="onCardMouseMove" @mouseleave="onCardMouseLeave">
               <div class="slide-card__svg">
                 <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <filter id="glow1" x="-50%" y="-50%" width="200%" height="200%">
-                      <feGaussianBlur stdDeviation="3" result="blur"/>
-                      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-                    </filter>
-                  </defs>
                   <!-- Circle -->
-                  <circle cx="150" cy="150" r="120" fill="none" stroke="#7C3AED" stroke-width="2" filter="url(#glow1)"/>
-                  <!-- Centre O -->
-                  <circle cx="150" cy="150" r="5" fill="#7C3AED" filter="url(#glow1)"/>
-                  <text x="155" y="142" fill="#A78BFA" font-family="monospace" font-size="14">O</text>
-                  <!-- Point A (bottom-left of circle) -->
-                  <circle cx="58" cy="210" r="5" fill="#A78BFA" filter="url(#glow1)"/>
-                  <text x="40" y="225" fill="#A78BFA" font-family="monospace" font-size="14">A</text>
-                  <!-- Point B (bottom-right of circle) -->
-                  <circle cx="242" cy="210" r="5" fill="#A78BFA" filter="url(#glow1)"/>
-                  <text x="250" y="225" fill="#A78BFA" font-family="monospace" font-size="14">B</text>
-                  <!-- Point C (top of circle) -->
-                  <circle cx="150" cy="30" r="5" fill="#F43F5E" filter="url(#glow1)"/>
-                  <text x="155" y="25" fill="#F43F5E" font-family="monospace" font-size="14">C</text>
-                  <!-- Lines OA, OB (centre angle) -->
-                  <line x1="150" y1="150" x2="58" y2="210" stroke="#7C3AED" stroke-width="2" filter="url(#glow1)"/>
-                  <line x1="150" y1="150" x2="242" y2="210" stroke="#7C3AED" stroke-width="2" filter="url(#glow1)"/>
-                  <!-- Lines CA, CB (circumference angle) -->
-                  <line x1="150" y1="30" x2="58" y2="210" stroke="#F43F5E" stroke-width="1.5" filter="url(#glow1)"/>
-                  <line x1="150" y1="30" x2="242" y2="210" stroke="#F43F5E" stroke-width="1.5" filter="url(#glow1)"/>
-                  <!-- Centre angle arc AOB -->
-                  <path d="M 131 168 A 25 25 0 0 1 169 168" fill="none" stroke="#7C3AED" stroke-width="2"/>
-                  <text x="137" y="190" fill="#7C3AED" font-family="monospace" font-size="11">2α</text>
-                  <!-- Circumference angle arc ACB -->
-                  <path d="M 140 47 A 18 18 0 0 1 160 47" fill="none" stroke="#F43F5E" stroke-width="2"/>
-                  <text x="143" y="65" fill="#F43F5E" font-family="monospace" font-size="11">α</text>
+                  <circle cx="150" cy="150" r="115" fill="none" stroke="#7C3AED" stroke-width="2.5"/>
+                  <!-- Purple filled sector at centre (large angle) -->
+                  <path d="M 150 150 L 52 202 A 115 115 0 0 1 248 202 Z"
+                        fill="#7C3AED" opacity="0.25" stroke="#7C3AED" stroke-width="1.5" stroke-linejoin="round"/>
+                  <!-- Red filled triangle at circumference (small angle) -->
+                  <path d="M 150 35 L 52 202 L 248 202 Z"
+                        fill="#F43F5E" opacity="0.18" stroke="#F43F5E" stroke-width="1.5" stroke-linejoin="round"/>
+                  <!-- Centre dot O -->
+                  <circle cx="150" cy="150" r="5" fill="#7C3AED"/>
+                  <text x="156" y="145" fill="#A78BFA" font-family="monospace" font-size="13" font-weight="700">O</text>
+                  <!-- Points -->
+                  <circle cx="52"  cy="202" r="5" fill="#A78BFA"/>
+                  <text x="28"  y="218" fill="#A78BFA" font-family="monospace" font-size="13">A</text>
+                  <circle cx="248" cy="202" r="5" fill="#A78BFA"/>
+                  <text x="254" y="218" fill="#A78BFA" font-family="monospace" font-size="13">B</text>
+                  <circle cx="150" cy="35"  r="5" fill="#F43F5E"/>
+                  <text x="156" y="28"  fill="#F43F5E" font-family="monospace" font-size="13">C</text>
+                  <!-- Labels inside sectors -->
+                  <text x="120" y="178" fill="#7C3AED" font-family="monospace" font-size="14" font-weight="700">2×</text>
+                  <text x="136" y="110" fill="#F43F5E" font-family="monospace" font-size="14" font-weight="700">1×</text>
                 </svg>
               </div>
               <div class="slide-card__text">
@@ -159,45 +170,32 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <!-- Slide 2: Angles in Same Segment -->
+          <!-- Slide 2: Angles in Same Segment — two identical triangles highlighted -->
           <div class="carousel__slide">
-            <div class="slide-card">
+            <div class="slide-card" @mousemove="onCardMouseMove" @mouseleave="onCardMouseLeave">
               <div class="slide-card__svg">
                 <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <filter id="glow2" x="-50%" y="-50%" width="200%" height="200%">
-                      <feGaussianBlur stdDeviation="3" result="blur"/>
-                      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-                    </filter>
-                  </defs>
                   <!-- Circle -->
-                  <circle cx="150" cy="150" r="120" fill="none" stroke="#7C3AED" stroke-width="2" filter="url(#glow2)"/>
-                  <!-- Chord A (left) -->
-                  <circle cx="42" cy="105" r="5" fill="#A78BFA" filter="url(#glow2)"/>
-                  <text x="22" y="100" fill="#A78BFA" font-family="monospace" font-size="14">A</text>
-                  <!-- Chord B (right) -->
-                  <circle cx="258" cy="105" r="5" fill="#A78BFA" filter="url(#glow2)"/>
-                  <text x="265" y="100" fill="#A78BFA" font-family="monospace" font-size="14">B</text>
-                  <!-- Point C (top-left arc) -->
-                  <circle cx="80" cy="46" r="5" fill="#F43F5E" filter="url(#glow2)"/>
-                  <text x="65" y="38" fill="#F43F5E" font-family="monospace" font-size="14">C</text>
-                  <!-- Point D (top-right arc) -->
-                  <circle cx="220" cy="46" r="5" fill="#F43F5E" filter="url(#glow2)"/>
-                  <text x="228" y="38" fill="#F43F5E" font-family="monospace" font-size="14">D</text>
-                  <!-- Lines CA, CB -->
-                  <line x1="80" y1="46" x2="42" y2="105" stroke="#F43F5E" stroke-width="1.5" filter="url(#glow2)"/>
-                  <line x1="80" y1="46" x2="258" y2="105" stroke="#F43F5E" stroke-width="1.5" filter="url(#glow2)"/>
-                  <!-- Lines DA, DB -->
-                  <line x1="220" y1="46" x2="42" y2="105" stroke="#F43F5E" stroke-width="1.5" filter="url(#glow2)"/>
-                  <line x1="220" y1="46" x2="258" y2="105" stroke="#F43F5E" stroke-width="1.5" filter="url(#glow2)"/>
-                  <!-- Angle arc at C -->
-                  <path d="M 68 64 A 20 20 0 0 1 98 56" fill="none" stroke="#F43F5E" stroke-width="2"/>
-                  <text x="75" y="80" fill="#F43F5E" font-family="monospace" font-size="11">α</text>
-                  <!-- Angle arc at D -->
-                  <path d="M 202 56 A 20 20 0 0 1 232 64" fill="none" stroke="#F43F5E" stroke-width="2"/>
-                  <text x="210" y="80" fill="#F43F5E" font-family="monospace" font-size="11">α</text>
-                  <!-- Chord AB -->
-                  <line x1="42" y1="105" x2="258" y2="105" stroke="#A78BFA" stroke-width="1" stroke-dasharray="6 4"/>
+                  <circle cx="150" cy="150" r="115" fill="none" stroke="#7C3AED" stroke-width="2.5"/>
+                  <!-- Chord AB at bottom -->
+                  <line x1="52" y1="215" x2="248" y2="215" stroke="#A78BFA" stroke-width="2" stroke-dasharray="7 4"/>
+                  <!-- Triangle from C (same red fill) -->
+                  <path d="M 90 52 L 52 215 L 248 215 Z"
+                        fill="#F43F5E" opacity="0.2" stroke="#F43F5E" stroke-width="2" stroke-linejoin="round"/>
+                  <!-- Triangle from D (same red fill — visually equal) -->
+                  <path d="M 210 52 L 52 215 L 248 215 Z"
+                        fill="#F43F5E" opacity="0.1" stroke="#F43F5E" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="6 3"/>
+                  <!-- Points -->
+                  <circle cx="52"  cy="215" r="5" fill="#A78BFA"/>
+                  <text x="28"  y="230" fill="#A78BFA" font-family="monospace" font-size="13">A</text>
+                  <circle cx="248" cy="215" r="5" fill="#A78BFA"/>
+                  <text x="254" y="230" fill="#A78BFA" font-family="monospace" font-size="13">B</text>
+                  <circle cx="90"  cy="52"  r="5" fill="#F43F5E"/>
+                  <text x="66"  y="44"  fill="#F43F5E" font-family="monospace" font-size="13">C</text>
+                  <circle cx="210" cy="52"  r="5" fill="#F43F5E"/>
+                  <text x="216" y="44"  fill="#F43F5E" font-family="monospace" font-size="13">D</text>
+                  <!-- "=" label in centre -->
+                  <text x="126" y="158" fill="#F43F5E" font-family="monospace" font-size="22" font-weight="700">∠C = ∠D</text>
                 </svg>
               </div>
               <div class="slide-card__text">
@@ -207,38 +205,32 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <!-- Slide 3: Angle in Semicircle -->
+          <!-- Slide 3: Angle in Semicircle — right-angle square marker, no arc labels -->
           <div class="carousel__slide">
-            <div class="slide-card">
+            <div class="slide-card" @mousemove="onCardMouseMove" @mouseleave="onCardMouseLeave">
               <div class="slide-card__svg">
                 <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <filter id="glow3" x="-50%" y="-50%" width="200%" height="200%">
-                      <feGaussianBlur stdDeviation="3" result="blur"/>
-                      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-                    </filter>
-                  </defs>
                   <!-- Circle -->
-                  <circle cx="150" cy="150" r="120" fill="none" stroke="#7C3AED" stroke-width="2" filter="url(#glow3)"/>
-                  <!-- Diameter A (left) -->
-                  <circle cx="30" cy="150" r="5" fill="#A78BFA" filter="url(#glow3)"/>
-                  <text x="10" y="145" fill="#A78BFA" font-family="monospace" font-size="14">A</text>
-                  <!-- Diameter B (right) -->
-                  <circle cx="270" cy="150" r="5" fill="#A78BFA" filter="url(#glow3)"/>
-                  <text x="276" y="145" fill="#A78BFA" font-family="monospace" font-size="14">B</text>
+                  <circle cx="150" cy="150" r="115" fill="none" stroke="#7C3AED" stroke-width="2.5"/>
                   <!-- Diameter line -->
-                  <line x1="30" y1="150" x2="270" y2="150" stroke="#A78BFA" stroke-width="2" filter="url(#glow3)"/>
-                  <!-- Point C (top of circle) -->
-                  <circle cx="105" cy="37" r="5" fill="#F43F5E" filter="url(#glow3)"/>
-                  <text x="88" y="28" fill="#F43F5E" font-family="monospace" font-size="14">C</text>
-                  <!-- Lines CA, CB -->
-                  <line x1="105" y1="37" x2="30" y2="150" stroke="#F43F5E" stroke-width="1.5" filter="url(#glow3)"/>
-                  <line x1="105" y1="37" x2="270" y2="150" stroke="#F43F5E" stroke-width="1.5" filter="url(#glow3)"/>
-                  <!-- 90 degree square at C -->
-                  <path d="M 93 50 L 83 40 L 93 30" fill="none" stroke="#F43F5E" stroke-width="2"/>
-                  <text x="60" y="55" fill="#F43F5E" font-family="monospace" font-size="11">90°</text>
+                  <line x1="35" y1="150" x2="265" y2="150" stroke="#A78BFA" stroke-width="3"/>
+                  <!-- Triangle ACB filled -->
+                  <path d="M 100 48 L 35 150 L 265 150 Z"
+                        fill="#F43F5E" opacity="0.15" stroke="#F43F5E" stroke-width="2" stroke-linejoin="round"/>
+                  <!-- Right-angle square at C — axis-aligned for clarity -->
+                  <rect x="100" y="48" width="18" height="18" fill="#F43F5E" opacity="0.5" stroke="#F43F5E" stroke-width="1.5"
+                        transform="rotate(-38 109 57)"/>
+                  <!-- Points -->
+                  <circle cx="35"  cy="150" r="5" fill="#A78BFA"/>
+                  <text x="10"  y="146" fill="#A78BFA" font-family="monospace" font-size="13">A</text>
+                  <circle cx="265" cy="150" r="5" fill="#A78BFA"/>
+                  <text x="270" y="146" fill="#A78BFA" font-family="monospace" font-size="13">B</text>
+                  <circle cx="100" cy="48"  r="5" fill="#F43F5E"/>
+                  <text x="80"  y="38"  fill="#F43F5E" font-family="monospace" font-size="13">C</text>
                   <!-- Centre dot -->
-                  <circle cx="150" cy="150" r="3" fill="#7C3AED"/>
+                  <circle cx="150" cy="150" r="4" fill="#7C3AED"/>
+                  <!-- Big 90° label -->
+                  <text x="116" y="106" fill="#F43F5E" font-family="monospace" font-size="22" font-weight="700">90°</text>
                 </svg>
               </div>
               <div class="slide-card__text">
@@ -248,47 +240,54 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <!-- Slide 4: Cyclic Quadrilateral -->
+          <!-- Slide 4: Cyclic Quadrilateral — opposite angles filled in matching colours -->
           <div class="carousel__slide">
-            <div class="slide-card">
+            <div class="slide-card" @mousemove="onCardMouseMove" @mouseleave="onCardMouseLeave">
               <div class="slide-card__svg">
                 <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <filter id="glow4" x="-50%" y="-50%" width="200%" height="200%">
-                      <feGaussianBlur stdDeviation="3" result="blur"/>
-                      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-                    </filter>
-                  </defs>
                   <!-- Circle -->
-                  <circle cx="150" cy="150" r="120" fill="none" stroke="#7C3AED" stroke-width="2" filter="url(#glow4)"/>
-                  <!-- Point A (top) -->
-                  <circle cx="150" cy="30" r="5" fill="#F43F5E" filter="url(#glow4)"/>
-                  <text x="155" y="24" fill="#F43F5E" font-family="monospace" font-size="14">A</text>
-                  <!-- Point B (right) -->
-                  <circle cx="260" cy="180" r="5" fill="#A78BFA" filter="url(#glow4)"/>
-                  <text x="267" y="185" fill="#A78BFA" font-family="monospace" font-size="14">B</text>
-                  <!-- Point C (bottom) -->
-                  <circle cx="120" cy="268" r="5" fill="#F43F5E" filter="url(#glow4)"/>
-                  <text x="105" y="286" fill="#F43F5E" font-family="monospace" font-size="14">C</text>
-                  <!-- Point D (left) -->
-                  <circle cx="38" cy="120" r="5" fill="#A78BFA" filter="url(#glow4)"/>
-                  <text x="18" y="115" fill="#A78BFA" font-family="monospace" font-size="14">D</text>
-                  <!-- Quadrilateral sides -->
-                  <polygon points="150,30 260,180 120,268 38,120" fill="none" stroke="#7C3AED" stroke-width="1.5" filter="url(#glow4)"/>
-                  <!-- Angle arc at A (red) -->
-                  <path d="M 140 50 A 22 22 0 0 1 160 50" fill="none" stroke="#F43F5E" stroke-width="2.5"/>
-                  <text x="130" y="60" fill="#F43F5E" font-family="monospace" font-size="11">α</text>
-                  <!-- Angle arc at C (red) -->
-                  <path d="M 108 252 A 22 22 0 0 0 132 252" fill="none" stroke="#F43F5E" stroke-width="2.5"/>
-                  <text x="108" y="248" fill="#F43F5E" font-family="monospace" font-size="11">γ</text>
-                  <!-- Angle arc at B (purple) -->
-                  <path d="M 245 168 A 22 22 0 0 1 248 192" fill="none" stroke="#A78BFA" stroke-width="2.5"/>
-                  <text x="232" y="185" fill="#A78BFA" font-family="monospace" font-size="11">β</text>
-                  <!-- Angle arc at D (purple) -->
-                  <path d="M 50 108 A 22 22 0 0 0 48 132" fill="none" stroke="#A78BFA" stroke-width="2.5"/>
-                  <text x="55" y="125" fill="#A78BFA" font-family="monospace" font-size="11">δ</text>
-                  <!-- Labels -->
-                  <text x="90" y="155" fill="#F43F5E" font-family="monospace" font-size="12">α + γ = 180°</text>
+                  <circle cx="150" cy="150" r="115" fill="none" stroke="#7C3AED" stroke-width="2.5"/>
+                  <!--
+                    4 points evenly on circle (cx=150,cy=150,r=115):
+                    A top:    (150, 35)
+                    B right:  (250, 183)   cos(-30°)*115+150, sin(-30°)*115+150 ≈ (250,93) — use simpler:
+                    Use clock positions: 12, 4, 7, 9 o'clock
+                    A (12): 150, 35
+                    B (4):  247, 208   (approx on circle)
+                    C (7):  90,  255   (approx on circle)
+                    D (9):  35,  150
+                  -->
+                  <!-- Quadrilateral fill: opposite pairs in matching colours -->
+                  <!-- Triangle A-B-C-D outline -->
+                  <polygon points="150,35 247,195 90,255 35,150"
+                           fill="none" stroke="#7C3AED" stroke-width="2"/>
+                  <!-- Angle A (red filled wedge using clip) -->
+                  <polygon points="150,35 247,195 35,150"
+                           fill="#F43F5E" opacity="0.22" stroke="none"/>
+                  <!-- Angle C (red — opposite to A) -->
+                  <polygon points="90,255 247,195 35,150"
+                           fill="#F43F5E" opacity="0.22" stroke="none"/>
+                  <!-- Angle B (purple) -->
+                  <polygon points="247,195 150,35 90,255"
+                           fill="#A78BFA" opacity="0.22" stroke="none"/>
+                  <!-- Angle D (purple — opposite to B) -->
+                  <polygon points="35,150 150,35 90,255"
+                           fill="#A78BFA" opacity="0.22" stroke="none"/>
+                  <!-- Redraw outline on top -->
+                  <polygon points="150,35 247,195 90,255 35,150"
+                           fill="none" stroke="#7C3AED" stroke-width="2"/>
+                  <!-- Points -->
+                  <circle cx="150" cy="35"  r="5" fill="#F43F5E"/>
+                  <text x="156" y="28"  fill="#F43F5E" font-family="monospace" font-size="13">A</text>
+                  <circle cx="247" cy="195" r="5" fill="#A78BFA"/>
+                  <text x="253" y="193" fill="#A78BFA" font-family="monospace" font-size="13">B</text>
+                  <circle cx="90"  cy="255" r="5" fill="#F43F5E"/>
+                  <text x="68"  y="272" fill="#F43F5E" font-family="monospace" font-size="13">C</text>
+                  <circle cx="35"  cy="150" r="5" fill="#A78BFA"/>
+                  <text x="10"  y="148" fill="#A78BFA" font-family="monospace" font-size="13">D</text>
+                  <!-- Label -->
+                  <text x="96" y="155" fill="#F43F5E" font-family="monospace" font-size="13" font-weight="700">A+C = 180°</text>
+                  <text x="96" y="174" fill="#A78BFA" font-family="monospace" font-size="13" font-weight="700">B+D = 180°</text>
                 </svg>
               </div>
               <div class="slide-card__text">
@@ -300,7 +299,7 @@ onUnmounted(() => {
 
           <!-- Slide 5: Tangent-Radius -->
           <div class="carousel__slide">
-            <div class="slide-card">
+            <div class="slide-card" @mousemove="onCardMouseMove" @mouseleave="onCardMouseLeave">
               <div class="slide-card__svg">
                 <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
                   <defs>
@@ -351,7 +350,7 @@ onUnmounted(() => {
 
           <!-- Slide 6: Tangent Lengths -->
           <div class="carousel__slide">
-            <div class="slide-card">
+            <div class="slide-card" @mousemove="onCardMouseMove" @mouseleave="onCardMouseLeave">
               <div class="slide-card__svg">
                 <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
                   <defs>
@@ -402,8 +401,13 @@ onUnmounted(() => {
       </div>
 
       <!-- Right Arrow -->
-      <button class="carousel__arrow carousel__arrow--right" @click="next" aria-label="Next theorem">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <button
+        class="carousel__arrow carousel__arrow--right"
+        @click="next"
+        :aria-label="lang === 'zh' ? '下一个定理' : 'Next theorem'"
+        :aria-disabled="theorems.length <= 1"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
@@ -416,7 +420,8 @@ onUnmounted(() => {
         :key="theorem.id"
         class="carousel__dot"
         :class="{ 'carousel__dot--active': index === currentIndex }"
-        :aria-label="`Go to theorem ${index + 1}`"
+        :aria-label="theorem.name"
+        :aria-current="index === currentIndex ? 'true' : undefined"
         @click="goTo(index)"
       />
     </div>
@@ -487,6 +492,13 @@ onUnmounted(() => {
   border-radius: 12px;
   width: 100%;
   overflow: hidden;
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+  will-change: transform;
+}
+
+.slide-card:hover {
+  box-shadow: var(--shadow-elevated), 0 0 30px rgba(124,58,237,0.12);
 }
 
 .slide-card__svg {
@@ -559,6 +571,11 @@ onUnmounted(() => {
   transform: translateY(-50%) scale(1.08);
 }
 
+.carousel__arrow:focus-visible {
+  outline: 2px solid #7C3AED;
+  outline-offset: 3px;
+}
+
 .carousel__arrow:active {
   transform: translateY(-50%) scale(0.95);
 }
@@ -588,6 +605,11 @@ onUnmounted(() => {
   box-shadow: 0 0 10px rgba(124, 58, 237, 0.6);
 }
 
+.carousel__dot:focus-visible {
+  outline: 2px solid #7C3AED;
+  outline-offset: 3px;
+}
+
 .carousel__dot:hover:not(.carousel__dot--active) {
   border-color: #A78BFA;
 }
@@ -596,6 +618,10 @@ onUnmounted(() => {
 @media (prefers-reduced-motion: reduce) {
   .carousel__track {
     transition: none;
+  }
+  .slide-card {
+    transition: none;
+    transform: none !important;
   }
 }
 
@@ -641,6 +667,50 @@ onUnmounted(() => {
 
   .slide-card__explanation {
     font-size: 0.9rem;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .carousel-section {
+    padding: 2rem 0.5rem;
+  }
+
+  .carousel {
+    padding: 0 2.25rem;
+  }
+
+  .slide-card {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .slide-card__svg svg {
+    width: 200px;
+    height: 200px;
+  }
+
+  .slide-card__name {
+    font-size: 1rem;
+  }
+
+  .slide-card__explanation {
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+
+  .carousel__arrow {
+    width: 30px;
+    height: 30px;
+  }
+
+  .carousel__arrow svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .carousel-title {
+    font-size: 1.6rem;
   }
 }
 </style>

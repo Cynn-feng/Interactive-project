@@ -11,6 +11,7 @@
 
   var angleState = {
     running: false,
+    paused: false,
     difficulty: 'easy',
     questionIndex: 0,
     totalQuestions: 8,
@@ -24,6 +25,7 @@
 
   var matcherState = {
     running: false,
+    paused: false,
     score: 0,
     matches: 0,
     selectedDiagram: null,
@@ -168,6 +170,41 @@
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
+  function flashScreen(type) {
+    var el = document.createElement('div');
+    el.className = 'game-flash game-flash--' + type;
+    document.body.appendChild(el);
+    el.addEventListener('animationend', function () { el.remove(); });
+  }
+
+  function showStreakBurst(streak) {
+    if (streak < 2) return;
+    var labels = { 2: '2× Streak!', 3: '3× Streak! 🔥', 5: '5× COMBO!!', 10: '10× GODLIKE!!' };
+    var text = labels[streak] || (streak + '× Streak!');
+    var el = document.createElement('div');
+    el.className = 'streak-burst';
+    el.textContent = text;
+    document.body.appendChild(el);
+    el.addEventListener('animationend', function () { el.remove(); });
+  }
+
+  function showRoundComplete(score) {
+    var el = document.createElement('div');
+    el.className = 'round-complete';
+    el.innerHTML = '&#10003; Round Complete<br><span style="font-size:1rem;color:var(--color-accent)">' + score + ' pts</span>';
+    document.body.appendChild(el);
+    setTimeout(function () { el.remove(); }, 2200);
+  }
+
+  function flashCard(el, type) {
+    el.classList.remove('angle-question-card--correct', 'angle-question-card--wrong');
+    void el.offsetWidth;
+    el.classList.add('angle-question-card--' + type);
+    setTimeout(function () {
+      el.classList.remove('angle-question-card--correct', 'angle-question-card--wrong');
+    }, 800);
+  }
+
   function initAngleGame() {
     angleEls = {
       difficulty: document.getElementById('angle-difficulty'),
@@ -184,12 +221,18 @@
       feedback: document.getElementById('angle-feedback'),
     };
 
+    angleEls.pauseBtn = document.getElementById('angle-pause');
+    angleEls.pauseLabel = document.getElementById('angle-pause-label');
+
     angleEls.start.addEventListener('click', startAngleRound);
     angleEls.submit.addEventListener('click', submitAngleAnswer);
     angleEls.next.addEventListener('click', nextAngleQuestion);
     angleEls.answer.addEventListener('keydown', function (evt) {
       if (evt.key === 'Enter') submitAngleAnswer();
     });
+    if (angleEls.pauseBtn) {
+      angleEls.pauseBtn.addEventListener('click', toggleAnglePause);
+    }
     resetAngleRound();
   }
 
@@ -200,10 +243,56 @@
     return 24;
   }
 
+  function toggleAnglePause() {
+    if (!angleState.running) return;
+    angleState.paused = !angleState.paused;
+    if (angleState.paused) {
+      stopAngleTimer();
+      angleEls.answer.disabled = true;
+      angleEls.submit.disabled = true;
+      if (angleEls.pauseLabel) angleEls.pauseLabel.textContent = t('game1.resume') || 'Resume';
+      angleEls.pauseBtn.classList.add('game-pause-btn--paused');
+      showPauseOverlay('angle-panel');
+    } else {
+      hidePauseOverlay('angle-panel');
+      angleEls.answer.disabled = false;
+      angleEls.submit.disabled = false;
+      if (angleEls.pauseLabel) angleEls.pauseLabel.textContent = t('game1.pause') || 'Pause';
+      angleEls.pauseBtn.classList.remove('game-pause-btn--paused');
+      startAngleTimer();
+    }
+  }
+
+  function showPauseOverlay(panelId) {
+    var panel = document.getElementById('panel-' + panelId.replace('panel-', '').replace('-panel', ''));
+    if (!panel) panel = document.querySelector('.game-panel--active');
+    if (!panel) return;
+    var existing = panel.querySelector('.game-pause-overlay');
+    if (existing) return;
+    var overlay = document.createElement('div');
+    overlay.className = 'game-pause-overlay';
+    var lang = window.CircleLab && window.CircleLab.i18n ? window.CircleLab.i18n.getLanguage() : 'en';
+    overlay.innerHTML = '<div class="game-pause-overlay__box">'
+      + '<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="10" height="24" rx="2" fill="currentColor"/><rect x="18" y="4" width="10" height="24" rx="2" fill="currentColor"/></svg>'
+      + '<p>' + (lang === 'zh' ? '游戏已暂停' : 'Game Paused') + '</p>'
+      + '<span>' + (lang === 'zh' ? '休息一下，随时继续' : 'Take a break — resume anytime') + '</span>'
+      + '</div>';
+    panel.appendChild(overlay);
+  }
+
+  function hidePauseOverlay(panelId) {
+    var panel = document.querySelector('.game-panel--active');
+    if (!panel) return;
+    var overlay = panel.querySelector('.game-pause-overlay');
+    if (overlay) overlay.remove();
+  }
+
   function startAngleRound() {
     resetAngleRound();
     angleState.running = true;
+    angleState.paused = false;
     angleState.difficulty = angleEls.difficulty.value;
+    if (angleEls.pauseBtn) angleEls.pauseBtn.style.display = '';
     loadAngleQuestion();
   }
 
@@ -220,13 +309,17 @@
     angleState.current = null;
     angleState.timeLeft = 0;
     angleEls.feedback.textContent = '';
+    angleEls.feedback.classList.remove('feedback--correct', 'feedback--wrong');
     angleEls.prompt.textContent = t('game1.start');
     angleEls.theorem.textContent = '';
     angleEls.answer.value = '';
     angleEls.answer.disabled = true;
     angleEls.submit.disabled = true;
     angleEls.next.disabled = true;
+    if (angleEls.pauseBtn) angleEls.pauseBtn.style.display = 'none';
+    hidePauseOverlay('angle');
     renderAngleStats();
+    updateProgressBar();
   }
 
   function makeAngleQuestion() {
@@ -352,6 +445,22 @@
     revealAngleResult(ok, false);
   }
 
+  function setFeedback(el, text, type) {
+    el.textContent = text;
+    el.classList.remove('feedback--correct', 'feedback--wrong');
+    void el.offsetWidth; // force reflow for re-trigger
+    if (type === 'correct') el.classList.add('feedback--correct');
+    if (type === 'wrong') el.classList.add('feedback--wrong');
+  }
+
+  function flashHubValue(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('hub-card__value--flash');
+    void el.offsetWidth;
+    el.classList.add('hub-card__value--flash');
+  }
+
   function revealAngleResult(correct, timeout) {
     stopAngleTimer();
     angleEls.answer.disabled = true;
@@ -367,16 +476,23 @@
       hub.correct += 1;
       if (angleState.streak > angleState.bestStreak) angleState.bestStreak = angleState.streak;
       if (angleState.streak > hub.bestStreak) hub.bestStreak = angleState.streak;
-      angleEls.feedback.textContent = t('game1.correct') + ' (' + angleState.current.answer + '°)';
+      setFeedback(angleEls.feedback, t('game1.correct') + ' (' + angleState.current.answer + '°)', 'correct');
+      flashHubValue('hub-total-score');
+      flashScreen('correct');
+      flashCard(document.querySelector('.angle-question-card'), 'correct');
+      showStreakBurst(angleState.streak);
       tone(820);
     } else {
       angleState.streak = 0;
-      angleEls.feedback.textContent = (timeout ? t('game1.timeout') : t('game1.wrong')) + ' ' + t('game1.answer') + ' ' + angleState.current.answer + '°';
+      setFeedback(angleEls.feedback, (timeout ? t('game1.timeout') : t('game1.wrong')) + ' ' + t('game1.answer') + ' ' + angleState.current.answer + '°', 'wrong');
+      flashScreen('wrong');
+      flashCard(document.querySelector('.angle-question-card'), 'wrong');
       tone(220);
     }
     saveHub();
     updateHubView();
     renderAngleStats();
+    updateProgressBar();
   }
 
   function nextAngleQuestion() {
@@ -398,6 +514,7 @@
     angleEls.theorem.textContent = '';
     angleEls.prompt.textContent = t('game1.round_complete') + ' ' + t('game1.final_score') + ': ' + angleState.score + ' ' + t('points');
     angleEls.feedback.textContent = t('game1.questions_correct') + ': ' + hub.correct + '/' + hub.attempts;
+    showRoundComplete(angleState.score);
     angleEls.answer.disabled = true;
     angleEls.submit.disabled = true;
     angleEls.next.disabled = true;
@@ -415,14 +532,23 @@
       feedback: document.getElementById('matcher-feedback'),
     };
 
+    matcherEls.pauseBtn = document.getElementById('matcher-pause');
+    matcherEls.pauseLabel = document.getElementById('matcher-pause-label');
+
     matcherEls.start.addEventListener('click', startMatcher);
     matcherEls.reset.addEventListener('click', resetMatcher);
+    if (matcherEls.pauseBtn) {
+      matcherEls.pauseBtn.addEventListener('click', toggleMatcherPause);
+    }
     resetMatcher();
   }
 
   function resetMatcher() {
     stopMatcherTimer();
     matcherState.running = false;
+    matcherState.paused = false;
+    if (matcherEls.pauseBtn) matcherEls.pauseBtn.style.display = 'none';
+    hidePauseOverlay('matcher');
     matcherState.score = 0;
     matcherState.matches = 0;
     matcherState.selectedDiagram = null;
@@ -435,9 +561,27 @@
     renderMatcherStats();
   }
 
+  function toggleMatcherPause() {
+    if (!matcherState.running) return;
+    matcherState.paused = !matcherState.paused;
+    if (matcherState.paused) {
+      stopMatcherTimer();
+      if (matcherEls.pauseLabel) matcherEls.pauseLabel.textContent = t('game1.resume') || 'Resume';
+      matcherEls.pauseBtn.classList.add('game-pause-btn--paused');
+      showPauseOverlay('matcher');
+    } else {
+      hidePauseOverlay('matcher');
+      if (matcherEls.pauseLabel) matcherEls.pauseLabel.textContent = t('game1.pause') || 'Pause';
+      matcherEls.pauseBtn.classList.remove('game-pause-btn--paused');
+      startMatcherTimer();
+    }
+  }
+
   function startMatcher() {
     resetMatcher();
     matcherState.running = true;
+    matcherState.paused = false;
+    if (matcherEls.pauseBtn) matcherEls.pauseBtn.style.display = '';
     startMatcherTimer();
   }
 
@@ -525,14 +669,15 @@
       matcherState.score += 12;
       hub.correct += 1;
       hub.totalScore += 12;
-      matcherEls.feedback.textContent = t('game2.correct');
+      setFeedback(matcherEls.feedback, t('game2.correct'), 'correct');
+      flashHubValue('hub-total-score');
       tone(740);
       if (matcherState.matches >= MATCHER_IDS.length) {
         finishMatcher(true);
       }
     } else {
       matcherState.score = Math.max(0, matcherState.score - 3);
-      matcherEls.feedback.textContent = t('game2.wrong');
+      setFeedback(matcherEls.feedback, t('game2.wrong'), 'wrong');
       tone(240);
     }
 
@@ -567,22 +712,118 @@
   function getDiagramSvg(id) {
     var c = 'var(--color-secondary)';
     var p = 'var(--color-primary)';
+    var r = 'var(--color-cta)';
+    var g = 'var(--color-success)';
+
     if (id === 'centre_angle') {
-      return '<svg viewBox="0 0 120 80"><circle cx="40" cy="40" r="28" fill="none" stroke="' + p + '" /><line x1="40" y1="40" x2="64" y2="30" stroke="' + c + '" /><line x1="40" y1="40" x2="64" y2="50" stroke="' + c + '" /><text x="72" y="44" fill="' + c + '" font-size="10">2a</text></svg>';
+      // Circle with centre O, circumference point C, arc points A & B. Central angle 2α, inscribed angle α
+      return '<svg viewBox="0 0 160 140" role="img" aria-label="Angle at centre theorem">'
+        + '<circle cx="70" cy="74" r="52" fill="none" stroke="' + p + '" stroke-width="2"/>'
+        + '<circle cx="70" cy="74" r="3" fill="' + p + '"/>'
+        + '<text x="74" y="71" fill="' + p + '" font-family="monospace" font-size="11" font-weight="700">O</text>'
+        + '<circle cx="34" cy="108" r="4" fill="' + c + '"/><text x="22" y="122" fill="' + c + '" font-family="monospace" font-size="10">A</text>'
+        + '<circle cx="106" cy="108" r="4" fill="' + c + '"/><text x="110" y="122" fill="' + c + '" font-family="monospace" font-size="10">B</text>'
+        + '<circle cx="70" cy="22" r="4" fill="' + r + '"/><text x="74" y="18" fill="' + r + '" font-family="monospace" font-size="10">C</text>'
+        + '<line x1="70" y1="74" x2="34" y2="108" stroke="' + p + '" stroke-width="2"/>'
+        + '<line x1="70" y1="74" x2="106" y2="108" stroke="' + p + '" stroke-width="2"/>'
+        + '<line x1="70" y1="22" x2="34" y2="108" stroke="' + r + '" stroke-width="1.5"/>'
+        + '<line x1="70" y1="22" x2="106" y2="108" stroke="' + r + '" stroke-width="1.5"/>'
+        + '<path d="M 58 85 A 16 16 0 0 1 82 85" fill="none" stroke="' + p + '" stroke-width="1.5"/>'
+        + '<text x="62" y="100" fill="' + p + '" font-family="monospace" font-size="9">2α</text>'
+        + '<path d="M 63 33 A 10 10 0 0 1 77 33" fill="none" stroke="' + r + '" stroke-width="1.5"/>'
+        + '<text x="65" y="46" fill="' + r + '" font-family="monospace" font-size="9">α</text>'
+        + '</svg>';
     }
+
     if (id === 'same_segment') {
-      return '<svg viewBox="0 0 120 80"><circle cx="40" cy="40" r="28" fill="none" stroke="' + p + '" /><line x1="20" y1="22" x2="60" y2="22" stroke="' + c + '" /><text x="70" y="24" fill="' + c + '" font-size="10">a=a</text></svg>';
+      // Two inscribed angles C and D subtending same chord AB, both equal α
+      return '<svg viewBox="0 0 160 140" role="img" aria-label="Angles in same segment">'
+        + '<circle cx="76" cy="74" r="52" fill="none" stroke="' + p + '" stroke-width="2"/>'
+        + '<circle cx="40" cy="96" r="4" fill="' + c + '"/><text x="24" y="94" fill="' + c + '" font-family="monospace" font-size="10">A</text>'
+        + '<circle cx="112" cy="96" r="4" fill="' + c + '"/><text x="116" y="94" fill="' + c + '" font-family="monospace" font-size="10">B</text>'
+        + '<circle cx="50" cy="30" r="4" fill="' + r + '"/><text x="34" y="26" fill="' + r + '" font-family="monospace" font-size="10">C</text>'
+        + '<circle cx="102" cy="30" r="4" fill="' + r + '"/><text x="106" y="26" fill="' + r + '" font-family="monospace" font-size="10">D</text>'
+        + '<line x1="40" y1="96" x2="112" y2="96" stroke="' + c + '" stroke-width="1.5" stroke-dasharray="5 3"/>'
+        + '<line x1="50" y1="30" x2="40" y2="96" stroke="' + r + '" stroke-width="1.5"/>'
+        + '<line x1="50" y1="30" x2="112" y2="96" stroke="' + r + '" stroke-width="1.5"/>'
+        + '<line x1="102" y1="30" x2="40" y2="96" stroke="' + r + '" stroke-width="1.5" opacity="0.6"/>'
+        + '<line x1="102" y1="30" x2="112" y2="96" stroke="' + r + '" stroke-width="1.5" opacity="0.6"/>'
+        + '<path d="M 40 44 A 16 16 0 0 1 60 44" fill="none" stroke="' + r + '" stroke-width="1.5"/>'
+        + '<text x="44" y="58" fill="' + r + '" font-family="monospace" font-size="9">α</text>'
+        + '<path d="M 92 44 A 16 16 0 0 1 112 44" fill="none" stroke="' + r + '" stroke-width="1.5"/>'
+        + '<text x="96" y="58" fill="' + r + '" font-family="monospace" font-size="9">α</text>'
+        + '</svg>';
     }
+
     if (id === 'semicircle') {
-      return '<svg viewBox="0 0 120 80"><path d="M12 54 A28 28 0 0 1 68 54" fill="none" stroke="' + p + '" /><line x1="12" y1="54" x2="68" y2="54" stroke="' + c + '" /><text x="74" y="54" fill="' + c + '" font-size="10">90deg</text></svg>';
+      // Diameter AB, point C on circle, angle ACB = 90°
+      return '<svg viewBox="0 0 160 140" role="img" aria-label="Angle in semicircle">'
+        + '<circle cx="80" cy="80" r="52" fill="none" stroke="' + p + '" stroke-width="2"/>'
+        + '<circle cx="28" cy="80" r="4" fill="' + c + '"/><text x="12" y="78" fill="' + c + '" font-family="monospace" font-size="10">A</text>'
+        + '<circle cx="132" cy="80" r="4" fill="' + c + '"/><text x="136" y="78" fill="' + c + '" font-family="monospace" font-size="10">B</text>'
+        + '<circle cx="80" cy="28" r="4" fill="' + r + '"/><text x="84" y="24" fill="' + r + '" font-family="monospace" font-size="10">C</text>'
+        + '<line x1="28" y1="80" x2="132" y2="80" stroke="' + c + '" stroke-width="2"/>'
+        + '<circle cx="80" cy="80" r="3" fill="' + p + '"/>'
+        + '<line x1="80" y1="28" x2="28" y2="80" stroke="' + r + '" stroke-width="1.5"/>'
+        + '<line x1="80" y1="28" x2="132" y2="80" stroke="' + r + '" stroke-width="1.5"/>'
+        + '<rect x="72" y="28" width="10" height="10" fill="none" stroke="' + r + '" stroke-width="1.5" transform="rotate(-38 77 33)"/>'
+        + '<text x="48" y="50" fill="' + r + '" font-family="monospace" font-size="11" font-weight="700">90°</text>'
+        + '</svg>';
     }
+
     if (id === 'cyclic_quad') {
-      return '<svg viewBox="0 0 120 80"><circle cx="40" cy="40" r="28" fill="none" stroke="' + p + '" /><polygon points="38,14 61,34 42,62 18,40" fill="none" stroke="' + c + '" /><text x="70" y="44" fill="' + c + '" font-size="10">180deg</text></svg>';
+      // Cyclic quadrilateral ABCD with opposite angles summing to 180°
+      return '<svg viewBox="0 0 160 140" role="img" aria-label="Cyclic quadrilateral">'
+        + '<circle cx="80" cy="72" r="52" fill="none" stroke="' + p + '" stroke-width="2"/>'
+        + '<circle cx="80" cy="20" r="4" fill="' + r + '"/><text x="84" y="16" fill="' + r + '" font-family="monospace" font-size="10">A</text>'
+        + '<circle cx="128" cy="96" r="4" fill="' + c + '"/><text x="132" y="100" fill="' + c + '" font-family="monospace" font-size="10">B</text>'
+        + '<circle cx="70" cy="122" r="4" fill="' + r + '"/><text x="56" y="136" fill="' + r + '" font-family="monospace" font-size="10">C</text>'
+        + '<circle cx="32" cy="72" r="4" fill="' + c + '"/><text x="14" y="70" fill="' + c + '" font-family="monospace" font-size="10">D</text>'
+        + '<polygon points="80,20 128,96 70,122 32,72" fill="none" stroke="' + c + '" stroke-width="1.5"/>'
+        + '<path d="M 70 32 A 14 14 0 0 1 90 32" fill="none" stroke="' + r + '" stroke-width="2"/>'
+        + '<text x="60" y="44" fill="' + r + '" font-family="monospace" font-size="9">α</text>'
+        + '<path d="M 60 112 A 14 14 0 0 0 80 112" fill="none" stroke="' + r + '" stroke-width="2"/>'
+        + '<text x="62" y="108" fill="' + r + '" font-family="monospace" font-size="9">γ</text>'
+        + '<text x="86" y="86" fill="' + g + '" font-family="monospace" font-size="9">α+γ=180°</text>'
+        + '</svg>';
     }
+
     if (id === 'tangent_radius') {
-      return '<svg viewBox="0 0 120 80"><circle cx="36" cy="40" r="24" fill="none" stroke="' + p + '" /><line x1="36" y1="40" x2="60" y2="40" stroke="' + c + '" /><line x1="60" y1="20" x2="60" y2="60" stroke="' + c + '" /><text x="70" y="44" fill="' + c + '" font-size="10">90deg</text></svg>';
+      // Radius OP to point of tangency P, tangent line through P, right angle marker
+      return '<svg viewBox="0 0 160 140" role="img" aria-label="Tangent-radius theorem">'
+        + '<circle cx="64" cy="72" r="48" fill="none" stroke="' + p + '" stroke-width="2"/>'
+        + '<circle cx="64" cy="72" r="3" fill="' + p + '"/>'
+        + '<text x="50" y="68" fill="' + p + '" font-family="monospace" font-size="11" font-weight="700">O</text>'
+        + '<circle cx="112" cy="72" r="4" fill="' + r + '"/>'
+        + '<text x="116" y="68" fill="' + r + '" font-family="monospace" font-size="10">P</text>'
+        + '<line x1="64" y1="72" x2="112" y2="72" stroke="' + c + '" stroke-width="2"/>'
+        + '<text x="82" y="64" fill="' + c + '" font-family="monospace" font-size="9">r</text>'
+        + '<line x1="112" y1="20" x2="112" y2="124" stroke="' + r + '" stroke-width="2.5" stroke-linecap="round"/>'
+        + '<rect x="100" y="60" width="12" height="12" fill="none" stroke="' + r + '" stroke-width="1.5"/>'
+        + '<text x="118" y="56" fill="' + r + '" font-family="monospace" font-size="10">90°</text>'
+        + '<text x="116" y="26" fill="' + r + '" font-family="monospace" font-size="9" opacity="0.8">tangent</text>'
+        + '</svg>';
     }
-    return '<svg viewBox="0 0 120 80"><circle cx="32" cy="40" r="20" fill="none" stroke="' + p + '" /><line x1="76" y1="40" x2="52" y2="24" stroke="' + c + '" /><line x1="76" y1="40" x2="52" y2="56" stroke="' + c + '" /><text x="82" y="44" fill="' + c + '" font-size="10">PA=PB</text></svg>';
+
+    // tangent_lengths: two equal tangents from external point P
+    return '<svg viewBox="0 0 160 140" role="img" aria-label="Equal tangent lengths">'
+      + '<circle cx="62" cy="72" r="44" fill="none" stroke="' + p + '" stroke-width="2"/>'
+      + '<circle cx="62" cy="72" r="3" fill="' + p + '"/>'
+      + '<text x="50" y="68" fill="' + p + '" font-family="monospace" font-size="10">O</text>'
+      + '<circle cx="144" cy="72" r="4" fill="' + r + '"/>'
+      + '<text x="148" y="68" fill="' + r + '" font-family="monospace" font-size="10">P</text>'
+      + '<circle cx="96" cy="34" r="4" fill="' + c + '"/><text x="100" y="28" fill="' + c + '" font-family="monospace" font-size="10">A</text>'
+      + '<circle cx="96" cy="110" r="4" fill="' + c + '"/><text x="100" y="124" fill="' + c + '" font-family="monospace" font-size="10">B</text>'
+      + '<line x1="144" y1="72" x2="96" y2="34" stroke="' + r + '" stroke-width="2"/>'
+      + '<line x1="144" y1="72" x2="96" y2="110" stroke="' + r + '" stroke-width="2"/>'
+      + '<line x1="116" y1="46" x2="124" y2="56" stroke="' + r + '" stroke-width="2"/>'
+      + '<line x1="112" y1="48" x2="120" y2="58" stroke="' + r + '" stroke-width="2"/>'
+      + '<line x1="116" y1="98" x2="124" y2="88" stroke="' + r + '" stroke-width="2"/>'
+      + '<line x1="112" y1="96" x2="120" y2="86" stroke="' + r + '" stroke-width="2"/>'
+      + '<line x1="62" y1="72" x2="96" y2="34" stroke="' + p + '" stroke-width="1" stroke-dasharray="5 3" opacity="0.4"/>'
+      + '<line x1="62" y1="72" x2="96" y2="110" stroke="' + p + '" stroke-width="1" stroke-dasharray="5 3" opacity="0.4"/>'
+      + '<text x="106" y="76" fill="' + g + '" font-family="monospace" font-size="9">PA=PB</text>'
+      + '</svg>';
   }
 
   function initConstructorGame() {
@@ -730,11 +971,12 @@
       constructorState.score += 15;
       hub.totalScore += 15;
       constructorState.solvedCurrent = true;
-      constructorEls.feedback.textContent = t('game3.correct');
+      setFeedback(constructorEls.feedback, t('game3.correct'), 'correct');
+      flashHubValue('hub-total-score');
       tone(700);
     } else {
       constructorState.solvedCurrent = false;
-      constructorEls.feedback.textContent = t('game3.wrong');
+      setFeedback(constructorEls.feedback, t('game3.wrong'), 'wrong');
       tone(220);
     }
     saveHub();
@@ -763,6 +1005,13 @@
     constructorEls.feedback.textContent = '';
     renderConstructorMeta();
     renderConstructorStage();
+  }
+
+  function updateProgressBar() {
+    var fill = document.getElementById('angle-progress-fill');
+    if (!fill) return;
+    var pct = (angleState.questionIndex / angleState.totalQuestions) * 100;
+    fill.style.width = pct + '%';
   }
 
   function refreshRuntimeLanguage() {

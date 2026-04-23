@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Wireframe - CircleLab</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    /* ── Wireframe Token Colors ── */
+    :root {
+      --wf-bg:        #f0f2f5;
+      --wf-surface:   #ffffff;
+      --wf-border:    #c8ccd4;
+      --wf-border-dk: #8a8fa8;
+      --wf-fill-lo:   #e4e8f0;
+      --wf-fill-md:   #c8ccd4;
+      --wf-fill-hi:   #8a8fa8;
+      --wf-accent:    #4F46E5;
+      --wf-green:     #22C55E;
+      --wf-red:       #EF4444;
+      --wf-text:      #1a1a2e;
+      --wf-text-muted:#6b7280;
+      --wf-label:     #4F46E5;
+      --radius:       10px;
+      --radius-sm:    6px;
+    }
+
+    /* ── Layout Shell ── */
+    .page-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    /* ── Page Title ── */
+    .doc-title {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .doc-title h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--wf-accent);
+      letter-spacing: -0.3px;
+    }
+    .doc-title p {
+      margin-top: 6px;
+      font-size: 0.85rem;
+      color: var(--wf-text-muted);
+    }
+    .doc-title .badge {
+      display: inline-block;
+      margin-top: 10px;
+      background: var(--wf-accent);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    /* ── Section Header ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .section-header .num {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--wf-accent);
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .section-header h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--wf-text);
+    }
+    .section-header .tag {
+      margin-left: auto;
+      font-size: 0.7rem;
+      color: var(--wf-text-muted);
+      background: var(--wf-fill-lo);
+      border: 1px solid var(--wf-border);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* ── Screen Frame ── */
+    .screen {
+      background: var(--wf-surface);
+      border: 2px solid var(--wf-border-dk);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      margin-bottom: 48px;
+    }
+
+    /* ── Browser Chrome ── */
+    .browser-bar {
+      background: var(--wf-fill-lo);
+      border-bottom: 1px solid var(--wf-border);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .browser-dots { display: flex; gap: 5px; }
+    .browser-dots span {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--wf-fill-md);
+      border: 1px solid var(--wf-border-dk);
+    }
+    .browser-url {
+      flex: 1;
+      background: var(--wf-surface);
+      border: 1px solid var(--wf-border);
+      border-radius: 4px;
+      padding: 3px 10px;
+      font-size: 0.72rem;
+      color: var(--wf-text-muted);
+    }
+
+    /* ── Navbar ── */
+    .wf-navbar {
+      background: var(--wf-fill-lo);
+      border-bottom: 1px solid var(--wf-border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .wf-logo {
+      width: 100px; height: 22px;
+      background: var(--wf-fill-md);
+      border-radius: 4px;
+      border: 1px solid var(--wf-border-dk);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; color: var(--wf-text-muted); font-weight: 600;
+    }
+    .wf-nav-links {
+      display: flex; gap: 8px;
+    }
+    .wf-nav-link {
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      color: var(--wf-text-muted);
+      border: 1px solid transparent;
+      background: transparent;
+    }
+    .wf-nav-link.active {
+      background: var(--wf-accent);
+      color: #fff;
+      border-color: var(--wf-accent);
+      font-weight: 600;
+    }
+    .wf-nav-right { display: flex; gap: 8px; align-items: center; }
+    .wf-btn-sm {
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--wf-border-dk);
+      background: var(--wf-surface);
+      font-size: 0.68rem;
+      color: var(--wf-text-muted);
+    }
+
+    /* ── Screen Content ── */
+    .screen-body {
+      padding: 28px 32px 36px;
+    }
+
+    /* ── Hero ── */
+    .wf-hero {
+      padding-bottom: 20px;
+      border-bottom: 1px dashed var(--wf-border);
+      margin-bottom: 24px;
+    }
+    .wf-hero-title {
+      height: 36px;
+      background: var(--wf-fill-lo);
+      border: 1px solid var(--wf-border);
+      border-radius: 6px;
+      width: 55%;
+      display: flex; align-items: center; padding: 0 12px;
+      font-size: 0.78rem; font-weight: 700; color: var(--wf-text-muted);
+    }
+    .wf-hero-sub {
+      margin-top: 8px;
+      height: 18px;
+      background: var(--wf-fill-lo);
+      border: 1px solid var(--wf-border);
+      border-radius: 4px;
+      width: 40%;
+      display: flex; align-items: center; padding: 0 10px;
+      font-size: 0.65rem; color: var(--wf-text-muted);
+    }
+
+    /* ── Quiz Shell ── */
+    .wf-shell {
+      border: 1.5px solid var(--wf-border-dk);
+      border-radius: var(--radius);
+      padding: 20px;
+      background: var(--wf-fill-lo);
+    }
+
+    /* ── Topbar Chips ── */
+    .wf-topbar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .wf-chip {
+      background: var(--wf-surface);
+      border: 1px solid var(--wf-border-dk);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .wf-chip-label {
+      font-size: 0.6rem;
+      color: var(--wf-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 600;
+    }
+    .wf-chip-value {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--wf-accent);
+    }
+    .wf-chip-bar {
+      margin-top: 4px;
+      height: 4px;
+      background: var(--wf-fill-md);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .wf-chip-bar-fill {
+      height: 100%;
+      background: var(--wf-accent);
+      border-radius: 2px;
+    }
+
+    /* ── Question Card ── */
+    .wf-qcard {
+      background: var(--wf-surface);
+      border: 1px solid var(--wf-border-dk);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .wf-question-text {
+      height: 48px;
+      background: var(--wf-fill-lo);
+      border: 1px solid var(--wf-border);
+      border-radius: 6px;
+      display: flex; align-items: center; padding: 0 14px;
+      font-size: 0.75rem; color: var(--wf-text-muted);
+      font-style: italic;
+    }
+    .wf-image-area {
+      margin-top: 14px;
+      border: 2px dashed var(--wf-border-dk);
+      border-radius: var(--radius);
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--wf-fill-lo);
+      color: var(--wf-text-muted);
+    }
+    .wf-image-area svg {
+      opacity: 0.4;
+    }
+    .wf-image-area span {
+      font-size: 0.68rem;
+      color: var(--wf-text-muted);
+    }
+
+    /* ── Options Grid ── */
+    .wf-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .wf-option {
+      border: 1.5px solid var(--wf-border-dk);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      background: var(--wf-surface);
+      display: flex; align-items: center; gap: 10px;
+      cursor: pointer;
+    }
+    .wf-option-key {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid var(--wf-border-dk);
+      background: var(--wf-fill-lo);
+      font-size: 0.65rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: var(--wf-text-muted);
+    }
+    .wf-option-text {
+      height: 14px;
+      background: var(--wf-fill-lo);
+      border-radius: 3px;
+      flex: 1;
+    }
+    .wf-option.correct {
+      border-color: var(--wf-green);
+      background: #f0fdf4;
+    }
+    .wf-option.correct .wf-option-key {
+      background: var(--wf-green);
+      border-color: var(--wf-green);
+      color: #fff;
+    }
+    .wf-option.wrong {
+      border-color: var(--wf-red);
+      background: #fff1f2;
+    }
+    .wf-option.wrong .wf-option-key {
+      background: var(--wf-red);
+      border-color: var(--wf-red);
+      color: #fff;
+    }
+    .wf-option.disabled {
+      opacity: 0.45;
+    }
+
+    /* ── Feedback ── */
+    .wf-feedback {
+      border-radius: var(--radius-sm);
+      padding: 10px 16px;
+      font-size: 0.72rem;
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 14px;
+    }
+    .wf-feedback.ok {
+      background: #f0fdf4;
+      border: 1px solid var(--wf-green);
+      color: #166534;
+    }
+    .wf-feedback.err {
+      background: #fff1f2;
+      border: 1px solid var(--wf-red);
+      color: #991b1b;
+    }
+    .wf-feedback.done {
+      background: #eef2ff;
+      border: 1px solid var(--wf-accent);
+      color: var(--wf-accent);
+      font-weight: 600;
+    }
+    .wf-feedback-icon {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 700;
+    }
+    .ok .wf-feedback-icon { background: var(--wf-green); color: #fff; }
+    .err .wf-feedback-icon { background: var(--wf-red); color: #fff; }
+    .done .wf-feedback-icon { background: var(--wf-accent); color: #fff; }
+
+    /* ── Actions ── */
+    .wf-actions {
+      display: flex; gap: 10px; justify-content: flex-end;
+    }
+    .wf-btn {
+      padding: 10px 22px;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem; font-weight: 600;
+      border: 1.5px solid var(--wf-border-dk);
+      background: var(--wf-surface);
+      color: var(--wf-text-muted);
+      cursor: pointer;
+    }
+    .wf-btn.primary {
+      background: var(--wf-accent);
+      border-color: var(--wf-accent);
+      color: #fff;
+    }
+    .wf-btn.hidden-state {
+      opacity: 0.3;
+      border-style: dashed;
+    }
+
+    /* ── Annotation Layer ── */
+    .annotated {
+      position: relative;
+    }
+    .ann {
+      position: absolute;
+      right: -220px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 200px;
+      background: #fffbea;
+      border: 1px solid #f59e0b;
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 0.65rem;
+      color: #92400e;
+      line-height: 1.5;
+      z-index: 10;
+    }
+    .ann::before {
+      content: '';
+      position: absolute;
+      left: -8px; top: 50%;
+      transform: translateY(-50%);
+      border: 4px solid transparent;
+      border-right-color: #f59e0b;
+    }
+    .ann strong { display: block; font-size: 0.68rem; margin-bottom: 2px; color: #78350f; }
+
+    /* ── States Grid ── */
+    .states-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 48px;
+    }
+    .state-card {
+      background: var(--wf-surface);
+      border: 1.5px solid var(--wf-border-dk);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .state-card-header {
+      background: var(--wf-fill-lo);
+      border-bottom: 1px solid var(--wf-border);
+      padding: 8px 14px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--wf-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .state-card-body {
+      padding: 14px;
+    }
+
+    /* ── Mobile Frame ── */
+    .mobile-frame {
+      width: 320px;
+      margin: 0 auto 48px;
+      background: var(--wf-surface);
+      border: 3px solid var(--wf-border-dk);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    }
+    .mobile-notch {
+      background: var(--wf-fill-lo);
+      height: 28px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .mobile-notch-pill {
+      width: 60px; height: 8px;
+      background: var(--wf-fill-md);
+      border-radius: 4px;
+    }
+    .mobile-body {
+      padding: 14px;
+    }
+
+    /* ── Flow Diagram ── */
+    .flow-wrap {
+      background: var(--wf-surface);
+      border: 2px solid var(--wf-border-dk);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 48px;
+      overflow-x: auto;
+    }
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      min-width: 700px;
+    }
+    .flow-node {
+      flex-shrink: 0;
+      background: var(--wf-fill-lo);
+      border: 1.5px solid var(--wf-border-dk);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--wf-text);
+      text-align: center;
+      min-width: 90px;
+    }
+    .flow-node.start { background: var(--wf-accent); color: #fff; border-color: var(--wf-accent); }
+    .flow-node.end   { background: var(--wf-green); color: #fff; border-color: var(--wf-green); }
+    .flow-node.decision {
+      background: #fffbea;
+      border-color: #f59e0b;
+      color: #78350f;
+      border-radius: 6px;
+      transform: rotate(2deg);
+    }
+    .flow-arrow {
+      flex-shrink: 0;
+      display: flex; align-items: center;
+      padding: 0 4px;
+      color: var(--wf-border-dk);
+      font-size: 1rem;
+    }
+    .flow-label {
+      font-size: 0.6rem;
+      color: var(--wf-text-muted);
+      text-align: center;
+      margin-top: 4px;
+    }
+    .flow-col {
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    /* ── Spacing Legend ── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 48px;
+      background: var(--wf-surface);
+      border: 1.5px solid var(--wf-border-dk);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.68rem; color: var(--wf-text-muted);
+    }
+    .legend-swatch {
+      width: 20px; height: 14px;
+      border-radius: 3px;
+      border: 1px solid var(--wf-border-dk);
+    }
+
+    /* ── Redline Specs ── */
+    .spec-row {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 6px 16px;
+      font-size: 0.7rem;
+      margin-bottom: 4px;
+    }
+    .spec-key { color: var(--wf-text-muted); font-weight: 600; }
+    .spec-val { color: var(--wf-text); font-family: monospace; }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px dashed var(--wf-border);
+      margin: 8px 0 20px;
+    }
+
+    /* ── Responsive note ── */
+    @media (max-width: 900px) {
+      .ann { display: none; }
+      .states-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- ═══════════════════════════════════════
+       DOC TITLE
+  ═══════════════════════════════════════ -->
+  <div class="doc-title">
+    <h1>CircleLab · Quiz 页面线框图</h1>
+    <p>Wireframe Design · feature/quiz-luogen · 2026-04-20</p>
+    <span class="badge">Wireframe v1.0</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       LEGEND
+  ═══════════════════════════════════════ -->
+  <div class="section-header">
+    <div class="num">0</div>
+    <h2>图例 / Legend</h2>
+  </div>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:#e4e8f0;"></div>
+      低优先级填充 / Low-priority fill
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:#c8ccd4;"></div>
+      中等填充 / Medium fill
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:#4F46E5;"></div>
+      主色调 / Primary accent
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:#22C55E;"></div>
+      正确状态 / Correct state
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:#EF4444;"></div>
+      错误状态 / Wrong state
+    </div>
+    <div class="legend-item">
+      <div class="legend-swatch" style="background:#fff;border:2px dashed #8a8fa8;"></div>
+      图片占位区 / Image placeholder
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 1 — USER FLOW
+  ═══════════════════════════════════════ -->
+  <div class="section-header">
+    <div class="num">1</div>
+    <h2>用户流程 / User Flow</h2>
+    <span class="tag">Interaction Map</span>
+  </div>
+  <div class="flow-wrap">
+    <div class="flow">
+      <div class="flow-col">
+        <div class="flow-node start">页面加载</div>
+        <div class="flow-label">Page Load</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-col">
+        <div class="flow-node">随机排题<br><span style="font-weight:400;font-size:0.6rem">Fisher-Yates</span></div>
+        <div class="flow-label">Shuffle Questions</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-col">
+        <div class="flow-node">渲染题目<br>+ 图片</div>
+        <div class="flow-label">Render Q + Image</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-col">
+        <div class="flow-node">用户点击<br>选项</div>
+        <div class="flow-label">Click Option</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-col">
+        <div class="flow-node decision">答对？</div>
+        <div class="flow-label">Correct?</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-col">
+        <div class="flow-node" style="background:#f0fdf4;border-color:#22C55E;color:#166534;">✓ 正确反馈<br>显示 Next</div>
+        <div class="flow-label">Correct Feedback</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-col">
+        <div class="flow-node decision">最后一题？</div>
+        <div class="flow-label">Last Q?</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-col">
+        <div class="flow-node end">完成画面<br>Restart</div>
+        <div class="flow-label">Completion</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:0.65rem;color:var(--wf-text-muted);">
+      ※ 答错时：显示错误反馈，选项禁用，允许重试（不扣分）。答对后所有选项锁定，Next 按钮出现。
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 2 — DESKTOP FULL LAYOUT
+  ═══════════════════════════════════════ -->
+  <div class="section-header">
+    <div class="num">2</div>
+    <h2>桌面端主界面 / Desktop — Answering State</h2>
+    <span class="tag">1280px · Default</span>
+  </div>
+
+  <div class="screen">
+    <!-- Browser chrome -->
+    <div class="browser-bar">
+      <div class="browser-dots">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="browser-url">localhost:3000/quiz</div>
+    </div>
+
+    <!-- Navbar -->
+    <div class="wf-navbar">
+      <div class="wf-logo">CIRCLE LAB</div>
+      <div class="wf-nav-links">
+        <div class="wf-nav-link">Home</div>
+        <div class="wf-nav-link">Theorems</div>
+        <div class="wf-nav-link active">Quiz</div>
+        <div class="wf-nav-link">About</div>
+      </div>
+      <div class="wf-nav-right">
+        <div class="wf-btn-sm">EN / 中</div>
+        <div class="wf-btn-sm">☀ Theme</div>
+      </div>
+    </div>
+
+    <!-- Page body -->
+    <div class="screen-body" style="position:relative;padding-right:260px;">
+      <!-- Hero -->
+      <div class="wf-hero annotated">
+        <div class="wf-hero-title">Circle Geometry Quiz</div>
+        <div class="wf-hero-sub">Test your understanding with theorem-based questions.</div>
+        <div class="ann">
+          <strong>Hero Section</strong>
+          H1: Exo 800 · clamp(2rem→3rem)<br>
+          Sub: Roboto Mono 0.9rem<br>
+          border-bottom: 1px dashed
+        </div>
+      </div>
+
+      <!-- Quiz Shell -->
+      <div class="wf-shell">
+        <!-- Topbar -->
+        <div class="wf-topbar annotated">
+          <div class="wf-chip">
+            <div class="wf-chip-label">Progress</div>
+            <div class="wf-chip-value">3 / 10</div>
+            <div class="wf-chip-bar"><div class="wf-chip-bar-fill" style="width:30%"></div></div>
+          </div>
+          <div class="wf-chip">
+            <div class="wf-chip-label">Level</div>
+            <div class="wf-chip-value">2</div>
+          </div>
+          <div class="wf-chip">
+            <div class="wf-chip-label">Question</div>
+            <div class="wf-chip-value">3 / 10</div>
+          </div>
+          <div class="ann" style="top:0;transform:none;">
+            <strong>Topbar Chips</strong>
+            3-col grid · gap 0.8rem<br>
+            Chip: bg-secondary · Roboto Mono<br>
+            Value: color-accent · bold<br>
+            Progress chip 含进度条
+          </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="wf-qcard annotated">
+          <div class="wf-question-text">
+            &lt;题目文字 — 由 quiz.js 动态注入，中英双语&gt;
+          </div>
+
+          <!-- Image placeholder -->
+          <div class="wf-image-area">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8a8fa8" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <span>Circle Theorem Diagram</span>
+            <span style="font-size:0.6rem">img · object-fit: contain · min-height: 360px</span>
+          </div>
+
+          <!-- Options -->
+          <div class="wf-options annotated">
+            <div class="wf-option">
+              <div class="wf-option-key">A</div>
+              <div class="wf-option-text"></div>
+            </div>
+            <div class="wf-option">
+              <div class="wf-option-key">B</div>
+              <div class="wf-option-text"></div>
+            </div>
+            <div class="wf-option">
+              <div class="wf-option-key">C</div>
+              <div class="wf-option-text"></div>
+            </div>
+            <div class="wf-option">
+              <div class="wf-option-key">D</div>
+              <div class="wf-option-text"></div>
+            </div>
+            <div class="ann" style="top:auto;bottom:0;transform:none;">
+              <strong>Options Grid</strong>
+              2-col · gap 10px<br>
+              hover: border-accent + bg<br>
+              cursor: pointer<br>
+              min 44×44px touch target
+            </div>
+          </div>
+
+          <div class="ann" style="top:0;transform:none;">
+            <strong>Question Card</strong>
+            bg-secondary · radius-lg<br>
+            Q text: Exo 600 1.25rem<br>
+            Image wrap: inset shadow<br>
+            aria-live="polite" on shell
+          </div>
+        </div>
+
+        <!-- Feedback (hidden initially) -->
+        <div style="height:10px;"></div>
+        <div class="wf-feedback ok annotated" style="opacity:0.35;border-style:dashed;">
+          <div class="wf-feedback-icon">✓</div>
+          &lt;feedback text — 正确解释文字&gt;
+          <div class="ann">
+            <strong>Feedback Bar</strong>
+            hidden until answered<br>
+            ok: green · err: red<br>
+            aria-live="assertive"<br>
+            emoji 前缀: ✅ / ❌
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="wf-actions annotated">
+          <div class="wf-btn hidden-state">Restart Quiz</div>
+          <div class="wf-btn primary hidden-state">Next Question →</div>
+          <div class="ann" style="right:-220px;top:50%;transform:translateY(-50%);">
+            <strong>Action Buttons</strong>
+            Next: hidden until correct<br>
+            Restart: hidden until done<br>
+            Last Q → Next 变 Restart
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 3 — INTERACTION STATES
+  ═══════════════════════════════════════ -->
+  <div class="section-header">
+    <div class="num">3</div>
+    <h2>交互状态 / Interaction States</h2>
+    <span class="tag">Option Button · 4 States</span>
+  </div>
+
+  <div class="states-grid">
+    <!-- State: Default -->
+    <div class="state-card">
+      <div class="state-card-header">① 默认 / Default</div>
+      <div class="state-card-body">
+        <div class="wf-option" style="margin-bottom:8px;">
+          <div class="wf-option-key">A</div>
+          <div class="wf-option-text" style="background:#e4e8f0;"></div>
+        </div>
+        <div style="font-size:0.65rem;color:var(--wf-text-muted);margin-top:8px;">
+          border: 1.5px solid --border-dk<br>
+          bg: --surface<br>
+          cursor: pointer<br>
+          transition: 150ms ease
+        </div>
+      </div>
+    </div>
+
+    <!-- State: Hover -->
+    <div class="state-card">
+      <div class="state-card-header">② 悬停 / Hover</div>
+      <div class="state-card-body">
+        <div class="wf-option" style="border-color:#4F46E5;background:#eef2ff;margin-bottom:8px;">
+          <div class="wf-option-key" style="background:#4F46E5;border-color:#4F46E5;color:#fff;">A</div>
+          <div class="wf-option-text" style="background:#c7d2fe;"></div>
+        </div>
+        <div style="font-size:0.65rem;color:var(--wf-text-muted);margin-top:8px;">
+          border-color: --accent<br>
+          bg: accent/8<br>
+          key: bg-accent text-white<br>
+          transform: translateY(-1px)
+        </div>
+      </div>
+    </div>
+
+    <!-- State: Correct -->
+    <div class="state-card">
+      <div class="state-card-header">③ 答对 / Correct</div>
+      <div class="state-card-body">
+        <div class="wf-option correct" style="margin-bottom:8px;">
+          <div class="wf-option-key">✓</div>
+          <div class="wf-option-text" style="background:#bbf7d0;"></div>
+        </div>
+        <div class="wf-feedback ok" style="font-size:0.65rem;padding:6px 10px;">
+          <div class="wf-feedback-icon" style="width:14px;height:14px;font-size:0.55rem;">✓</div>
+          ✅ 正确！+ 解释文字
+        </div>
+        <div style="font-size:0.65rem;color:var(--wf-text-muted);margin-top:8px;">
+          border: --green · bg: green/5<br>
+          其余选项 opacity:0.45<br>
+          Next 按钮 visible
+        </div>
+      </div>
+    </div>
+
+    <!-- State: Wrong -->
+    <div class="state-card">
+      <div class="state-card-header">④ 答错 / Wrong</div>
+      <div class="state-card-body">
+        <div class="wf-option wrong" style="margin-bottom:8px;">
+          <div class="wf-option-key">✗</div>
+          <div class="wf-option-text" style="background:#fecaca;"></div>
+        </div>
+        <div class="wf-feedback err" style="font-size:0.65rem;padding:6px 10px;">
+          <div class="wf-feedback-icon" style="width:14px;height:14px;font-size:0.55rem;">✗</div>
+          ❌ 再试一次
+        </div>
+        <div style="font-size:0.65rem;color:var(--wf-text-muted);margin-top:8px;">
+          border: --red · bg: red/5<br>
+          其余选项仍可点击<br>
+          无扣分机制
+        </div>
+      </div>
+    </div>
+
+    <!-- State: Completion -->
+    <div class="state-card">
+      <div class="state-card-header">⑤ 完成 / Completion</div>
+      <div class="state-card-body">
+        <div class="wf-feedback done" style="margin-bottom:8px;">
+          <div class="wf-feedback-icon" style="width:14px;height:14px;font-size:0.55rem;">★</div>
+          全部完成！点击重新开始
+        </div>
+        <div class="wf-actions" style="justify-content:flex-start;margin-top:8px;">
+          <div class="wf-btn primary" style="font-size:0.65rem;padding:7px 14px;">Restart Quiz</div>
+        </div>
+        <div style="font-size:0.65rem;color:var(--wf-text-muted);margin-top:8px;">
+          feedback: done 样式<br>
+          Restart 替代 Next<br>
+          重新 shuffle 题目
+        </div>
+      </div>
+    </div>
+
+    <!-- State: Loading -->
+    <div class="state-card">
+      <div class="state-card-header">⑥ 加载中 / Loading</div>
+      <div class="state-card-body">
+        <div class="wf-question-text" style="opacity:0.4;font-style:italic;">Loading question...</div>
+        <div style="margin-top:10px;height:80px;background:var(--wf-fill-lo);border:1px dashed var(--wf-border);border-radius:6px;display:flex;align-items:center;justify-content:center;">
+          <div style="width:32px;height:32px;border-radius:50%;border:3px solid var(--wf-fill-md);border-top-color:var(--wf-accent);"></div>
+        </div>
+        <div style="font-size:0.65rem;color:var(--wf-text-muted);margin-top:8px;">
+          i18n key: "loading"<br>
+          图片 skeleton placeholder<br>
+          选项按钮 disabled
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 4 — MOBILE LAYOUT
+  ═══════════════════════════════════════ -->
+  <div class="section-header">
+    <div class="num">4</div>
+    <h2>移动端布局 / Mobile Layout</h2>
+    <span class="tag">375px · Single Column</span>
+  </div>
+
+  <div style="display:flex;gap:32px;align-items:flex-start;margin-bottom:48px;flex-wrap:wrap;">
+    <div class="mobile-frame">
+      <div class="mobile-notch"><div class="mobile-notch-pill"></div></div>
+      <div class="mobile-body">
+        <!-- Mobile Navbar -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--wf-border);">
+          <div class="wf-logo" style="width:80px;height:18px;font-size:0.55rem;">CIRCLE LAB</div>
+          <div style="display:flex;gap:6px;">
+            <div class="wf-btn-sm" style="font-size:0.6rem;padding:3px 7px;">EN</div>
+            <div style="width:22px;height:22px;border:1px solid var(--wf-border-dk);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--wf-text-muted);">☰</div>
+          </div>
+        </div>
+
+        <!-- Hero -->
+        <div style="margin-bottom:12px;">
+          <div style="height:22px;background:var(--wf-fill-lo);border:1px solid var(--wf-border);border-radius:4px;margin-bottom:5px;"></div>
+          <div style="height:12px;background:var(--wf-fill-lo);border:1px solid var(--wf-border);border-radius:3px;width:70%;"></div>
+        </div>
+
+        <!-- Topbar: single col on mobile -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;">
+          <div class="wf-chip" style="padding:6px 8px;">
+            <div class="wf-chip-label" style="font-size:0.52rem;">Progress</div>
+            <div class="wf-chip-value" style="font-size:0.72rem;">3/10</div>
+          </div>
+          <div class="wf-chip" style="padding:6px 8px;">
+            <div class="wf-chip-label" style="font-size:0.52rem;">Level</div>
+            <div class="wf-chip-value" style="font-size:0.72rem;">2</div>
+          </div>
+        </div>
+
+        <!-- Question -->
+        <div class="wf-qcard" style="padding:12px;margin-bottom:10px;">
+          <div class="wf-question-text" style="height:36px;font-size:0.65rem;">&lt;题目文字&gt;</div>
+          <div class="wf-image-area" style="min-height:140px;margin-top:10px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8a8fa8" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <span style="font-size:0.58rem;">Diagram · min-height: 260px</span>
+          </div>
+          <!-- Options: 1-col on mobile -->
+          <div style="display:grid;grid-template-columns:1fr;gap:6px;margin-top:10px;">
+            <div class="wf-option" style="padding:9px 10px;">
+              <div class="wf-option-key" style="width:18px;height:18px;font-size:0.58rem;">A</div>
+              <div class="wf-option-text"></div>
+            </div>
+            <div class="wf-option" style="padding:9px 10px;">
+              <div class="wf-option-key" style="width:18px;height:18px;font-size:0.58rem;">B</div>
+              <div class="wf-option-text"></div>
+            </div>
+            <div class="wf-option" style="padding:9px 10px;">
+              <div class="wf-option-key" style="width:18px;height:18px;font-size:0.58rem;">C</div>
+              <div class="wf-option-text"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div style="display:flex;justify-content:flex-end;gap:6px;">
+          <div class="wf-btn primary" style="font-size:0.65rem;padding:8px 14px;opacity:0.35;border-style:dashed;">Next →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Specs -->
+    <div style="flex:1;min-width:240px;">
+      <div style="font-size:0.78rem;font-weight:700;margin-bottom:12px;color:var(--wf-text);">移动端适配规则</div>
+      <hr class="divider">
+      <div class="spec-row"><span class="spec-key">Breakpoint</span><span class="spec-val">≤ 640px</span></div>
+      <div class="spec-row"><span class="spec-key">Topbar</span><span class="spec-val">3-col → 2-col grid</span></div>
+      <div class="spec-row"><span class="spec-key">Options</span><span class="spec-val">2-col → 1-col</span></div>
+      <div class="spec-row"><span class="spec-key">Image min-h</span><span class="spec-val">360px → 260px</span></div>
+      <div class="spec-row"><span class="spec-key">Card padding</span><span class="spec-val">2rem → 1.25rem</span></div>
+      <div class="spec-row"><span class="spec-key">Touch target</span><span class="spec-val">min 44×44px</span></div>
+      <div class="spec-row"><span class="spec-key">Navbar</span><span class="spec-val">汉堡菜单 collapse</span></div>
+      <div class="spec-row"><span class="spec-key">Font hero</span><span class="spec-val">clamp(2rem, 3.5vw, 3rem)</span></div>
+      <hr class="divider" style="margin-top:16px;">
+      <div style="font-size:0.78rem;font-weight:700;margin-bottom:12px;color:var(--wf-text);">间距系统 / Spacing</div>
+      <div class="spec-row"><span class="spec-key">Page max-w</span><span class="spec-val">min(980px, 100%-2.5rem)</span></div>
+      <div class="spec-row"><span class="spec-key">Page padding</span><span class="spec-val">40px 0 80px</span></div>
+      <div class="spec-row"><span class="spec-key">Shell padding</span><span class="spec-val">2rem (→ 1.25rem mob)</span></div>
+      <div class="spec-row"><span class="spec-key">Chip gap</span><span class="spec-val">0.8rem</span></div>
+      <div class="spec-row"><span class="spec-key">Option gap</span><span class="spec-val">10px</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 5 — COMPONENT SPECS
+  ═══════════════════════════════════════ -->
+  <div class="section-header">
+    <div class="num">5</div>
+    <h2>组件规格 / Component Specs</h2>
+    <span class="tag">Redline Annotations</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:48px;">
+    <!-- Chip Spec -->
+    <div class="state-card">
+      <div class="state-card-header">Topbar Chip</div>
+      <div class="state-card-body">
+        <div class="wf-chip" style="margin-bottom:12px;">
+          <div class="wf-chip-label">Progress</div>
+          <div class="wf-chip-value">3 / 10</div>
+          <div class="wf-chip-bar"><div class="wf-chip-bar-fill" style="width:30%"></div></div>
+        </div>
+        <hr class="divider">
+        <div class="spec-row"><span class="spec-key">padding</span><span class="spec-val">0.7rem 1rem</span></div>
+        <div class="spec-row"><span class="spec-key">border-radius</span><span class="spec-val">--radius-md</span></div>
+        <div class="spec-row"><span class="spec-key">label font</span><span class="spec-val">Roboto Mono 0.8rem</span></div>
+        <div class="spec-row"><span class="spec-key">value color</span><span class="spec-val">--color-accent bold</span></div>
+        <div class="spec-row"><span class="spec-key">progress bar</span><span class="spec-val">h:4px bg-accent</span></div>
+        <div class="spec-row"><span class="spec-key">hover</span><span class="spec-val">border-color-hover + bg-card-hover</span></div>
+      </div>
+    </div>
+
+    <!-- Button Spec -->
+    <div class="state-card">
+      <div class="state-card-header">Action Button</div>
+      <div class="state-card-body">
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <div class="wf-btn" style="font-size:0.72rem;">Secondary</div>
+          <div class="wf-btn primary" style="font-size:0.72rem;">Primary →</div>
+        </div>
+        <hr class="divider">
+        <div class="spec-row"><span class="spec-key">padding</span><span class="spec-val">10px 22px</span></div>
+        <div class="spec-row"><span class="spec-key">border-radius</span><span class="spec-val">--radius-sm</span></div>
+        <div class="spec-row"><span class="spec-key">primary bg</span><span class="spec-val">--color-accent</span></div>
+        <div class="spec-row"><span class="spec-key">hidden state</span><span class="spec-val">display:none (JS toggle)</span></div>
+        <div class="spec-row"><span class="spec-key">transition</span><span class="spec-val">150ms ease</span></div>
+        <div class="spec-row"><span class="spec-key">focus</span><span class="spec-val">outline: 2px accent offset:2</span></div>
+      </div>
+    </div>
+
+    <!-- Feedback Spec -->
+    <div class="state-card">
+      <div class="state-card-header">Feedback Bar</div>
+      <div class="state-card-body">
+        <div class="wf-feedback ok" style="margin-bottom:6px;font-size:0.68rem;">
+          <div class="wf-feedback-icon">✓</div>
+          Correct! Explanation text here.
+        </div>
+        <div class="wf-feedback err" style="margin-bottom:6px;font-size:0.68rem;">
+          <div class="wf-feedback-icon">✗</div>
+          Try again. Hint text.
+        </div>
+        <div class="wf-feedback done" style="font-size:0.68rem;">
+          <div class="wf-feedback-icon">★</div>
+          Quiz complete! Restart to try again.
+        </div>
+        <hr class="divider" style="margin-top:10px;">
+        <div class="spec-row"><span class="spec-key">aria-live</span><span class="spec-val">assertive</span></div>
+        <div class="spec-row"><span class="spec-key">ok color</span><span class="spec-val">rgba(34,197,94,0.1) bg</span></div>
+        <div class="spec-row"><span class="spec-key">err color</span><span class="spec-val">rgba(244,63,94,0.08) bg</span></div>
+      </div>
+    </div>
+
+    <!-- Image Area Spec -->
+    <div class="state-card">
+      <div class="state-card-header">Diagram Image Area</div>
+      <div class="state-card-body">
+        <div class="wf-image-area" style="min-height:100px;margin-bottom:12px;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8a8fa8" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <span style="font-size:0.6rem;">Theorem Diagram</span>
+        </div>
+        <hr class="divider">
+        <div class="spec-row"><span class="spec-key">min-height</span><span class="spec-val">360px (mob: 260px)</span></div>
+        <div class="spec-row"><span class="spec-key">object-fit</span><span class="spec-val">contain</span></div>
+        <div class="spec-row"><span class="spec-key">border</span><span class="spec-val">1px solid --border-color</span></div>
+        <div class="spec-row"><span class="spec-key">shadow</span><span class="spec-val">inset 0 2px 8px rgba(0,0,0,.06)</span></div>
+        <div class="spec-row"><span class="spec-key">alt text</span><span class="spec-val">"Circle theorem diagram"</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 6 — A11Y & I18N CHECKLIST
+  ═══════════════════════════════════════ -->
+  <div class="section-header">
+    <div class="num">6</div>
+    <h2>无障碍 & 国际化 / A11y & i18n</h2>
+    <span class="tag">Compliance Notes</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:48px;">
+    <div class="state-card">
+      <div class="state-card-header">无障碍 / Accessibility</div>
+      <div class="state-card-body">
+        <div style="font-size:0.68rem;line-height:1.9;color:var(--wf-text);">
+          ✓ <strong>aria-live="polite"</strong> — quiz-shell 动态内容<br>
+          ✓ <strong>aria-live="assertive"</strong> — feedback 即时播报<br>
+          ✓ <strong>role="group"</strong> — options 容器<br>
+          ✓ <strong>alt text</strong> — 每张 diagram 图片<br>
+          ✓ <strong>focus ring</strong> — outline 2px accent<br>
+          ✓ <strong>keyboard nav</strong> — Tab 顺序与视觉一致<br>
+          ✓ <strong>44×44px</strong> — 最小触控目标<br>
+          ✓ <strong>4.5:1</strong> — 文字对比度最低要求<br>
+          ✓ <strong>cursor:pointer</strong> — 所有可点击元素<br>
+          ✓ <strong>disabled state</strong> — opacity:0.45 + cursor:not-allowed
+        </div>
+      </div>
+    </div>
+
+    <div class="state-card">
+      <div class="state-card-header">国际化 / i18n Keys</div>
+      <div class="state-card-body">
+        <div style="font-size:0.68rem;line-height:1.9;color:var(--wf-text);font-family:monospace;">
+          title · subtitle<br>
+          progressLabel · levelLabel · questionLabel<br>
+          next · restart · loading<br>
+          incorrect · finished · doneHint<br>
+          <hr class="divider" style="margin:8px 0;">
+          <span style="font-family:sans-serif;font-size:0.65rem;color:var(--wf-text-muted);">
+          题目文字由 quiz.js 直接注入，<br>
+          不使用 data-i18n 属性（防止 i18n 异步覆盖）。<br>
+          语言切换时保持当前题目状态不重置。
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="text-align:center;font-size:0.65rem;color:var(--wf-text-muted);border-top:1px dashed var(--wf-border);padding-top:20px;">
+    CircleLab · Quiz Wireframe v1.0 · feature/quiz-luogen · 2026-04-20
+    <br>Designed for: Desktop 1280px · Tablet 768px · Mobile 375px
+  </div>
+
+</div>
+</body>
+</html>
