@@ -28,29 +28,35 @@
         </div>
       </div>
 
-      <header class="quiz-topbar">
-        <p class="quiz-chip"><span data-i18n="progressLabel">Progress</span>: <strong id="quiz-progress">1 / 10</strong></p>
-        <p class="quiz-chip"><span id="quiz-mode-chip-label">Mode</span>: <strong id="quiz-mode-label">Easy</strong></p>
-        <p class="quiz-chip"><span id="quiz-score-chip-label">Score</span>: <strong id="quiz-score">0 / 100</strong></p>
-        <p class="quiz-chip"><span data-i18n="levelLabel">Level</span>: <strong id="quiz-level">1</strong></p>
-        <p class="quiz-chip"><span data-i18n="questionLabel">Question</span>: <strong id="quiz-question-counter">1 / 10</strong></p>
-      </header>
+      <section id="quiz-start-panel" class="quiz-start-panel" aria-live="polite">
+        <button id="quiz-start" class="quiz-btn quiz-btn--primary quiz-start-panel__button" type="button">开始测试</button>
+      </section>
 
-      <article class="quiz-question-card">
-        <h2 id="quiz-question-text">Loading question...</h2>
+      <div id="quiz-play-area" class="quiz-play-area quiz-play-area--hidden">
+        <header class="quiz-topbar">
+          <p class="quiz-chip"><span data-i18n="progressLabel">Progress</span>: <strong id="quiz-progress">1 / 10</strong></p>
+          <p class="quiz-chip"><span id="quiz-mode-chip-label">Mode</span>: <strong id="quiz-mode-label">Easy</strong></p>
+          <p class="quiz-chip"><span id="quiz-score-chip-label">Score</span>: <strong id="quiz-score">0 / 100</strong></p>
+          <p class="quiz-chip"><span data-i18n="levelLabel">Level</span>: <strong id="quiz-level">1</strong></p>
+          <p class="quiz-chip"><span data-i18n="questionLabel">Question</span>: <strong id="quiz-question-counter">1 / 10</strong></p>
+        </header>
 
-        <div class="quiz-image-wrap">
-          <img id="quiz-image" src="" alt="Circle theorem diagram">
+        <article class="quiz-question-card">
+          <h2 id="quiz-question-text">Loading question...</h2>
+
+          <div class="quiz-image-wrap">
+            <img id="quiz-image" src="" alt="Circle theorem diagram">
+          </div>
+
+          <div id="quiz-options" class="quiz-options" role="group" aria-label="Quiz options"></div>
+        </article>
+
+        <p id="quiz-feedback" class="quiz-feedback" aria-live="assertive"></p>
+
+        <div class="quiz-actions">
+          <button id="quiz-next" class="quiz-btn quiz-btn--primary quiz-btn--hidden" type="button" data-i18n="next">Next Question</button>
+          <button id="quiz-restart" class="quiz-btn quiz-btn--hidden" type="button" data-i18n="restart">Restart Quiz</button>
         </div>
-
-        <div id="quiz-options" class="quiz-options" role="group" aria-label="Quiz options"></div>
-      </article>
-
-      <p id="quiz-feedback" class="quiz-feedback" aria-live="assertive"></p>
-
-      <div class="quiz-actions">
-        <button id="quiz-next" class="quiz-btn quiz-btn--primary quiz-btn--hidden" type="button" data-i18n="next">Next Question</button>
-        <button id="quiz-restart" class="quiz-btn quiz-btn--hidden" type="button" data-i18n="restart">Restart Quiz</button>
       </div>
     </section>
   </main>

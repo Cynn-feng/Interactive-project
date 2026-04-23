@@ -15,6 +15,7 @@
       hardLabel: '困难',
       modeTitle: '模式',
       scoreTitle: '得分',
+      startLabel: '开始测试',
       nextLabel: '下一题',
       finishLabel: '完成测验',
       finished: '本模式题目已完成，做得很不错！',
@@ -30,6 +31,7 @@
       hardLabel: 'Hard',
       modeTitle: 'Mode',
       scoreTitle: 'Score',
+      startLabel: 'Start Quiz',
       nextLabel: 'Next Question',
       finishLabel: 'Finish Quiz',
       finished: 'Quiz complete! Great work.',
@@ -48,6 +50,7 @@
       easy: 0,
       hard: 0
     },
+    started: false,
     solvedCurrent: false,
     currentHadWrongAttempt: false,
     currentResult: null,
@@ -99,6 +102,9 @@
     els.feedback = document.getElementById('quiz-feedback');
     els.next = document.getElementById('quiz-next');
     els.restart = document.getElementById('quiz-restart');
+    els.start = document.getElementById('quiz-start');
+    els.startPanel = document.getElementById('quiz-start-panel');
+    els.playArea = document.getElementById('quiz-play-area');
     els.easyMode = document.getElementById('quiz-mode-easy');
     els.hardMode = document.getElementById('quiz-mode-hard');
     els.modeSwitcherLabel = document.querySelector('.quiz-mode-switcher__label');
@@ -178,6 +184,9 @@
     els.scoreChipLabel.textContent = copy.scoreTitle;
     els.easyMode.textContent = copy.easyButton;
     els.hardMode.textContent = copy.hardButton;
+    if (els.start) {
+      els.start.textContent = copy.startLabel;
+    }
     els.easyMode.classList.toggle('is-active', isEasy);
     els.hardMode.classList.toggle('is-active', !isEasy);
     els.easyMode.setAttribute('aria-pressed', String(isEasy));
@@ -202,6 +211,53 @@
     }
 
     state.order = indices.slice(0, Math.min(QUIZ_LENGTH, indices.length));
+  }
+
+  function setQuizStarted(started) {
+    state.started = started;
+    if (els.startPanel) {
+      els.startPanel.classList.toggle('quiz-start-panel--hidden', started);
+      els.startPanel.setAttribute('aria-hidden', String(started));
+    }
+    if (els.playArea) {
+      els.playArea.classList.toggle('quiz-play-area--hidden', !started);
+      els.playArea.setAttribute('aria-hidden', String(!started));
+    }
+  }
+
+  function showStartView() {
+    state.order = [];
+    state.index = 0;
+    state.solvedCurrent = false;
+    state.currentHadWrongAttempt = false;
+    state.currentResult = null;
+    state.completed = false;
+
+    updateModeUI();
+    setQuizStarted(false);
+    if (els.question) {
+      els.question.textContent = '';
+    }
+    if (els.options) {
+      els.options.innerHTML = '';
+    }
+    if (els.image) {
+      els.image.removeAttribute('src');
+    }
+    if (els.next) {
+      els.next.classList.add('quiz-btn--hidden');
+    }
+    if (els.restart) {
+      els.restart.classList.add('quiz-btn--hidden');
+    }
+    if (els.feedback) {
+      setFeedback('', '');
+    }
+  }
+
+  function startQuiz() {
+    setQuizStarted(true);
+    restartQuiz();
   }
 
   function renderOptions(question) {
@@ -311,6 +367,7 @@
   }
 
   function restartQuiz() {
+    setQuizStarted(true);
     state.index = 0;
     state.score[state.mode] = 0;
     state.solvedCurrent = false;
@@ -327,11 +384,15 @@
     }
 
     state.mode = mode;
-    restartQuiz();
+    showStartView();
   }
 
   function onLanguageChange() {
     updateModeUI();
+
+    if (!state.started) {
+      return;
+    }
 
     if (state.completed) {
       setFinishedView();
@@ -368,11 +429,12 @@
   function init() {
     cacheEls();
 
-    if (!els.question || !els.options || !els.next || !els.restart || !els.easyMode || !els.hardMode || !rawQuestions.length) {
+    if (!els.question || !els.options || !els.next || !els.restart || !els.start || !els.startPanel || !els.playArea || !els.easyMode || !els.hardMode || !rawQuestions.length) {
       console.warn('[CircleLabQuiz] Required data or DOM elements not found.');
       return;
     }
 
+    els.start.addEventListener('click', startQuiz);
     els.next.addEventListener('click', nextQuestion);
     els.restart.addEventListener('click', restartQuiz);
     els.easyMode.addEventListener('click', function () {
@@ -383,7 +445,7 @@
     });
     document.addEventListener('languagechange', onLanguageChange);
 
-    restartQuiz();
+    showStartView();
   }
 
   window.CircleLabQuiz = { init: init };
