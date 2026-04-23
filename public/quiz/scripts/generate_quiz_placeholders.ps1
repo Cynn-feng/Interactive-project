@@ -145,7 +145,7 @@ $lightGreenBrush = New-Brush '#dcfce7'
 # q11: radius vs diameter
 $c = New-Canvas
 $g = $c.Graphics
-Draw-Title $g 'Radius and Diameter'
+Draw-Title $g 'Circle Segment Diagram'
 $cx = 720; $cy = 650; $r = 340
 Draw-Circle $g $blackPen $cx $cy $r
 $left = Get-CirclePoint $cx $cy $r 180
@@ -157,15 +157,16 @@ Draw-Point $g $darkBrush $cx $cy 16
 Draw-Point $g $purpleBrush $left.X $left.Y 14
 Draw-Point $g $purpleBrush $right.X $right.Y 14
 Draw-Point $g $blueBrush $topRight.X $topRight.Y 14
-Draw-Label $g 'diameter = 2r' 520 730 '#8b5cf6' 30
-Draw-Label $g 'radius = r' 790 450 '#4f46e5' 30
+Draw-Label $g 'A' ($left.X - 28) ($left.Y - 52) '#8b5cf6' 28
+Draw-Label $g 'B' ($right.X + 14) ($right.Y - 52) '#8b5cf6' 28
+Draw-Label $g 'C' ($topRight.X + 14) ($topRight.Y - 42) '#4f46e5' 28
 Draw-Label $g 'O' ($cx + 18) ($cy - 40) '#111827' 28
 Save-Canvas $c 'q11.png'
 
 # q12: central vs inscribed angle
 $c = New-Canvas
 $g = $c.Graphics
-Draw-Title $g 'Central Angle = 2 x Inscribed Angle'
+Draw-Title $g 'Central and Inscribed Angles'
 $cx = 700; $cy = 660; $r = 360
 Draw-Circle $g $blackPen $cx $cy $r
 $a = Get-CirclePoint $cx $cy $r 150
@@ -181,15 +182,15 @@ Draw-Point $g $darkBrush $cx $cy 16
 Draw-Point $g $blueBrush $a.X $a.Y 14
 Draw-Point $g $blueBrush $b.X $b.Y 14
 Draw-Point $g $purpleBrush $p.X $p.Y 14
-Draw-Label $g '110 deg' 760 525 '#f97316' 28
-Draw-Label $g '55 deg' 355 760 '#16a34a' 28
+Draw-Label $g '35 deg' 355 760 '#16a34a' 28
+Draw-Label $g '?' 785 530 '#f97316' 30
 Draw-Label $g 'O' ($cx + 18) ($cy - 38) '#111827' 28
 Save-Canvas $c 'q12.png'
 
 # q13: cyclic quadrilateral opposite angles
 $c = New-Canvas
 $g = $c.Graphics
-Draw-Title $g 'Opposite Angles in a Cyclic Quadrilateral'
+Draw-Title $g 'Cyclic Quadrilateral'
 $cx = 760; $cy = 650; $r = 360
 Draw-Circle $g $blackPen $cx $cy $r
 $a = Get-CirclePoint $cx $cy $r 155
@@ -213,14 +214,13 @@ Draw-Point $g $purpleBrush $b.X $b.Y 14
 Draw-Point $g $purpleBrush $cpt.X $cpt.Y 14
 Draw-Point $g $purpleBrush $d.X $d.Y 14
 Draw-Label $g '68 deg' 420 430 '#ec4899' 30
-Draw-Label $g '112 deg' 940 845 '#ec4899' 30
-Draw-Label $g 'Opposite angles add to 180 deg' 930 180 '#0f172a' 28
+Draw-Label $g '?' 990 845 '#ec4899' 32
 Save-Canvas $c 'q13.png'
 
 # q14: tangent perpendicular to radius
 $c = New-Canvas
 $g = $c.Graphics
-Draw-Title $g 'Tangent Perpendicular to Radius'
+Draw-Title $g 'Tangent and Radius'
 $cx = 660; $cy = 650; $r = 300
 Draw-Circle $g $bluePen $cx $cy $r
 $touch = Get-CirclePoint $cx $cy $r 25
@@ -229,15 +229,12 @@ $g.DrawLine($greenPen, $cx, $cy, $touch.X, $touch.Y)
 $g.DrawRectangle($greenPen, $touch.X - 48, $touch.Y - 10, 44, 44)
 Draw-Point $g $darkBrush $cx $cy 16
 Draw-Point $g $orangeBrush $touch.X $touch.Y 16
-Draw-Label $g '90 deg' ($touch.X - 20) ($touch.Y - 95) '#16a34a' 28
-Draw-Label $g 'radius' 520 575 '#16a34a' 28
-Draw-Label $g 'tangent' 1010 365 '#f97316' 28
 Save-Canvas $c 'q14.png'
 
 # q15: equal chords equal distance from centre
 $c = New-Canvas
 $g = $c.Graphics
-Draw-Title $g 'Equal Distances from the Centre'
+Draw-Title $g 'Chords and Centre Distance'
 $cx = 720; $cy = 650; $r = 360
 Draw-Circle $g $blackPen $cx $cy $r
 $g.DrawLine($purplePen, $cx - 220, $cy - 150, $cx + 220, $cy - 150)
@@ -249,15 +246,12 @@ $g.DrawRectangle($greenPen, $cx - 30, $cy + 122, 28, 28)
 Draw-Point $g $darkBrush $cx $cy 16
 Draw-Label $g 'd' ($cx + 24) ($cy - 100) '#16a34a' 28
 Draw-Label $g 'd' ($cx + 24) ($cy + 110) '#16a34a' 28
-Draw-Label $g 'Chord 1' 980 420 '#8b5cf6' 28
-Draw-Label $g 'Chord 2' 980 720 '#8b5cf6' 28
-Draw-Label $g 'equal distance => equal chord length' 920 170 '#0f172a' 26
 Save-Canvas $c 'q15.png'
 
 # q16: alternate segment
 $c = New-Canvas
 $g = $c.Graphics
-Draw-Title $g 'Alternate Segment Theorem'
+Draw-Title $g 'Tangent-Chord Angle Diagram'
 $cx = 700; $cy = 690; $r = 330
 Draw-Circle $g $bluePen $cx $cy $r
 $t1 = Get-CirclePoint $cx $cy $r 115
@@ -272,7 +266,7 @@ Draw-Point $g $purpleBrush $t1.X $t1.Y 14
 Draw-Point $g $orangeBrush $t2.X $t2.Y 14
 Draw-Point $g $darkBrush $p.X $p.Y 14
 Draw-Label $g '41 deg' ($t1.X + 50) ($t1.Y - 55) '#16a34a' 28
-Draw-Label $g '41 deg' ($p.X - 55) ($p.Y - 70) '#16a34a' 28
+Draw-Label $g '?' ($p.X - 25) ($p.Y - 75) '#16a34a' 32
 Save-Canvas $c 'q16.png'
 
 # q17: externally tangent circles
@@ -289,13 +283,13 @@ Draw-Point $g $blueBrush $c2x $c2y 16
 Draw-Point $g $orangeBrush ($c1x + $r1) $c1y 14
 Draw-Label $g '4 cm' 590 720 '#ec4899' 28
 Draw-Label $g '9 cm' 1030 720 '#4f46e5' 28
-Draw-Label $g 'centre distance = 4 + 9 = 13 cm' 990 180 '#0f172a' 28
+Draw-Label $g '?' 755 620 '#f97316' 34
 Save-Canvas $c 'q17.png'
 
 # q18: equal tangents from external point
 $c = New-Canvas
 $g = $c.Graphics
-Draw-Title $g 'Tangents from One External Point'
+Draw-Title $g 'Tangents from an External Point'
 $cx = 600; $cy = 650; $r = 230
 Draw-Circle $g $bluePen $cx $cy $r
 $externalX = 1230; $externalY = 610
@@ -308,7 +302,7 @@ Draw-Point $g $orangeBrush $externalX $externalY 16
 Draw-Point $g $purpleBrush $upper.X $upper.Y 14
 Draw-Point $g $purpleBrush $lower.X $lower.Y 14
 Draw-Label $g 'PA = 12 cm' 790 340 '#8b5cf6' 28
-Draw-Label $g 'PB = 12 cm' 790 790 '#8b5cf6' 28
+Draw-Label $g 'PB = ?' 790 790 '#8b5cf6' 28
 Draw-Label $g 'P' ($externalX + 16) ($externalY - 24) '#f97316' 28
 Save-Canvas $c 'q18.png'
 
@@ -330,7 +324,7 @@ $g.DrawLine($purplePen, $points[0].X, $points[0].Y, $points[1].X, $points[1].Y)
 Draw-Point $g $darkBrush $cx $cy 16
 foreach ($pt in $points) { Draw-Point $g $greenBrush $pt.X $pt.Y 14 }
 Draw-Label $g 'radius = 8 cm' 960 320 '#f97316' 28
-Draw-Label $g 'side = 8 cm' 930 395 '#8b5cf6' 28
+Draw-Label $g 'side = ?' 930 395 '#8b5cf6' 28
 Save-Canvas $c 'q19.png'
 
 # q20: hard cyclic quadrilateral
@@ -360,8 +354,7 @@ Draw-Point $g $pinkBrush $b.X $b.Y 14
 Draw-Point $g $pinkBrush $c3.X $c3.Y 14
 Draw-Point $g $pinkBrush $d.X $d.Y 14
 Draw-Label $g '97 deg' 465 410 '#ec4899' 30
-Draw-Label $g 'x = 83 deg' 965 830 '#ec4899' 30
-Draw-Label $g 'Opposite angles are supplementary' 915 180 '#0f172a' 28
+Draw-Label $g 'x = ?' 965 830 '#ec4899' 30
 Save-Canvas $c 'q20.png'
 
 $pens = @($blackPen, $bluePen, $purplePen, $pinkPen, $greenPen, $orangePen, $grayPen)
